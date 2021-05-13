@@ -101,6 +101,7 @@ const Login: React.FC<LoginProps> = (props) => {
           <>
             <ProFormText
               name="userName"
+              initialValue="admin"
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -127,6 +128,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <LockOutlined className={styles.prefixIcon} />,
               }}
+              initialValue="ant.design"
               placeholder={intl.formatMessage({
                 id: 'pages.login.password.placeholder',
                 defaultMessage: 'Password: ant.design',
