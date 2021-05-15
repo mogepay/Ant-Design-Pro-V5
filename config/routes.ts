@@ -45,7 +45,7 @@
                     name: 'sub-page',
                     icon: 'smile',
                     component: './Welcome',
-                    authority: ['admin'],
+                    // authority: ['admin'],
                   },
                 ],
               },
