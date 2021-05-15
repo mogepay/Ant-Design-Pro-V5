@@ -4,7 +4,8 @@
  * @see You can view component api by: https://github.com/ant-design/ant-design-pro-layout
  */
 import type { MenuDataItem, BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout';
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
+import ProLayout from '@ant-design/pro-layout';
+import { Footer } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
@@ -50,32 +51,6 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     };
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
-
-const defaultFooterDom = (
-  <DefaultFooter
-    copyright={`${new Date().getFullYear()} Produced by Ant Group Experience Technology Department`}
-    links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
-    ]}
-  />
-);
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const {
@@ -197,7 +172,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       }}
       footerRender={() => {
         if (settings.footerRender || settings.footerRender === undefined) {
-          return defaultFooterDom;
+          return <Footer />;
         }
         return null;
       }}
