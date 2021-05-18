@@ -33,6 +33,7 @@ const checkPermissions = <T, K>(
   target: T,
   Exception: K,
 ): T | K | React.ReactNode => {
+
   // No judgment permission. View all by default
   // Retirement authority, return target;
   if (!authority) {
