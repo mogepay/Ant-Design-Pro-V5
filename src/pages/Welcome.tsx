@@ -1,8 +1,9 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Typography } from 'antd';
+import { Card, Alert, Typography, Button} from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
+import { Jump } from '@/utils'
 
 const CodePreview: React.FC = ({ children }) => (
   <pre className={styles.pre}>
@@ -17,7 +18,13 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-        <Alert
+
+        <Button onClick={() => {
+
+          Jump.title('/list')
+
+        }}>测试</Button>
+        {/* <Alert
           message={intl.formatMessage({
             id: 'pages.welcome.alertMessage',
             defaultMessage: 'Faster and stronger heavy-duty components have been released.',
@@ -56,7 +63,7 @@ export default (): React.ReactNode => {
             <FormattedMessage id="pages.welcome.link" defaultMessage="Welcome" />
           </a>
         </Typography.Text>
-        <CodePreview>Domsy</CodePreview>
+        <CodePreview>Domsy</CodePreview> */}
       </Card>
     </PageContainer>
   );
