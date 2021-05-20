@@ -21,8 +21,6 @@ export default (): React.ReactNode => {
 
         <Button onClick={() => {
 
-          Jump.title('/list')
-
         }}>测试</Button>
         {/* <Alert
           message={intl.formatMessage({
