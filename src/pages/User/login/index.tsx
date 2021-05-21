@@ -1,12 +1,4 @@
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  MailOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
-} from '@ant-design/icons';
+import { AlipayCircleOutlined, LockOutlined, MailOutlined, MobileOutlined, TaobaoCircleOutlined, UserOutlined, WeiboCircleOutlined } from '@ant-design/icons';
 import { Alert, Space, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
@@ -51,6 +43,7 @@ const Login: React.FC<LoginProps> = (props) => {
       payload: { ...values, type },
     });
   };
+
   return (
     <div className={styles.main}>
       <ProForm

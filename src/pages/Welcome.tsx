@@ -19,7 +19,7 @@ export default (): React.ReactNode => {
     <PageContainer>
       <Card>
 
-        <Button debounce onClick={()=> {console.log('1')}}>测试</Button>
+        <Button debounce  onClick={()=> {console.log('1')}}>测试</Button>
         {/* <Alert
           message={intl.formatMessage({
             id: 'pages.welcome.alertMessage',
