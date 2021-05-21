@@ -71,25 +71,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         type: 'user/fetchCurrent',
       });
     }
-    // const result = [
-    //   {
-    //     "path": "/welcome",
-    //     "name": "welcome",
-    //     "icon": "smile",
-    //   },
-    //   {
-    //     "path": "/admin",
-    //     "name": "admin",
-    //     "icon": "crown",
-    //     children: [
-    //       {
-    //         "path": "/admin/sub-page",
-    //         "name": "sub-page"
-    //       }
-    //     ]
-    //   }
-    // ]
-    // setMenuData(formatter(result || []))
   }, []);
   /** Init variables */
 
