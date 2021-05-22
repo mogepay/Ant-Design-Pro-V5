@@ -34,6 +34,7 @@ export type UserModelType = {
 };
 
 const UserModel: UserModelType = {
+
   namespace: 'user',
 
   state: {
