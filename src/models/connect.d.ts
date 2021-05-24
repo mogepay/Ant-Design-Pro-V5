@@ -22,6 +22,7 @@ export type ConnectState = {
   loading: Loading;
   settings: ProSettings;
   user: UserModelState;
+  domesy: any;
   login: StateType;
 };
 

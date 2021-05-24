@@ -34,9 +34,7 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-
       const response = yield call(fakeAccountLogin, payload);
-      console.log(response, '-009989')
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -82,7 +80,6 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,

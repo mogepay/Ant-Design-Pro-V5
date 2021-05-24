@@ -37,9 +37,6 @@ const Login: React.FC<LoginProps> = (props) => {
   const intl = useIntl();
 
   const handleSubmit = (values: LoginParamsType) => {
-    console.log(props,'---')
-    console.log(values,'---')
-
     const { dispatch } = props;
     dispatch({
       type: 'login/login',
