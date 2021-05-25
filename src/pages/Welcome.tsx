@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
 

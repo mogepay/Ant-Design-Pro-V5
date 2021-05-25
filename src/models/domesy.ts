@@ -1,34 +1,28 @@
 import type { Reducer, Effect } from 'umi';
-import { setAuthority } from '@/utils/authority';
 
 export type StateType = {
-  status?: 'ok' | 'error';
-  type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
+  status?: number;
 };
 
-export type LoginModelType = {
+export type DomesyModelType = {
   namespace: string;
-  state: any;
+  state: StateType;
   effects: {
-    // login: Effect;
-    // logout: Effect;
+    add: Effect;
   };
   reducers: {
-    // changeLoginStatus: Reducer<StateType>;
     changeStatus: Reducer<any>;
   };
 };
 
-const Domsey: LoginModelType = {
+const Domsey: DomesyModelType = {
   namespace: 'domesy',
   state: {
     status: 0,
   },
 
   effects: {
-    *add(action:any, { call, put, select }:any){
-
+    *add(action, { call, put, select }){
       yield put({
         type: 'changeStatus',
         payload: {
