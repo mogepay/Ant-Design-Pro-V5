@@ -100,6 +100,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   };
 
   const handleMenuCollapse = (payload: boolean): void => {
+    console.log('1')
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -124,7 +125,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       formatMessage={formatMessage}
       {...props}
       {...settings}
-      onCollapse={handleMenuCollapse}
+      // onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (
@@ -136,16 +137,19 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         }
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: formatMessage({ id: 'menu.home' }),
-        },
-        ...routers,
-      ]}
+      breadcrumbRender={(routers = []) =>
+        [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({ id: 'menu.home' }),
+          },
+          ...routers,
+        ]
+      }
       itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
+        const first = routes.indexOf(route) === 0
+        const secound = route.path === '/' ? false : true
+        return first && secound ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
           <span>{route.breadcrumbName}</span>
@@ -163,10 +167,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         menuDataRef.current = menuData || [];
         return menuData || [];
       }}
-      waterMarkProps={{
-        content: 'Ant Design Pro',
-        fontColor: 'rgba(24,144,255,0.15)',
-      }}
+      // waterMarkProps={{
+      //   content: 'Domesy',
+      //   fontColor: 'rgba(24,144,255,0.15)',
+      // }}
     >
     <Authorized authority={authorized!.authority} noMatch={noMatch}>
       {children}
