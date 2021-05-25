@@ -9,7 +9,6 @@ import { Button } from '@/components'
 const Welcome: React.FC<any> = (props) => {
 
   useEffect(() => {
-    console.log(props,'--')
   }, [props.domesy])
 
   return (
