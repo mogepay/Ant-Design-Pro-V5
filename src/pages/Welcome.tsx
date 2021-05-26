@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
 
@@ -8,26 +8,12 @@ import { Button } from '@/components'
 
 const Welcome: React.FC<any> = (props) => {
 
-  useEffect(() => {
-  }, [props.domesy])
-
+  const [count, setCount] = useState(0)
   return (
     <PageContainer>
       <Card>
-        <div>{props.domesy.status}</div>
         <Button onClick={()=> {
-          const { dispatch } = props
-
-          dispatch({
-            type: 'domesy/add',
-            payload: {
-              data: 1
-            },
-            data:{
-              list: '1'
-            }
-          })
-
+          setCount(count + 1)
         } }>测试</Button>
       </Card>
     </PageContainer>
