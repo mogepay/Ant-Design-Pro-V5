@@ -1,6 +1,6 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 
 const codeMessage: Record<number, string> = {
   200: '服务器成功返回请求的数据。',
@@ -31,13 +31,13 @@ const errorHandler = (error: { response: Response }): Response => {
     const { status, url } = response;
 
     notification.error({
-      message: `Request error ${status}: ${url}`,
+      message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
   } else if (!response) {
     notification.error({
-      description: 'Your network is abnormal and cannot connect to the server',
-      message: 'Network anomaly',
+      description: '您的网络发生异常，无法连接服务器',
+      message: '网络异常',
     });
   }
   return response;
@@ -48,8 +48,44 @@ const errorHandler = (error: { response: Response }): Response => {
  * @zh-CN 配置request请求时的默认参数
  */
 const request = extend({
-  errorHandler, // default error handling
-  credentials: 'include', // Does the default request bring cookies
+  errorHandler, // 默认错误处理
+  credentials: 'include', // 默认请求是否带上cookie
 });
 
-export default request;
+// // request拦截器
+// request.interceptors.request.use((_url, options):any => {
+//   let c_token = localStorage.getItem('domesy');
+//   if (c_token) {
+//     const headers = {
+//       Authorization: JSON.parse(c_token),
+//     };
+//     return {
+//       options: { ...options, headers: headers },
+//     };
+//   }
+// });
+
+// // response拦截器
+// request.interceptors.response.use(async (response, options) => {
+//   if (!response) {
+//     notification.error({
+//       description: '您的网络发生异常，无法连接服务器',
+//       message: '网络异常',
+//     });
+//     return;
+//   }
+//   const data = await response.clone().json();
+//   if ([10001,10008].includes(data.resultCode)) {
+//     message.error(data.message);
+//     localStorage.clear();
+//     // setTimeout(window.location.reload(), 1000);
+//     return false;
+//   }
+//   if (data.resultCode !== 200) {
+//     message.error(data.message);
+//     return;
+//   }
+//   return data;
+// });
+
+export default request; 
