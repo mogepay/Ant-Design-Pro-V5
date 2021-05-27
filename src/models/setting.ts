@@ -22,16 +22,21 @@ const SettingModel: SettingModelType = {
   state: defaultSettings,
   reducers: {
     changeSetting(state = defaultSettings, { payload }) {
-      const { colorWeak, contentWidth } = payload;
+      // const { colorWeak, contentWidth } = payload;
 
-      if (state.contentWidth !== contentWidth && window.dispatchEvent) {
-        window.dispatchEvent(new Event('resize'));
-      }
-      updateColorWeak(!!colorWeak);
+      // if (state.contentWidth !== contentWidth && window.dispatchEvent) {
+      //   window.dispatchEvent(new Event('resize'));
+      // }
+      // updateColorWeak(!!colorWeak);
+      // return {
+      //   ...state,
+      //   ...payload,
+      // };
+      console.log(defaultSettings,'----')
       return {
-        ...state,
-        ...payload,
-      };
+      ...state,
+
+      }
     },
   },
 };
