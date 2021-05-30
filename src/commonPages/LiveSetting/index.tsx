@@ -11,13 +11,21 @@ const LiveSetting: React.FC = () => (
       pointerEvents: 'none',
     }}
   >
-    {/* <iframe
+    <iframe
       title="resg"
       src={'http://www.domesy.cn/live2d/index.html'}
-      style={{ width: '100%', border: '0px', height: 300, position:'absolute',left: '80%', bottom: 30, pointerEvents:'auto'}}
+      style={{
+        width: '100%',
+        border: '0px',
+        height: 300,
+        position: 'absolute',
+        left: '80%',
+        bottom: 30,
+        pointerEvents: 'auto',
+      }}
       sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       scrolling="auto"
-    /> */}
+    />
   </div>
 );
 
