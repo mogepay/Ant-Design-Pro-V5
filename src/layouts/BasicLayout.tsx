@@ -3,7 +3,11 @@
  *
  * @see You can view component api by: https://github.com/ant-design/ant-design-pro-layout
  */
-import type { MenuDataItem, BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout';
+import type {
+  MenuDataItem,
+  BasicLayoutProps as ProLayoutProps,
+  Settings,
+} from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
 import { Footer } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -17,6 +21,7 @@ import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
 import allIcons from '@@/plugin-antd-icon/icons';
+import { LiveSetting } from '@/commonPages';
 
 const noMatch = (
   <Result
@@ -74,10 +79,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   }, []);
   /** Init variables */
 
-  const toHump = (name: string) => name.replace(/-(\w)/g, (all: string, letter: any) => letter.toUpperCase());
+  const toHump = (name: string) =>
+    name.replace(/-(\w)/g, (all: string, letter: any) => letter.toUpperCase());
 
   const formatter = (data: any[]) => {
-    data.forEach(item => {
+    data.forEach((item) => {
       if (item.icon) {
         const { icon } = item;
         const v4IconName = toHump(icon.replace(icon[0], icon[0].toUpperCase()));
@@ -95,12 +101,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         const children = formatter(item.routes || item.children); // Reduce memory usage
         item.children = children;
       }
-    })
+    });
     return data;
   };
 
   const handleMenuCollapse = (payload: boolean): void => {
-    console.log('1')
+    console.log('1');
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -120,63 +126,64 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const { formatMessage } = useIntl();
 
   return (
-    <ProLayout
-      logo={logo}
-      formatMessage={formatMessage}
-      {...props}
-      {...settings}
-      // onCollapse={handleMenuCollapse}
-      onMenuHeaderClick={() => history.push('/')}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (
-          menuItemProps.isUrl ||
-          !menuItemProps.path ||
-          location.pathname === menuItemProps.path
-        ) {
-          return defaultDom;
-        }
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) =>
-        [
+    <>
+      <ProLayout
+        logo={logo}
+        formatMessage={formatMessage}
+        {...props}
+        {...settings}
+        // onCollapse={handleMenuCollapse}
+        onMenuHeaderClick={() => history.push('/')}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (
+            menuItemProps.isUrl ||
+            !menuItemProps.path ||
+            location.pathname === menuItemProps.path
+          ) {
+            return defaultDom;
+          }
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
           {
             path: '/',
             breadcrumbName: formatMessage({ id: 'menu.home' }),
           },
           ...routers,
-        ]
-      }
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0
-        const secound = route.path === '/' ? false : true
-        return first && secound ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      footerRender={() => {
-        if (settings.footerRender || settings.footerRender === undefined) {
-          return <Footer />;
-        }
-        return null;
-      }}
-      menuDataRender={menuDataRender}
-      rightContentRender={() => <RightContent />}
-      postMenuData={(menuData) => {
-        menuDataRef.current = menuData || [];
-        return menuData || [];
-      }}
-      // waterMarkProps={{
-      //   content: 'Domesy',
-      //   fontColor: 'rgba(24,144,255,0.15)',
-      // }}
-    >
-    <Authorized authority={authorized!.authority} noMatch={noMatch}>
-      {children}
-    </Authorized>
-  </ProLayout>
-    // <>
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          const secound = route.path === '/' ? false : true;
+          return first && secound ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        footerRender={() => {
+          if (settings.footerRender || settings.footerRender === undefined) {
+            return <Footer />;
+          }
+          return null;
+        }}
+        menuDataRender={menuDataRender}
+        rightContentRender={() => <RightContent />}
+        postMenuData={(menuData) => {
+          menuDataRef.current = menuData || [];
+          return menuData || [];
+        }}
+        // waterMarkProps={{
+        //   content: 'Domesy',
+        //   fontColor: 'rgba(24,144,255,0.15)',
+        // }}
+      >
+        <Authorized authority={authorized!.authority} noMatch={noMatch}>
+          {children}
+        </Authorized>
+      </ProLayout>
+
+      <LiveSetting />
+    </>
     // {
     //   menuData.length!==0 ?
     //   <ProLayout
