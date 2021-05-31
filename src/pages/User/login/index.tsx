@@ -1,4 +1,12 @@
-import { AlipayCircleOutlined, LockOutlined, MailOutlined, MobileOutlined, TaobaoCircleOutlined, UserOutlined, WeiboCircleOutlined } from '@ant-design/icons';
+import {
+  AlipayCircleOutlined,
+  LockOutlined,
+  MailOutlined,
+  MobileOutlined,
+  TaobaoCircleOutlined,
+  UserOutlined,
+  WeiboCircleOutlined,
+} from '@ant-design/icons';
 import { Alert, Space, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
@@ -8,9 +16,7 @@ import type { Dispatch } from 'umi';
 import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
-
 import styles from './index.less';
-
 export type LoginProps = {
   dispatch: Dispatch;
   userLogin: StateType;
@@ -61,7 +67,7 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
-          console.log(values,'---')
+          console.log(values, '---');
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
@@ -107,12 +113,7 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.username.required"
-                      defaultMessage="Please enter user name!"
-                    />
-                  ),
+                  message: '用户名是必填项！',
                 },
               ]}
             />
@@ -130,12 +131,7 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.password.required"
-                      defaultMessage="Please enter password！"
-                    />
-                  ),
+                  message: '密码是必填项！',
                 },
               ]}
             />
@@ -160,21 +156,11 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.phoneNumber.required"
-                      defaultMessage="Please enter phone number!"
-                    />
-                  ),
+                  message: '手机号是必填项！',
                 },
                 {
                   pattern: /^1\d{10}$/,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.phoneNumber.invalid"
-                      defaultMessage="Malformed phone number!"
-                    />
-                  ),
+                  message: '不合法的手机号！',
                 },
               ]}
             />
@@ -197,6 +183,7 @@ const Login: React.FC<LoginProps> = (props) => {
                     defaultMessage: 'Get verification code',
                   })}`;
                 }
+
                 return intl.formatMessage({
                   id: 'pages.login.phoneLogin.getVerificationCode',
                   defaultMessage: 'Get verification code',
@@ -206,19 +193,16 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.captcha.required"
-                      defaultMessage="Please enter verification code！"
-                    />
-                  ),
+                  message: '验证码是必填项！',
                 },
               ]}
               onGetCaptcha={async (mobile) => {
                 const result = await getFakeCaptcha(mobile);
+
                 if (result === false) {
                   return;
                 }
+
                 message.success(
                   'Get the verification code successfully! The verification code is: 1234',
                 );
@@ -232,19 +216,19 @@ const Login: React.FC<LoginProps> = (props) => {
           }}
         >
           <ProFormCheckbox noStyle name="autoLogin">
-            <FormattedMessage id="pages.login.rememberMe" defaultMessage="Auto login" />
+            自动登录
           </ProFormCheckbox>
           <a
             style={{
               float: 'right',
             }}
           >
-            <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Forget password" />
+            忘记密码 ?
           </a>
         </div>
       </ProForm>
       <Space className={styles.other}>
-        <FormattedMessage id="pages.login.loginWith" defaultMessage="Other login methods" />
+        其他登录方式 :
         <AlipayCircleOutlined className={styles.icon} />
         <TaobaoCircleOutlined className={styles.icon} />
         <WeiboCircleOutlined className={styles.icon} />
