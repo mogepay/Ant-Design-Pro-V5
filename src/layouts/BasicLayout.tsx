@@ -13,7 +13,6 @@ import { Footer } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -129,7 +128,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       <ProLayout
         logo={logo}
         {...props}
-        {...settings} // onCollapse={handleMenuCollapse}
+        {...settings}
+        onCollapse={handleMenuCollapse}
         onMenuHeaderClick={() => history.push('/')}
         menuItemRender={(menuItemProps, defaultDom) => {
           if (
@@ -170,7 +170,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         postMenuData={(menuData) => {
           menuDataRef.current = menuData || [];
           return menuData || [];
-        }} // waterMarkProps={{
+        }}
+        // waterMarkProps={{
         //   content: 'Domesy',
         //   fontColor: 'rgba(24,144,255,0.15)',
         // }}

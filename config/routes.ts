@@ -29,7 +29,7 @@
               },
               {
                 path: '/welcome',
-                name: 'welcome',
+                name: '欢迎',
                 icon: 'smile',
                 component: './Welcome',
               },
@@ -50,7 +50,7 @@
                 ],
               },
               {
-                name: 'list.table-list',
+                name: '列表',
                 icon: 'table',
                 path: '/list',
                 component: './TableList',

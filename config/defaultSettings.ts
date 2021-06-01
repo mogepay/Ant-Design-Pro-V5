@@ -11,9 +11,12 @@ const proSettings: DefaultSettings = {
   layout: 'side',
   contentWidth: 'Fluid',
   fixedHeader: false,
-  fixSiderbar: true,
+  fixSiderbar: false,
   colorWeak: false,
   title: 'Domesy',
+  menu: {
+    locale: false,
+  },
   pwa: false,
   iconfontUrl: '',
 };
