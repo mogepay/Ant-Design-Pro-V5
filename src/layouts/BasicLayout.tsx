@@ -21,6 +21,7 @@ import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
 import allIcons from '@@/plugin-antd-icon/icons';
 import { LiveSetting } from '@/commonPages';
+
 const noMatch = (
   <Result
     status={403}
@@ -44,8 +45,8 @@ export type BasicLayoutProps = {
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
 };
-/** Use Authorized check all menu item */
 
+/** Use Authorized check all menu item */
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map((item) => {
     const localItem = {
@@ -65,7 +66,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
   } = props;
   const [menuData, setMenuData] = useState<any>([]);
+
   const menuDataRef = useRef<MenuDataItem[]>([]);
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -84,7 +87,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         const { icon } = item;
         const v4IconName = toHump(icon.replace(icon[0], icon[0].toUpperCase()));
         const NewIcon = allIcons[icon] || allIcons[''.concat(v4IconName, 'Outlined')];
-
         if (NewIcon) {
           try {
             // eslint-disable-next-line no-param-reassign
@@ -94,10 +96,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           }
         }
       }
-
       if (item.routes || item.children) {
         const children = formatter(item.routes || item.children); // Reduce memory usage
-
         item.children = children;
       }
     });
@@ -106,15 +106,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const handleMenuCollapse = (payload: boolean): void => {
     console.log('1');
-
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
         payload,
       });
     }
-  }; // get children authority
-
+  };
+  // get children authority
   const authorized = useMemo(
     () =>
       getMatchMenu(location.pathname || '/', menuDataRef.current).pop() || {
@@ -122,11 +121,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       },
     [location.pathname],
   );
-  const {} = useIntl();
+
+  const { formatMessage } = useIntl();
+
   return (
     <>
       <ProLayout
         logo={logo}
+        formatMessage={formatMessage}
         {...props}
         {...settings}
         onCollapse={handleMenuCollapse}
@@ -139,13 +141,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           ) {
             return defaultDom;
           }
-
           return <Link to={menuItemProps.path}>{defaultDom}</Link>;
         }}
         breadcrumbRender={(routers = []) => [
           {
             path: '/',
-            breadcrumbName: '首页',
+            breadcrumbName: formatMessage({ id: 'menu.home' }),
           },
           ...routers,
         ]}
@@ -162,7 +163,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           if (settings.footerRender || settings.footerRender === undefined) {
             return <Footer />;
           }
-
           return null;
         }}
         menuDataRender={menuDataRender}
@@ -182,7 +182,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       </ProLayout>
 
       <LiveSetting />
-    </> // {
+    </>
+    // {
     //   menuData.length!==0 ?
     //   <ProLayout
     //     logo={logo}
