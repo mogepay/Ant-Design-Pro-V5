@@ -1,45 +1,32 @@
-import { useEffect } from 'react';
-
-const LiveSetting: React.FC = () => {
-  useEffect(() => {
-    console.log('1');
-    window.addEventListener('message', receiveMessageFromIndex, false);
-  }, []);
-
-  const receiveMessageFromIndex = (event: any) => {
-    console.log(event.data, '00');
-  };
-
-  return (
-    <div
+const LiveSetting: React.FC = () => (
+  <div
+    style={{
+      width: '100%',
+      height: '100%',
+      overflow: 'hidden',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      zIndex: 200000,
+      pointerEvents: 'none',
+    }}
+  >
+    <iframe
+      title="resg"
+      src={'http://www.domesy.cn/live2d/index.html'}
       style={{
         width: '100%',
-        height: '100%',
-        overflow: 'hidden',
+        border: '0px',
+        height: 300,
         position: 'absolute',
-        top: 0,
-        right: 0,
-        zIndex: 3,
-        pointerEvents: 'none',
+        left: '80%',
+        bottom: 30,
+        pointerEvents: 'auto',
       }}
-    >
-      <iframe
-        title="resg"
-        src={'http://www.domesy.cn/live2d/index.html'}
-        style={{
-          width: '100%',
-          border: '0px',
-          height: 300,
-          position: 'absolute',
-          left: '80%',
-          bottom: 30,
-          pointerEvents: 'auto',
-        }}
-        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-        scrolling="auto"
-      />
-    </div>
-  );
-};
+      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+      scrolling="auto"
+    />
+  </div>
+);
 
 export default LiveSetting;
