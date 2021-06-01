@@ -7,7 +7,7 @@ const LiveSetting: React.FC = () => (
       position: 'absolute',
       top: 0,
       right: 0,
-      zIndex: 200000,
+      zIndex: 5,
       pointerEvents: 'none',
     }}
   >
