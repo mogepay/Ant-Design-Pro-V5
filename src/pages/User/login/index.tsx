@@ -16,7 +16,9 @@ import type { Dispatch } from 'umi';
 import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
+
 import styles from './index.less';
+
 export type LoginProps = {
   dispatch: Dispatch;
   userLogin: StateType;
@@ -113,7 +115,12 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: '用户名是必填项！',
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.username.required"
+                      defaultMessage="Please enter user name!"
+                    />
+                  ),
                 },
               ]}
             />
@@ -131,7 +138,12 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: '密码是必填项！',
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.password.required"
+                      defaultMessage="Please enter password！"
+                    />
+                  ),
                 },
               ]}
             />
@@ -156,11 +168,21 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: '手机号是必填项！',
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.phoneNumber.required"
+                      defaultMessage="Please enter phone number!"
+                    />
+                  ),
                 },
                 {
                   pattern: /^1\d{10}$/,
-                  message: '不合法的手机号！',
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.phoneNumber.invalid"
+                      defaultMessage="Malformed phone number!"
+                    />
+                  ),
                 },
               ]}
             />
@@ -183,7 +205,6 @@ const Login: React.FC<LoginProps> = (props) => {
                     defaultMessage: 'Get verification code',
                   })}`;
                 }
-
                 return intl.formatMessage({
                   id: 'pages.login.phoneLogin.getVerificationCode',
                   defaultMessage: 'Get verification code',
@@ -193,16 +214,19 @@ const Login: React.FC<LoginProps> = (props) => {
               rules={[
                 {
                   required: true,
-                  message: '验证码是必填项！',
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.captcha.required"
+                      defaultMessage="Please enter verification code！"
+                    />
+                  ),
                 },
               ]}
               onGetCaptcha={async (mobile) => {
                 const result = await getFakeCaptcha(mobile);
-
                 if (result === false) {
                   return;
                 }
-
                 message.success(
                   'Get the verification code successfully! The verification code is: 1234',
                 );
@@ -216,19 +240,19 @@ const Login: React.FC<LoginProps> = (props) => {
           }}
         >
           <ProFormCheckbox noStyle name="autoLogin">
-            自动登录
+            <FormattedMessage id="pages.login.rememberMe" defaultMessage="Auto login" />
           </ProFormCheckbox>
           <a
             style={{
               float: 'right',
             }}
           >
-            忘记密码 ?
+            <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Forget password" />
           </a>
         </div>
       </ProForm>
       <Space className={styles.other}>
-        其他登录方式 :
+        <FormattedMessage id="pages.login.loginWith" defaultMessage="Other login methods" />
         <AlipayCircleOutlined className={styles.icon} />
         <TaobaoCircleOutlined className={styles.icon} />
         <WeiboCircleOutlined className={styles.icon} />
