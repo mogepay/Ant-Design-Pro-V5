@@ -56,14 +56,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  const {
-    dispatch,
-    children,
-    settings,
-    location = {
-      pathname: '/',
-    },
-  } = props;
+  const { dispatch, children, settings, location = { pathname: '/' } } = props;
   const [menuData, setMenuData] = useState<any>([]);
   const menuDataRef = useRef<MenuDataItem[]>([]);
   useEffect(() => {
