@@ -105,8 +105,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   };
 
   const handleMenuCollapse = (payload: boolean): void => {
-    console.log('1');
-
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
