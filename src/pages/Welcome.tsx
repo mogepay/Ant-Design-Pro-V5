@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
 import { Card } from 'antd';
 import { connect } from 'umi';
-import { Button } from '@/components';
+import { Button, UpLoad } from '@/components';
 import { Jump } from '@/utils';
 
 const Welcome: React.FC<any> = (props) => {
@@ -16,7 +16,8 @@ const Welcome: React.FC<any> = (props) => {
   return (
     <PageContainer>
       <Card>
-        <Button onClick={() => {}}>测试</Button>
+        {/* <Button onClick={() => {}}>测试</Button> */}
+        <UpLoad></UpLoad>
       </Card>
       {/* <div style={{width: '100%', height: '100%'}}>
         <iframe
