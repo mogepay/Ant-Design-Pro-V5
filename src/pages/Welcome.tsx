@@ -10,7 +10,7 @@ const Welcome: React.FC<any> = (props) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_ENV);
+    console.log(props);
   }, []);
 
   return (

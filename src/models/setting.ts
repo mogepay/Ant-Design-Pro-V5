@@ -32,11 +32,10 @@ const SettingModel: SettingModelType = {
       //   ...state,
       //   ...payload,
       // };
-      console.log(defaultSettings,'----')
+      console.log(defaultSettings, '----2');
       return {
-      ...state,
-
-      }
+        ...state,
+      };
     },
   },
 };

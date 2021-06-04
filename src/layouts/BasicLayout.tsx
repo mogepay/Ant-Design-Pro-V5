@@ -9,7 +9,7 @@ import type {
   Settings,
 } from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
-import { Footer } from '@/commonPages';
+import { Footer, LiveSetting } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, connect, history } from 'umi';
@@ -20,7 +20,6 @@ import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
 import allIcons from '@@/plugin-antd-icon/icons';
-import { LiveSetting } from '@/commonPages';
 const noMatch = (
   <Result
     status={403}
@@ -63,6 +62,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
+      });
+      dispatch({
+        type: 'domesy/initSetting',
       });
     }
   }, []);
