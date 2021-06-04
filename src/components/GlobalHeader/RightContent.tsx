@@ -10,6 +10,7 @@ import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
+  domesy: any;
   theme?: ProSettings['navTheme'] | 'realDark';
 } & Partial<ConnectProps> &
   Partial<ProSettings>;
@@ -21,7 +22,7 @@ const ENVTagColor = {
 };
 
 const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
-  const { theme, layout } = props;
+  const { theme, layout, domesy } = props;
   let className = styles.right;
 
   if (theme === 'dark' && layout === 'top') {
@@ -72,12 +73,19 @@ const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = (props) => {
           <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
         </span>
       )}
+      {domesy.env && (
+        <span>
+          <Tag color={'orange'}>dev</Tag>
+        </span>
+      )}
+
       <SelectLang className={styles.action} />
     </div>
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({ settings, domesy }: ConnectState) => ({
   theme: settings.navTheme,
   layout: settings.layout,
+  domesy,
 }))(GlobalHeaderRight);
