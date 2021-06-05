@@ -28,6 +28,11 @@ const Welcome: React.FC<any> = (props) => {
           multiple
           rules={rules}
           amount={4}
+          OSS
+          _config={{
+            ossUrl: '000',
+            ossText: '年是哦',
+          }}
           getFiles={(file: Array<any>) => {
             console.log(file);
           }}

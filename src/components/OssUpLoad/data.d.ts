@@ -8,9 +8,11 @@ interface rulesProps {
 }
 
 interface configProps {
-  check?: boolean;
+  noCheck?: boolean;
   text?: string;
   uploadNode?: Function | React.ReactNode;
+  ossUrl?: string;
+  ossText?: string;
 }
 
 interface Props extends UploadProps {
@@ -18,6 +20,7 @@ interface Props extends UploadProps {
   amount?: number;
   rules?: rulesProps;
   _config?: configProps;
+  OSS?: boolean;
 }
 
 export default Props;

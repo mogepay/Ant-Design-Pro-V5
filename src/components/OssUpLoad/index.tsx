@@ -1,7 +1,6 @@
 import React from 'react';
-import { Upload, message, Modal, UploadProps } from 'antd';
+import { Upload, message, Modal, UploadProps, Result } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Method } from '@/utils';
 import { useState } from 'react';
 import Props from './data';
 
@@ -15,6 +14,7 @@ import './index.less';
  * @param getFiles 上传后图片返回的值
  * @param rules 规则 判断规则不可传入的条件
  * @param _config 额外的配置
+ * @param OSS 开启OSS上传
  *
  * @rules
  * @param type 限制类型，可字符串可数组
@@ -24,22 +24,33 @@ import './index.less';
  *
  *
  * @_config
- * @param check 检验是否同一张图片 （当相同名字和文件大小一致时，才会校验不通过），默认true
+ * @param noCheck 检验是否同一张图片 （当相同名字和文件大小一致时，才会校验不通过），默认false
  * @param text 未上传时的文字 默认 Upload
  * @param uploadNode 自定义upload样式，类型 Function | React.ReactNode
+ * @param ossUrl 上传完图片，统一前缀 默认 web/domesy/images/
+ * @param ossText 上传完图片，oss的统一文字 默认不加
  */
 
 /**
  * @是否支持多选 maxCount
  */
 
+let aliOSS = require('ali-oss');
+let client = new aliOSS({
+  region: 'oss-cn-shanghai',
+  accessKeyId: 'LTAI4GK4W6BVkYDcHdAQzAW9',
+  accessKeySecret: 'otIM3G2WhGxdfbpxBDBB9NtMj2yVQ3',
+  bucket: 'bmx-system',
+});
+
 const UpLoadView: React.FC<Props> = ({
   amount = 4,
+  OSS = false,
   rules = {},
   onRemove,
   children,
   getFiles,
-  _config = { check: true },
+  _config = {},
   ...props
 }) => {
   const [fileList, setFileList] = useState<Array<any>>([]); //总文件数组
@@ -61,8 +72,7 @@ const UpLoadView: React.FC<Props> = ({
   // 上传前的操作
   const beforeUpload = async (file: any) => {
     let flag = true; // 控制最终的类型
-
-    if (_config?.check) {
+    if (!_config.noCheck) {
       const repeat = fileList.filter((item) => item.name === file.name && item.size === file.size);
       if (repeat.length !== 0) {
         message.error('您已上传过此文件，请勿重复上传');
@@ -106,9 +116,25 @@ const UpLoadView: React.FC<Props> = ({
   // 文件获取
   const onGetFiles = async (file: any) => {
     if (getFiles) {
-      const reult = [...getFilesList, file];
-      setGetFilesList(reult);
-      getFiles(reult);
+      let result: any = file;
+      let OssList: Array<any> = [];
+      if (OSS) {
+        const suffix = file.name.slice(file.name.lastIndexOf('.'));
+        const filename = _config.ossText + suffix || suffix;
+        const res = await client.put(
+          `${_config.ossUrl || 'web/domesy/images'}/${Date.now() + filename}`,
+          file,
+        );
+        result = res.url;
+      } else {
+        result = [...getFilesList, { file, newFile: result }];
+        setGetFilesList(result);
+        getFiles(result);
+      }
+      result = [...getFilesList, { file, newFile: result }];
+      OSS ? result.map((item: any) => (OssList = [...OssList, item.newFile])) : '';
+      setGetFilesList(result);
+      getFiles(OSS ? OssList : result);
     }
   };
 
@@ -137,8 +163,12 @@ const UpLoadView: React.FC<Props> = ({
           if (isFileFlag) setFileList(fileList);
         }}
         onRemove={(file) => {
-          const restult = fileList.filter((item) => JSON.stringify(item) !== JSON.stringify(file));
-          setFileList(restult);
+          const result = fileList.filter((item) => item.uid !== file.uid);
+          setFileList(result);
+          if (getFiles) {
+            const getFileResult = getFilesList.filter((item) => item.file.uid !== file.uid);
+            setGetFilesList(getFileResult);
+          }
           if (onRemove) onRemove(file);
         }}
         beforeUpload={beforeUpload}
