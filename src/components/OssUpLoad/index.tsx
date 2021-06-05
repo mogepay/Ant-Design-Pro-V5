@@ -2,6 +2,7 @@ import React from 'react';
 import { Upload, message, Modal, UploadProps, Result } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import ImgCrop from 'antd-img-crop';
 import Props from './data';
 
 import './index.less';
@@ -15,6 +16,7 @@ import './index.less';
  * @param rules 规则 判断规则不可传入的条件
  * @param _config 额外的配置
  * @param OSS 开启OSS上传
+ * @param crop 裁剪功能，默认false 注：截取有点问题，如gif动态截取后就成静止图
  *
  * @rules
  * @param type 限制类型，可字符串可数组
@@ -50,6 +52,7 @@ const UpLoadView: React.FC<Props> = ({
   onRemove,
   children,
   getFiles,
+  crop,
   _config = {},
   ...props
 }) => {
@@ -151,31 +154,35 @@ const UpLoadView: React.FC<Props> = ({
     );
   };
 
+  const uploadNode = (
+    <Upload
+      {...props}
+      // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      listType="picture-card"
+      fileList={fileList}
+      onPreview={handlePreview}
+      onChange={({ fileList }) => {
+        if (isFileFlag) setFileList(fileList);
+      }}
+      onRemove={(file) => {
+        const result = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(result);
+        if (getFiles) {
+          const getFileResult = getFilesList.filter((item) => item.file.uid !== file.uid);
+          setGetFilesList(getFileResult);
+        }
+        if (onRemove) onRemove(file);
+      }}
+      beforeUpload={beforeUpload}
+      maxCount={amount}
+    >
+      {fileList.length >= amount ? null : uploadButton()}
+    </Upload>
+  );
+
   return (
     <div className="UpLoadComponents">
-      <Upload
-        {...props}
-        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={({ fileList }) => {
-          if (isFileFlag) setFileList(fileList);
-        }}
-        onRemove={(file) => {
-          const result = fileList.filter((item) => item.uid !== file.uid);
-          setFileList(result);
-          if (getFiles) {
-            const getFileResult = getFilesList.filter((item) => item.file.uid !== file.uid);
-            setGetFilesList(getFileResult);
-          }
-          if (onRemove) onRemove(file);
-        }}
-        beforeUpload={beforeUpload}
-        maxCount={amount}
-      >
-        {fileList.length >= amount ? null : uploadButton()}
-      </Upload>
+      {crop ? <ImgCrop>{uploadNode}</ImgCrop> : uploadNode}
       <Modal
         visible={previewVisible}
         title={previewTitle}

@@ -21,6 +21,7 @@ interface Props extends UploadProps {
   rules?: rulesProps;
   _config?: configProps;
   OSS?: boolean;
+  crop?: boolean;
 }
 
 export default Props;
