@@ -7,7 +7,6 @@ import Props from './data';
 
 import './index.less';
 
-// .ant-upload-list-item-card-actions-btn.ant-btn-sm
 /**
  * @module UpLoad 图片上传
  *
@@ -16,7 +15,7 @@ import './index.less';
  * @param rules 规则 判断规则不可传入的条件
  * @param _config 额外的配置
  * @param OSS 开启OSS上传
- * @param crop 裁剪功能，默认false 注：截取有点问题，如gif动态截取后就成静止图
+ * @param crop 裁剪功能，默认false 注：截取有点问题，如gif动态截取后就成静止图,裁剪模式下，不能选取除照片格式以外的文件
  *
  * @rules
  * @param type 限制类型，可字符串可数组
@@ -27,10 +26,24 @@ import './index.less';
  *
  * @_config
  * @param noCheck 检验是否同一张图片 （当相同名字和文件大小一致时，才会校验不通过），默认false
+ * @param radio 单选照片，默认多选
  * @param text 未上传时的文字 默认 Upload
  * @param uploadNode 自定义upload样式，类型 Function | React.ReactNode
  * @param ossUrl 上传完图片，统一前缀 默认 web/domesy/images/
  * @param ossText 上传完图片，oss的统一文字 默认不加
+ */
+
+/**
+ *
+ * type 为 picture-card 只能支持图片， 其他文件格式不支持
+ *
+ * type为其他值时，出照片格式外，不应该预览
+ *
+ */
+
+/**
+ * 问题：
+ *  无法同时满足裁剪功能的照片和文件共同满足的情况，这种情况建议分开处理
  */
 
 /**
@@ -158,12 +171,14 @@ const UpLoadView: React.FC<Props> = ({
     <Upload
       {...props}
       // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      // listType="text"
       listType="picture-card"
       fileList={fileList}
       onPreview={handlePreview}
       onChange={({ fileList }) => {
         if (isFileFlag) setFileList(fileList);
       }}
+      multiple={!_config.radio}
       onRemove={(file) => {
         const result = fileList.filter((item) => item.uid !== file.uid);
         setFileList(result);

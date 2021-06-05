@@ -27,6 +27,7 @@ const Welcome: React.FC<any> = (props) => {
         <OssUpLoad
           multiple
           rules={rules}
+          crop
           amount={4}
           OSS
           _config={{

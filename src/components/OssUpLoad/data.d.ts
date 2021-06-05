@@ -13,6 +13,7 @@ interface configProps {
   uploadNode?: Function | React.ReactNode;
   ossUrl?: string;
   ossText?: string;
+  radio?: boolean;
 }
 
 interface Props extends UploadProps {
