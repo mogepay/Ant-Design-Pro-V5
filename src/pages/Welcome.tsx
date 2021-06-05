@@ -3,11 +3,18 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
 import { Card } from 'antd';
 import { connect } from 'umi';
-import { Button, UpLoad } from '@/components';
+import { Button, OssUpLoad } from '@/components';
 import { Jump } from '@/utils';
+import { text } from 'express';
 
 const Welcome: React.FC<any> = (props) => {
   const [count, setCount] = useState(0);
+
+  const rules = {
+    // type: ['jpg', 'png'],
+    // typeMsg: '只允许上传jpg'
+    // size: 0.01,
+  };
 
   useEffect(() => {
     console.log(props);
@@ -17,7 +24,14 @@ const Welcome: React.FC<any> = (props) => {
     <PageContainer>
       <Card>
         {/* <Button onClick={() => {}}>测试</Button> */}
-        <UpLoad></UpLoad>
+        <OssUpLoad
+          multiple
+          rules={rules}
+          amount={4}
+          getFiles={(file: Array<any>) => {
+            console.log(file);
+          }}
+        ></OssUpLoad>
       </Card>
       {/* <div style={{width: '100%', height: '100%'}}>
         <iframe

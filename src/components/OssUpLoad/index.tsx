@@ -1,0 +1,170 @@
+import React from 'react';
+import { Upload, message, Modal, UploadProps } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Method } from '@/utils';
+import { useState } from 'react';
+import Props from './data';
+
+import './index.less';
+
+// .ant-upload-list-item-card-actions-btn.ant-btn-sm
+/**
+ * @module UpLoad 图片上传
+ *
+ * @param amount 数量 可设置上传的数量，默认为1张
+ * @param getFiles 上传后图片返回的值
+ * @param rules 规则 判断规则不可传入的条件
+ * @param _config 额外的配置
+ *
+ * @rules
+ * @param type 限制类型，可字符串可数组
+ * @param typeMsg 类型不符合的提示语
+ * @param size 文件的类型大小 单位为M
+ * @param sizeMsg 文件大小不符合的提示语
+ *
+ *
+ * @_config
+ * @param check 检验是否同一张图片 （当相同名字和文件大小一致时，才会校验不通过），默认true
+ * @param text 未上传时的文字 默认 Upload
+ * @param uploadNode 自定义upload样式，类型 Function | React.ReactNode
+ */
+
+/**
+ * @是否支持多选 maxCount
+ */
+
+const UpLoadView: React.FC<Props> = ({
+  amount = 4,
+  rules = {},
+  onRemove,
+  children,
+  getFiles,
+  _config = { check: true },
+  ...props
+}) => {
+  const [fileList, setFileList] = useState<Array<any>>([]); //总文件数组
+  const [getFilesList, setGetFilesList] = useState<Array<any>>([]); //总文件数组
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false); // 是否打开弹出框
+  const [isFileFlag, setIsFileFlag] = useState<boolean>(false); // 控制照片，如果不满足则不添加
+  const [previewTitle, setPreviewTitle] = useState<any>(''); // 图片名称
+  const [previewImage, setPreviewImage] = useState<any>(''); // 图片展示的数据
+
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewVisible(true);
+    setPreviewImage(file.url || file.preview);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  // 上传前的操作
+  const beforeUpload = async (file: any) => {
+    let flag = true; // 控制最终的类型
+
+    if (_config?.check) {
+      const repeat = fileList.filter((item) => item.name === file.name && item.size === file.size);
+      if (repeat.length !== 0) {
+        message.error('您已上传过此文件，请勿重复上传');
+        flag = false;
+      }
+    }
+
+    if (typeof rules.type === 'string' && flag) {
+      const type = rules.type.trim() === 'jpg' ? 'jpeg' : rules.type.trim();
+      if (file.type.indexOf(type) === -1) {
+        message.error(rules.typeMsg || '请上传正确的文件类型');
+        flag = false;
+      }
+    } else if (Array.isArray(rules.type) && flag) {
+      let allFlag = false;
+      await rules.type.map((item) => {
+        const type = item.trim() === 'jpg' ? 'jpeg' : item.trim();
+        if (file.type.indexOf(type) !== -1) {
+          allFlag = true;
+          return;
+        }
+      });
+      if (!allFlag) {
+        message.error(rules.typeMsg || '请上传正确的文件类型');
+        flag = false;
+      }
+    }
+
+    if (rules.size && flag) {
+      const fileSize = file.size / 1024 / 1024 < rules.size;
+      if (!fileSize) {
+        message.error(rules.sizeMsg || `上传文件大于${rules.size}M!请重新上传`);
+        flag = false;
+      }
+    }
+    if (flag) onGetFiles(file);
+    setIsFileFlag(flag);
+    return file;
+  };
+
+  // 文件获取
+  const onGetFiles = async (file: any) => {
+    if (getFiles) {
+      const reult = [...getFilesList, file];
+      setGetFilesList(reult);
+      getFiles(reult);
+    }
+  };
+
+  // 自定义按钮样式
+  const uploadButton = () => {
+    if (_config?.uploadNode) {
+      return typeof _config.uploadNode === 'function' ? _config.uploadNode() : _config.uploadNode;
+    }
+    return (
+      <div>
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>{_config.text || 'Upload'}</div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="UpLoadComponents">
+      <Upload
+        {...props}
+        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        listType="picture-card"
+        fileList={fileList}
+        onPreview={handlePreview}
+        onChange={({ fileList }) => {
+          if (isFileFlag) setFileList(fileList);
+        }}
+        onRemove={(file) => {
+          const restult = fileList.filter((item) => JSON.stringify(item) !== JSON.stringify(file));
+          setFileList(restult);
+          if (onRemove) onRemove(file);
+        }}
+        beforeUpload={beforeUpload}
+        maxCount={amount}
+      >
+        {fileList.length >= amount ? null : uploadButton()}
+      </Upload>
+      <Modal
+        visible={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+      >
+        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+      </Modal>
+    </div>
+  );
+};
+
+export default UpLoadView;
+
+const getBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};

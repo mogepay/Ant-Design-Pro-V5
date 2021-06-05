@@ -4,4 +4,4 @@ export { default as HeaderSearch } from './HeaderSearch';
 export { default as NoticeIcon } from './NoticeIcon';
 export { default as PageLoading } from './PageLoading';
 export { default as Button } from './Button';
-export { default as UpLoad } from './UpLoad';
+export { default as OssUpLoad } from './OssUpLoad';
