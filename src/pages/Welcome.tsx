@@ -32,15 +32,10 @@ const Welcome: React.FC<any> = (props) => {
             ossUrl: '000',
             ossText: '年是哦',
           }}
-          button={{
-            type: 'default',
-          }}
           getFiles={(file: Array<any>) => {
             console.log(file);
           }}
-        >
-          <Button onClick={() => {}}>测试</Button>
-        </OssUpLoad>
+        ></OssUpLoad>
       </Card>
       {/* <div style={{width: '100%', height: '100%'}}>
         <iframe
