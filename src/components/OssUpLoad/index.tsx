@@ -1,6 +1,6 @@
 import React from 'react';
-import { Upload, message, Modal, UploadProps, Result } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Upload, message, Modal, Button } from 'antd';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import Props from './data';
@@ -16,6 +16,13 @@ import './index.less';
  * @param _config 额外的配置
  * @param OSS 开启OSS上传
  * @param crop 裁剪功能，默认false 注：截取有点问题，如gif动态截取后就成静止图,裁剪模式下，不能选取除照片格式以外的文件
+ * @param listType 三种模式，分别为 'text' ’picture' ‘picture-card'，默认 ‘picture-card'
+ * @param button 当type 为 'text' ’picture' 继承button的属性，如果children不存在时
+ * @param children  当type 为 'text' ’picture' 可自定义样式
+ *
+ * @param listType
+ * listType 为 picture-card 只能支持图片， 其他文件格式不支持
+ * listType为其他值时，出照片格式外，不应该预览
  *
  * @rules
  * @param type 限制类型，可字符串可数组
@@ -31,14 +38,7 @@ import './index.less';
  * @param uploadNode 自定义upload样式，类型 Function | React.ReactNode
  * @param ossUrl 上传完图片，统一前缀 默认 web/domesy/images/
  * @param ossText 上传完图片，oss的统一文字 默认不加
- */
-
-/**
- *
- * type 为 picture-card 只能支持图片， 其他文件格式不支持
- *
- * type为其他值时，出照片格式外，不应该预览
- *
+ * @param pictureCardTip listType为picture-card时上传其他模式时的提示语 默认'请上传正确的图片类型！'
  */
 
 /**
@@ -58,17 +58,20 @@ let client = new aliOSS({
   bucket: 'bmx-system',
 });
 
-const UpLoadView: React.FC<Props> = ({
+const OssUpLoad: React.FC<Props> = ({
   amount = 4,
   OSS = false,
   rules = {},
+  listType = 'picture-card',
   onRemove,
   children,
   getFiles,
   crop,
   _config = {},
+  button = {},
   ...props
 }) => {
+  console.log(children, '---');
   const [fileList, setFileList] = useState<Array<any>>([]); //总文件数组
   const [getFilesList, setGetFilesList] = useState<Array<any>>([]); //总文件数组
   const [previewVisible, setPreviewVisible] = useState<boolean>(false); // 是否打开弹出框
@@ -77,6 +80,7 @@ const UpLoadView: React.FC<Props> = ({
   const [previewImage, setPreviewImage] = useState<any>(''); // 图片展示的数据
 
   const handlePreview = async (file: any) => {
+    if (file.type.indexOf('image') === -1) return;
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -88,7 +92,9 @@ const UpLoadView: React.FC<Props> = ({
   // 上传前的操作
   const beforeUpload = async (file: any) => {
     let flag = true; // 控制最终的类型
-    if (!_config.noCheck) {
+
+    // 检测是否有相同类型
+    if (!_config.noCheck && flag) {
       const repeat = fileList.filter((item) => item.name === file.name && item.size === file.size);
       if (repeat.length !== 0) {
         message.error('您已上传过此文件，请勿重复上传');
@@ -96,6 +102,7 @@ const UpLoadView: React.FC<Props> = ({
       }
     }
 
+    // 判断文件类型
     if (typeof rules.type === 'string' && flag) {
       const type = rules.type.trim() === 'jpg' ? 'jpeg' : rules.type.trim();
       if (file.type.indexOf(type) === -1) {
@@ -117,6 +124,13 @@ const UpLoadView: React.FC<Props> = ({
       }
     }
 
+    // 根据listType来进行判断
+    if (listType === 'picture-card' && file.type.indexOf('image') === -1 && flag) {
+      message.error(_config.pictureCardTip || '请上传正确的图片类型！');
+      flag = false;
+    }
+
+    // 判断文件大小
     if (rules.size && flag) {
       const fileSize = file.size / 1024 / 1024 < rules.size;
       if (!fileSize) {
@@ -172,7 +186,7 @@ const UpLoadView: React.FC<Props> = ({
       {...props}
       // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       // listType="text"
-      listType="picture-card"
+      listType={listType}
       fileList={fileList}
       onPreview={handlePreview}
       onChange={({ fileList }) => {
@@ -191,13 +205,31 @@ const UpLoadView: React.FC<Props> = ({
       beforeUpload={beforeUpload}
       maxCount={amount}
     >
-      {fileList.length >= amount ? null : uploadButton()}
+      {listType === 'picture-card' ? (
+        fileList.length >= amount ? null : (
+          uploadButton()
+        )
+      ) : children ? (
+        children
+      ) : (
+        <Button
+          {...button}
+          icon={button.icon || <UploadOutlined />}
+          type={button.type || 'primary'}
+          disabled={fileList.length === amount}
+          onClick={(ev) => {
+            if (button.onClick) button.onClick(ev);
+          }}
+        >
+          {_config.text || 'Upload'}
+        </Button>
+      )}
     </Upload>
   );
 
   return (
     <div className="UpLoadComponents">
-      {crop ? <ImgCrop>{uploadNode}</ImgCrop> : uploadNode}
+      {crop && listType === 'picture-card' ? <ImgCrop>{uploadNode}</ImgCrop> : uploadNode}
       <Modal
         visible={previewVisible}
         title={previewTitle}
@@ -210,7 +242,7 @@ const UpLoadView: React.FC<Props> = ({
   );
 };
 
-export default UpLoadView;
+export default OssUpLoad;
 
 const getBase64 = (file: any) => {
   return new Promise((resolve, reject) => {

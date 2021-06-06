@@ -16,9 +16,7 @@ const Welcome: React.FC<any> = (props) => {
     // size: 0.01,
   };
 
-  useEffect(() => {
-    console.log(props);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <PageContainer>
@@ -27,17 +25,22 @@ const Welcome: React.FC<any> = (props) => {
         <OssUpLoad
           multiple
           rules={rules}
-          crop
           amount={4}
+          listType="picture"
           OSS
           _config={{
             ossUrl: '000',
             ossText: '年是哦',
           }}
+          button={{
+            type: 'default',
+          }}
           getFiles={(file: Array<any>) => {
             console.log(file);
           }}
-        ></OssUpLoad>
+        >
+          <Button onClick={() => {}}>测试</Button>
+        </OssUpLoad>
       </Card>
       {/* <div style={{width: '100%', height: '100%'}}>
         <iframe

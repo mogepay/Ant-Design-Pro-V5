@@ -1,4 +1,5 @@
-import { UploadProps } from 'antd';
+import { UploadProps, ButtonProps } from 'antd';
+import { Button } from '@/components';
 
 interface rulesProps {
   type?: string | Array<string>;
@@ -14,6 +15,7 @@ interface configProps {
   ossUrl?: string;
   ossText?: string;
   radio?: boolean;
+  pictureCardTip?: string;
 }
 
 interface Props extends UploadProps {
@@ -23,6 +25,7 @@ interface Props extends UploadProps {
   _config?: configProps;
   OSS?: boolean;
   crop?: boolean;
+  button?: ButtonProps;
 }
 
 export default Props;
