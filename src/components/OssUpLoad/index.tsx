@@ -19,6 +19,7 @@ import './index.less';
  * @param listType 三种模式，分别为 'text' ’picture' ‘picture-card'，默认 ‘picture-card'
  * @param button 当type 为 'text' ’picture' 继承button的属性，如果children不存在时
  * @param children  当type 为 'text' ’picture' 可自定义样式
+ * @param initFile  默认已有的文件
  *
  * @param listType
  * listType 为 picture-card 只能支持图片， 其他文件格式不支持
@@ -41,6 +42,26 @@ import './index.less';
  * @param pictureCardTip listType为picture-card时上传其他模式时的提示语 默认'请上传正确的图片类型！'
  */
 
+//  const  fileList = [
+//   {
+//     uid: '-4',
+//     name: 'image.png',
+//     status: 'done',
+//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   },
+//   {
+//     uid: '-xxx',
+//     percent: 50,
+//     name: 'image.png',
+//     status: 'uploading',
+//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   },
+//   {
+//     uid: '-5',
+//     name: 'image.png',
+//     status: 'error',
+//   },
+// ]
 /**
  * 问题：
  *  无法同时满足裁剪功能的照片和文件共同满足的情况，这种情况建议分开处理
@@ -69,10 +90,10 @@ const OssUpLoad: React.FC<Props> = ({
   crop,
   _config = {},
   button = {},
+  initFile = [],
   ...props
 }) => {
-  console.log(children, '---');
-  const [fileList, setFileList] = useState<Array<any>>([]); //总文件数组
+  const [fileList, setFileList] = useState<Array<any>>(initFile); //总文件数组
   const [getFilesList, setGetFilesList] = useState<Array<any>>([]); //总文件数组
   const [previewVisible, setPreviewVisible] = useState<boolean>(false); // 是否打开弹出框
   const [isFileFlag, setIsFileFlag] = useState<boolean>(false); // 控制照片，如果不满足则不添加

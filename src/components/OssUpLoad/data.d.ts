@@ -26,6 +26,7 @@ interface Props extends UploadProps {
   OSS?: boolean;
   crop?: boolean;
   button?: ButtonProps;
+  initFile?: Array<any>;
 }
 
 export default Props;
