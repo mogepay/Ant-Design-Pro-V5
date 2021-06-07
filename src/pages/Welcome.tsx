@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
-import { Card } from 'antd';
+import { Card, Col, Dropdown, Menu, Row } from 'antd';
 import { connect } from 'umi';
 import { Button, OssUpLoad } from '@/components';
 import { Jump } from '@/utils';
 import { text } from 'express';
+import ProCard from '@ant-design/pro-card';
 
 const Welcome: React.FC<any> = (props) => {
   const [count, setCount] = useState(0);
@@ -20,23 +21,10 @@ const Welcome: React.FC<any> = (props) => {
 
   return (
     <PageContainer>
-      <Card>
-        {/* <Button onClick={() => {}}>测试</Button> */}
-        <OssUpLoad
-          multiple
-          rules={rules}
-          amount={4}
-          listType="picture"
-          OSS
-          _config={{
-            ossUrl: '000',
-            ossText: '年是哦',
-          }}
-          getFiles={(file: Array<any>) => {
-            console.log(file);
-          }}
-        ></OssUpLoad>
-      </Card>
+      {/* <Card> */}
+      {/* <Button onClick={() => {}}>测试</Button>
+
+      </Card> */}
       {/* <div style={{width: '100%', height: '100%'}}>
         <iframe
           title="resg"
@@ -46,6 +34,21 @@ const Welcome: React.FC<any> = (props) => {
           scrolling="auto"
         />
       </div> */}
+
+      <ProCard style={{ marginTop: 8 }} gutter={[16, 16]} wrap title="换行">
+        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }} layout="center" bordered>
+          Col
+        </ProCard>
+        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }} layout="center" bordered>
+          Col
+        </ProCard>
+        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }} layout="center" bordered>
+          Col
+        </ProCard>
+        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }} layout="center" bordered>
+          Col
+        </ProCard>
+      </ProCard>
     </PageContainer>
   );
 };
