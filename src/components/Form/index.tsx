@@ -1,11 +1,5 @@
 import React from 'react';
-import ProForm, {
-  ProFormText,
-  ProFormSelect,
-  ProFormDependency,
-  ProFormProps,
-} from '@ant-design/pro-form';
-import './index.less';
+import ProForm, { ProFormProps } from '@ant-design/pro-form';
 
 /**
  * 1. 基本布局 居中响应式，每行一列
@@ -24,7 +18,7 @@ import './index.less';
 interface Props extends ProFormProps {}
 
 const Form: React.FC<Props> = ({}) => {
-  return <div className="UpLoadComponents"></div>;
+  return <div className="Form"></div>;
 };
 
 export default Form;
