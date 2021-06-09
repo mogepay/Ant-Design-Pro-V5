@@ -9,6 +9,7 @@ import './index.less';
 
 /**
  * @module UpLoad 图片上传
+ * @author Domesy
  *
  * @param amount 数量 可设置上传的数量，默认为1张
  * @param getFiles 上传后图片返回的值

@@ -7,6 +7,7 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
 
 /**
  * @module Form表单
+ * @author Domesy
  *
  * @param formList 必填 表单配置的数据
  * @param footer 按钮是否显示在页脚，如果自定义按钮则无效 默认：false
@@ -27,6 +28,11 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
  * @param required 必填项 判断是否有该字段 增加whitespace，只输入空格不可校验通过，如果字段无required，则默认加入必填字段，对应message默认字段为 请输入${data.label}
  * @param reMessage 有规则，但无必填字段，默认加入必填字段的message，取数组最后一个的renMessage
+ * @param pattern 正则，验证失败时会报错
+ * @param min 限定最少几个字符，可与max配合使用
+ * @param max 限定最多几个字符，可与min配合使用
+ * @param len 只限定几个字符能输入
+ * @param method 简化开发设定常用的的值 具体有 'tel'：电话 'password'：密码 'name'：姓名 'card'：银行卡号 'sfz'：身份证 'emil'：邮箱 'telEmil'：电话+邮箱;
  *
  *
  * @buttonConfig
