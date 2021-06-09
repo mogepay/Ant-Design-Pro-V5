@@ -26,6 +26,7 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param width 宽度
  * @param tooltip 提示语
  * @param placeholder 预设时的字段 默认 请输入 + label
+ * @param readonly 只读
  * @param disabled 不可编辑
  * @param rulesRender 适用于原本的rules
  * @param rules 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
@@ -58,7 +59,7 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  */
 
 /**
- * 1. 基本布局 居中响应式，每行一列
+ * 1. 基本布局 居中响应式，每行一列 栅格 按钮的问题 自定义文本框
  * 2. 各种类型的进行封装，普通的text 选择 开关 日期 单选 多选 图片 textArea
  * 3. 信息带入
  * 4. 特殊组件进行封装
@@ -72,12 +73,23 @@ const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
     sm: { span: 7 },
+    lg: { span: 12 },
   },
   wrapperCol: {
     xs: { span: 24 },
     sm: { span: 12 },
     md: { span: 10 },
   },
+};
+
+// const formItemLayout = {
+//   labelCol: { span: 4 },
+//   wrapperCol: { span: 8 },
+// };
+
+const formTailLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 8, offset: 4 },
 };
 
 /**
@@ -95,14 +107,13 @@ const waitTime = (time: number = 100) => {
 const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ...props }) => {
   // 规则设定
   const ruleRender = (data: formProps) => {
-    if (data.disabled || (!data.rules && !data.rulesRender)) return undefined;
+    if (data.readonly || data.disabled || (!data.rules && !data.rulesRender)) return undefined;
     if (data.rulesRender) return data.rulesRender;
     let rules: Array<RuleProps> = [];
     let require = {
       flag: false,
       message: '',
     };
-    // min max len
     data.rules.map((item) => {
       if (item.reMessage) require.message = item.reMessage;
       if (item.pattern) {
@@ -200,9 +211,9 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
           message.success('提交成功');
         }}
         // initialValues={
-        //   {
-        //     phone: '11'
-        //   }
+        // {
+        //   input4: '11'
+        // }
         // }
         layout="horizontal"
         submitter={{
@@ -267,6 +278,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
               // item.type === 'select' ? '' :
               <ProFormText
                 {...formItemLayout}
+                readonly={item.readonly}
                 width={item.width || 'md'}
                 name={item.name}
                 label={item.label}
@@ -275,6 +287,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
                 placeholder={item.placeholder || `请输入${item.label}`}
                 rules={ruleRender(item)}
                 fieldProps={{
+                  suffix: item.suffix,
                   prefix: item.prefix,
                   ...item.fieldProps,
                 }}
@@ -282,33 +295,32 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
             }
           </div>
         ))}
-        {/* <ProFormCaptcha
-        {...formItemLayout}
-        label='验证码'
-        fieldProps={{
-          size: 'large',
-          prefix: <MailTwoTone />,
-        }}
-        captchaProps={{
-          size: 'large',
-        }}
-        // 手机号的 name，onGetCaptcha 会注入这个值
-        phoneName="phone"
-        name="captcha"
-        rules={[
-          {
-            required: true,
-            message: '请输入验证码',
-          },
-        ]}
-        placeholder="请输入验证码"
-        // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
-        // throw new Error("获取验证码错误")
-        onGetCaptcha={async (phone) => {
-          await waitTime(1000);
-          message.success(`手机号 ${phone} 验证码发送成功!`);
-        }}
-      /> */}
+        <ProFormCaptcha
+          {...formTailLayout}
+          fieldProps={{
+            size: 'large',
+            prefix: <MailTwoTone />,
+          }}
+          captchaProps={{
+            size: 'large',
+          }}
+          // 手机号的 name，onGetCaptcha 会注入这个值
+          phoneName="phone"
+          name="captcha"
+          rules={[
+            {
+              required: true,
+              message: '请输入验证码',
+            },
+          ]}
+          placeholder="请输入验证码"
+          // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+          // throw new Error("获取验证码错误")
+          onGetCaptcha={async (phone) => {
+            await waitTime(1000);
+            message.success(`手机号 ${phone} 验证码发送成功!`);
+          }}
+        />
       </ProForm>
     </>
   );

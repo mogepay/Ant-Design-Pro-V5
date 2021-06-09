@@ -29,6 +29,13 @@ const list: any = [
   //   label: '为空时的文本样式',
   //   placeholder: '自定义placeholder'
   // },
+  {
+    name: 'input4',
+    label: '只读',
+    readonly: true,
+    tooltip: '只读层级高于disabled',
+    rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
+  },
   // {
   //   name: 'input4',
   //   label: '禁用',
@@ -187,6 +194,19 @@ const list: any = [
     label: '前缀图标(自定义)',
     tooltip: 'fieldProps若存在该属性，则prefix无效',
     prefix: <MailTwoTone />,
+  },
+  {
+    name: 'input20',
+    label: '前缀图标(自定义)',
+    tooltip: 'fieldProps若存在该属性，则suffix无效',
+    suffix: <MailTwoTone />,
+  },
+  {
+    name: 'captcha1',
+    label: '前缀图标(自定义)',
+    tooltip: 'fieldProps若存在该属性，则prefix无效',
+    prefix: <MailTwoTone />,
+    type: 'captcha',
   },
 ];
 

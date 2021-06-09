@@ -41,12 +41,14 @@ export interface formProps {
   name: string;
   label: string;
   tooltip?: string;
+  readonly?: boolean;
   width?: number | 'sm' | 'md' | 'xl' | 'xs' | 'lg' | undefined;
   placeholder?: string;
   disabled?: boolean;
   rules: Array<RuleProps>;
   rulesRender: Array<any>;
   prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   fieldProps?: Object;
 }
 
