@@ -202,12 +202,16 @@ const list: any = [
     suffix: <MailTwoTone />,
   },
   {
-    name: 'captcha1',
-    label: '前缀图标(自定义)',
-    tooltip: 'fieldProps若存在该属性，则prefix无效',
-    prefix: <MailTwoTone />,
-    type: 'captcha',
+    name: 'input21',
+    tooltip: '无 label',
   },
+  // {
+  //   name: 'captcha1',
+  //   label: '前缀图标(自定义)',
+  //   tooltip: 'fieldProps若存在该属性，则prefix无效',
+  //   prefix: <MailTwoTone />,
+  //   type: 'captcha',
+  // },
 ];
 
 const Welcome: React.FC<any> = (props) => {

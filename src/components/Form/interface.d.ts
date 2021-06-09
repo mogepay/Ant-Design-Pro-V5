@@ -10,7 +10,6 @@ interface ButtonRenderProps {
   onReset?: () => void;
   otherRender?: () => void;
   position?: 'left' | 'right';
-  renderStyle?: Object;
   render?:
     | false
     | ((
@@ -23,6 +22,27 @@ interface ButtonRenderProps {
         dom: JSX.Element[],
       ) => React.ReactNode | React.ReactNode[])
     | undefined;
+}
+
+interface colProps {
+  flex?: FlexType;
+  span?: ColSpanType;
+  order?: ColSpanType;
+  offset?: ColSpanType;
+  push?: ColSpanType;
+  pull?: ColSpanType;
+  xs?: ColSpanType | ColSize;
+  sm?: ColSpanType | ColSize;
+  md?: ColSpanType | ColSize;
+  lg?: ColSpanType | ColSize;
+  xl?: ColSpanType | ColSize;
+  xxl?: ColSpanType | ColSize;
+  prefixCls?: string;
+}
+
+interface formLayoutProps {
+  labelCol: colProps;
+  wrapperCol: colProps;
 }
 
 export interface RuleProps {
@@ -39,7 +59,7 @@ export interface RuleProps {
 export interface formProps {
   type?: 'input' | 'select';
   name: string;
-  label: string;
+  label?: string;
   tooltip?: string;
   readonly?: boolean;
   width?: number | 'sm' | 'md' | 'xl' | 'xs' | 'lg' | undefined;
@@ -53,6 +73,8 @@ export interface formProps {
 }
 
 interface Props extends ProFormProps {
+  formLayout?: formLayoutProps;
+  formTailLayout?: formLayoutProps;
   formList: Array<formProps>;
   footer?: boolean;
   buttonConfig?: ButtonRenderProps;

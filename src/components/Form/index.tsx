@@ -5,6 +5,7 @@ import ProForm, {
   ProFormCaptcha,
   ProFormDependency,
   ProFormSelect,
+  ProFormField,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -18,11 +19,13 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param formList 必填 表单配置的数据
  * @param footer 按钮是否显示在页脚，如果自定义按钮则无效 默认：false
  * @param buttonConfig 按钮相关的配置
+ * @param formLayout 栅格布局 与col类似,基础col的属性，将表格进行栅格布局，响应式布局等， 现在默认的居中，默认居中，有label字段，包含两个属性labelCol和wrapperCol
+ * @param formTailLayout 与formLayout相同，但无label字段
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
- * @param name 必填，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段
- * @param label 必填，字段名称
+ * @param name 必填(最后获取的值)，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段
+ * @param label 字段名称
  * @param width 宽度
  * @param tooltip 提示语
  * @param placeholder 预设时的字段 默认 请输入 + label
@@ -51,7 +54,6 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param resetButton 重置按钮的属性，继承Button
  * @param onSubmit 点击提交按钮的事件，不建议使用
  * @param onReset 点击重置按钮的事件，不建议使用
- * @param renderStyle 设置外层的样式
  * @param otherRender 在原有的重置和提交增加其他按钮，如返回上一步，可以加个上一步的按钮，需要自己根据需求设计样式
  * @param position 自定义渲染按钮的位置，‘left’和 'right' 默认’left‘
  * @param render 自定义按钮样式，注：此方法是重置的按钮,继承原有的ProForm中submitter中的render，返回原有的props和dome，一旦由此方法，buttonConfig的其他方法都无法使用
@@ -72,30 +74,32 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 7 },
+    sm: { span: 12 },
     lg: { span: 12 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
+    sm: { span: 7 },
+    lg: { span: 12 },
   },
 };
 
-// const formItemLayout = {
-//   labelCol: { span: 4 },
-//   wrapperCol: { span: 8 },
-// };
-
-const formTailLayout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 8, offset: 4 },
+const formItemTailLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    lg: { span: 12 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12, offset: 12 },
+    lg: { span: 12, offset: 12 },
+  },
 };
 
 /**
  * @module Form表单
  */
-
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -104,7 +108,14 @@ const waitTime = (time: number = 100) => {
   });
 };
 
-const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ...props }) => {
+const Form: React.FC<Props> = ({
+  formList = [],
+  footer = false,
+  buttonConfig,
+  formLayout,
+  formTailLayout,
+  ...props
+}) => {
   // 规则设定
   const ruleRender = (data: formProps) => {
     if (data.readonly || data.disabled || (!data.rules && !data.rulesRender)) return undefined;
@@ -186,7 +197,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
         require.flag = true;
         const result = {
           required: true,
-          message: item.message || `请输入${data.label}`,
+          message: item.message || `请输入${data.label || ''}`,
         };
         rules = [...rules, result];
       }
@@ -194,7 +205,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
     if (!require.flag) {
       const result = {
         required: true,
-        message: require.message || `请输入${data.label}`,
+        message: require.message || `请输入${data.label || ''}`,
       };
       rules = [...rules, result];
     }
@@ -237,6 +248,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
             if (buttonConfig?.otherRender) {
               otherRender = buttonConfig.otherRender();
             }
+            // ProFormSelect
             return (
               <>
                 {footer ? (
@@ -246,19 +258,30 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
                     {position === 'right' && otherRender}
                   </FooterToolbar>
                 ) : (
-                  <div
-                    style={
-                      buttonConfig?.renderStyle || {
-                        width: '70%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }
-                    }
-                  >
-                    {position === 'left' && otherRender}
-                    {dom}
-                    {position === 'right' && otherRender}
-                  </div>
+                  // <div
+                  //   style={
+                  //     buttonConfig?.renderStyle || {
+                  //       width: '70%',
+                  //       display: 'flex',
+                  //       justifyContent: 'center',
+                  //     }
+                  //   }
+                  // >
+                  //   {position === 'left' && otherRender}
+                  //   {dom}
+                  //   {position === 'right' && otherRender}
+                  // </div>
+                  <ProFormField
+                    labelCol={formTailLayout?.labelCol || formItemTailLayout.labelCol}
+                    wrapperCol={formTailLayout?.wrapperCol || formItemTailLayout.wrapperCol}
+                    renderFormItem={() => (
+                      <>
+                        {position === 'left' && otherRender}
+                        {dom}
+                        {position === 'right' && otherRender}
+                      </>
+                    )}
+                  ></ProFormField>
                 )}
               </>
             );
@@ -277,14 +300,23 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
             {
               // item.type === 'select' ? '' :
               <ProFormText
-                {...formItemLayout}
+                labelCol={
+                  item.label
+                    ? formLayout?.labelCol || formItemLayout.labelCol
+                    : formTailLayout?.labelCol || formItemTailLayout.labelCol
+                }
+                wrapperCol={
+                  item.label
+                    ? formLayout?.wrapperCol || formItemLayout.wrapperCol
+                    : formTailLayout?.wrapperCol || formItemTailLayout.wrapperCol
+                }
                 readonly={item.readonly}
                 width={item.width || 'md'}
                 name={item.name}
                 label={item.label}
                 tooltip={item.tooltip}
                 disabled={item.disabled}
-                placeholder={item.placeholder || `请输入${item.label}`}
+                placeholder={item.placeholder || `请输入${item.label || ''}`}
                 rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,
@@ -295,8 +327,13 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
             }
           </div>
         ))}
-        <ProFormCaptcha
-          {...formTailLayout}
+        {/* <ProFormText
+                {...formTailLayout}
+                width={ 'md'}
+                name={12}
+              /> */}
+        {/* <ProFormCaptcha
+          {...formItemLayout}
           fieldProps={{
             size: 'large',
             prefix: <MailTwoTone />,
@@ -304,6 +341,8 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
           captchaProps={{
             size: 'large',
           }}
+          label={'11'}
+          width='md'
           // 手机号的 name，onGetCaptcha 会注入这个值
           phoneName="phone"
           name="captcha"
@@ -320,7 +359,7 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
             await waitTime(1000);
             message.success(`手机号 ${phone} 验证码发送成功!`);
           }}
-        />
+        /> */}
       </ProForm>
     </>
   );
