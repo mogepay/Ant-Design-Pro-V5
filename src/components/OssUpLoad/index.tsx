@@ -3,7 +3,7 @@ import { Upload, message, Modal, Button } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
-import Props from './data.d';
+import Props from './interface.d';
 
 import './index.less';
 

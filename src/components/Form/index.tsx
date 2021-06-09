@@ -2,7 +2,7 @@ import React from 'react';
 import { message } from 'antd';
 import ProForm, { ProFormText, ProFormDependency, ProFormSelect } from '@ant-design/pro-form';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import Props, { formProps, RuleProps } from './data.d';
+import Props, { formProps, RuleProps } from './interface.d';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 
 /**
