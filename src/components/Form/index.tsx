@@ -3,6 +3,7 @@ import { message } from 'antd';
 import ProForm, { ProFormText, ProFormDependency, ProFormSelect } from '@ant-design/pro-form';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import Props, { formProps, RuleProps } from './data.d';
+import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 
 /**
  * @module Form表单
@@ -86,19 +87,79 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
       flag: false,
       message: '',
     };
+    // min max len
     data.rules.map((item) => {
       if (item.reMessage) require.message = item.reMessage;
       if (item.pattern) {
         const result = {
-          ...item,
+          pattern: item.pattern,
           message: item.message || `请输入合法的字符`,
+        };
+        rules = [...rules, result];
+      } else if (item.min || item.max) {
+        const message =
+          item.max && item.min
+            ? `请输入${item.min}~${item.max}个字符`
+            : item.max
+            ? `请输入最多${item.max}个字符`
+            : `请输入至少${item.min}个字符`;
+        const result = {
+          min: item.min || undefined,
+          max: item.max || undefined,
+          message: item.message || message,
+        };
+        rules = [...rules, result];
+      } else if (item.max) {
+        const result = {
+          max: item.max,
+          message: item.message || `请输入最多${item.max}个字符`,
+        };
+        rules = [...rules, result];
+      } else if (item.len) {
+        const result = {
+          len: item.len,
+          message: item.message || `请输入${item.len}个字符`,
+        };
+        rules = [...rules, result];
+      } else if (item.method) {
+        // , rePassword, reName, reCard, reSfz, reEmil, reTelEmil
+        const pattern =
+          item.method === 'tel'
+            ? reTel
+            : item.method === 'password'
+            ? rePassword
+            : item.method === 'name'
+            ? reName
+            : item.method === 'card'
+            ? reCard
+            : item.method === 'sfz'
+            ? reSfz
+            : item.method === 'emil'
+            ? reEmil
+            : reTelEmil;
+        const message =
+          item.method === 'tel'
+            ? '电话号码'
+            : item.method === 'password'
+            ? '密码，长度必须为6至20位'
+            : item.method === 'name'
+            ? '姓名'
+            : item.method === 'card'
+            ? '银行卡号'
+            : item.method === 'sfz'
+            ? '身份证'
+            : item.method === 'emil'
+            ? '邮箱'
+            : '邮箱活电话号码';
+        const result = {
+          pattern: pattern,
+          message: item.message || `请输入正确的${message}`,
         };
         rules = [...rules, result];
       } else if (item.required) {
         require.flag = true;
         const result = {
-          ...item,
-          ...require,
+          required: true,
           message: item.message || `请输入${data.label}`,
         };
         rules = [...rules, result];

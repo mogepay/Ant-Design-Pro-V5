@@ -30,6 +30,10 @@ export interface RuleProps {
   pattern?: RegExp;
   message?: string;
   reMessage?: string;
+  min?: number;
+  max?: number;
+  len?: number;
+  method?: 'tel' | 'password' | 'name' | 'card' | 'sfz' | 'emil' | 'telEmil';
 }
 
 export interface formProps {
