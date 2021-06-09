@@ -1,6 +1,12 @@
 import React from 'react';
 import { message } from 'antd';
-import ProForm, { ProFormText, ProFormDependency, ProFormSelect } from '@ant-design/pro-form';
+import ProForm, {
+  ProFormText,
+  ProFormCaptcha,
+  ProFormDependency,
+  ProFormSelect,
+} from '@ant-design/pro-form';
+import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import Props, { formProps, RuleProps } from './interface.d';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
@@ -15,14 +21,16 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
- *
  * @param name 必填，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段
  * @param label 必填，字段名称
  * @param width 宽度
  * @param tooltip 提示语
  * @param placeholder 预设时的字段 默认 请输入 + label
  * @param disabled 不可编辑
+ * @param rulesRender 适用于原本的rules
  * @param rules 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
+ * @param fieldProps 属性来支持设置输入组件的props
+ * @param prefix 样式前缀
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -87,7 +95,8 @@ const waitTime = (time: number = 100) => {
 const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ...props }) => {
   // 规则设定
   const ruleRender = (data: formProps) => {
-    if (data.disabled || !data.rules) return undefined;
+    if (data.disabled || (!data.rules && !data.rulesRender)) return undefined;
+    if (data.rulesRender) return data.rulesRender;
     let rules: Array<RuleProps> = [];
     let require = {
       flag: false,
@@ -174,7 +183,6 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
     if (!require.flag) {
       const result = {
         required: true,
-        whitespace: true,
         message: require.message || `请输入${data.label}`,
       };
       rules = [...rules, result];
@@ -266,98 +274,41 @@ const Form: React.FC<Props> = ({ formList = [], footer = false, buttonConfig, ..
                 disabled={item.disabled}
                 placeholder={item.placeholder || `请输入${item.label}`}
                 rules={ruleRender(item)}
-                // rules={item.disabled ? undefined : [
-                // {
-                //   required: true,
-                //   message: `请输入${item.label}`
-                // },
-                // {
-                //   pattern: /^1\d{10}$/,
-                //   message: '不合法的手机号格式!',
-                // }
-                // {
-                //   whitespace: true,
-                //   validateTrigger: 'onBlue'
-                // }
-                // {
-                //   min: 3,
-                //   max: 5
-                // },
-                // {
-                //   len: 5  // 限定字符
-                // },
-                // {
-                //   whitespace: true // 空字符串
-                // }
-                // ]}
+                fieldProps={{
+                  prefix: item.prefix,
+                  ...item.fieldProps,
+                }}
               />
             }
           </div>
         ))}
-        {/* <ProFormText
-          {...formItemLayout}
-          width="md"
-          name="name"
-          label="签约客户名称"
-          tooltip="最长为 24 位"
-          placeholder="请输入名称"
-        /> */}
-        {/* <ProFormText
-          // fieldProps={{
-          //   size: 'large',
-          // }}
-          {...formItemLayout}
-          name="phone"
-          placeholder="请输入手机号"
-          rules={[
-            {
-              required: true,
-              message: '请输入手机号!',
-            },
-            {
-              pattern: /^1\d{10}$/,
-              message: '不合法的手机号格式!',
-            },
-          ]}
-        /> */}
-        {/* <ProFormText
-          {...formItemLayout}
-          width="md"
-          name="name"
-          label="签约客户名称"
-          tooltip="最长为 24 位"
-          placeholder="请输入名称"
-        />
-        <ProFormText
-          {...formItemLayout}
-          width="md"
-          name="company"
-          label="我方公司名称"
-          placeholder="请输入名称"
-        />
-        <ProFormText
-          {...formItemLayout}
-          name="project"
-          width="md"
-          disabled
-          label="项目名称"
-          initialValue="xxxx项目"
-        />
-        <ProFormText
-          {...formItemLayout}
-          name="mangerName"
-          disabled
-          label="商务经理"
-          initialValue="启途"
-        />
-        <ProFormText
-          {...formItemLayout}
-          width="md"
-          name="name"
-          label="签约客户名称"
-          tooltip="最长为 24 位"
-          placeholder="请输入名称"
-        /> */}
+        {/* <ProFormCaptcha
+        {...formItemLayout}
+        label='验证码'
+        fieldProps={{
+          size: 'large',
+          prefix: <MailTwoTone />,
+        }}
+        captchaProps={{
+          size: 'large',
+        }}
+        // 手机号的 name，onGetCaptcha 会注入这个值
+        phoneName="phone"
+        name="captcha"
+        rules={[
+          {
+            required: true,
+            message: '请输入验证码',
+          },
+        ]}
+        placeholder="请输入验证码"
+        // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+        // throw new Error("获取验证码错误")
+        onGetCaptcha={async (phone) => {
+          await waitTime(1000);
+          message.success(`手机号 ${phone} 验证码发送成功!`);
+        }}
+      /> */}
       </ProForm>
     </>
   );

@@ -8,6 +8,7 @@ import { Jump } from '@/utils';
 import { text } from 'express';
 import ProCard from '@ant-design/pro-card';
 
+import { MailTwoTone } from '@ant-design/icons';
 const list: any = [
   // {
   //   name: 'input',
@@ -92,24 +93,101 @@ const list: any = [
   //     },
   //   ],
   // },
-  {
-    name: 'email',
-    label: '只能',
-    rules: [
-      {
-        method: 'tel',
-      },
-    ],
-  },
   // {
   //   name: 'input11',
-  //   label: '只能输入url',
+  //   label: '手机号验证',
+  //   tooltip: "method: 'tel', 对应utils/Regexp的reTel",
   //   rules: [
   //     {
-  //       type: 'url',
+  //       method: 'tel',
+  //       message: '11'
   //     },
   //   ],
   // },
+  // {
+  //   name: 'input12',
+  //   label: '密码',
+  //   tooltip: "method: 'password', 对应utils/Regexp的rePassword",
+  //   rules: [
+  //     {
+  //       method: 'password',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input13',
+  //   label: '姓名',
+  //   tooltip: "method: 'name', 对应utils/Regexp的reName",
+  //   rules: [
+  //     {
+  //       method: 'name'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input14',
+  //   label: '身份证',
+  //   tooltip: "method: 'sfz', 对应utils/Regexp的reSfz",
+  //   rules: [
+  //     {
+  //       method: 'sfz'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input15',
+  //   label: '银行卡号',
+  //   tooltip: "method: 'card', 对应utils/Regexp的reCard",
+  //   rules: [
+  //     {
+  //       method: 'card'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input16',
+  //   label: '邮箱',
+  //   tooltip: "method: 'emil', 对应utils/Regexp的reEmil",
+  //   rules: [
+  //     {
+  //       method: 'emil'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input17',
+  //   label: '电话或邮箱',
+  //   tooltip: "method: 'name', 对应utils/Regexp的reTelEmil",
+  //   rules: [
+  //     {
+  //       method: 'telEmil'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input18',
+  //   label: '规则rulesRender',
+  //   tooltip: "走原本的rules，原本的必填，输入空格也可校验过",
+  //   rulesRender: [
+  //     {
+  //       required: 'true'
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input19',
+  //   label: 'fieldProps',
+  //   tooltip: "支持原本的输入组件，如大小，placeholder",
+  //   fieldProps: {
+  //     size: 'large'
+  //   }
+  // },
+  {
+    name: 'input20',
+    label: '前缀图标(自定义)',
+    tooltip: 'fieldProps若存在该属性，则prefix无效',
+    prefix: <MailTwoTone />,
+  },
 ];
 
 const Welcome: React.FC<any> = (props) => {

@@ -45,6 +45,9 @@ export interface formProps {
   placeholder?: string;
   disabled?: boolean;
   rules: Array<RuleProps>;
+  rulesRender: Array<any>;
+  prefix?: React.ReactNode;
+  fieldProps?: Object;
 }
 
 interface Props extends ProFormProps {
