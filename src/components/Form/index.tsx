@@ -74,13 +74,11 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    lg: { span: 12 },
+    sm: { span: 8 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 7 },
-    lg: { span: 12 },
+    sm: { span: 8 },
   },
 };
 
@@ -92,8 +90,7 @@ const formItemTailLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12, offset: 12 },
-    lg: { span: 12, offset: 12 },
+    sm: { span: 8, offset: 8 },
   },
 };
 
