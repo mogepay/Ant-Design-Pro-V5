@@ -35,14 +35,25 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param placeholder 预设时的字段 默认 请输入 + label
  * @param readonly 只读
  * @param disabled 不可编辑
- * @param rulesRender 适用于原本的rules
- * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
- * @param fieldProps 属性来支持设置输入组件的props
- * @param prefix 样式前缀
  *
  * @type
  * @param input 就是最基本的input
  * @param password 密码设置状态框, 包含input的全部属性
+ * @param select 选择框
+ *
+ * @select的私有参数
+ * @param required select 唯一的规则，只有是否必填
+ * @param message 必填时的消息 默认
+ * @param enum 对象， 对应选择框的值，展示属性值，值为属性名
+ * @param options 数组 包含label和value，展示label，值为value 并且等级高于enum
+ * @param request 函数，返回对象为一个数组，包含label和value，展示label，值为value，并且等级高于enum和options
+ *
+ * @input和password的私有参数
+ * @param fieldProps 属性来支持设置输入组件的props
+ * @param prefix 样式前缀
+ * @param suffix 样式后缀
+ * @param rulesRender 适用于原本的rules
+ * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -220,6 +231,7 @@ const Form: React.FC<Props> = ({
   const commonProps = (item: any) => {
     const formLayout = item.label ? formItemLayout : formItemTailLayout;
     return {
+      ...item,
       ...formLayout,
       width: item.width || 'md',
       name: item.name,
@@ -240,9 +252,11 @@ const Form: React.FC<Props> = ({
           console.log(values, '--2');
           message.success('提交成功');
         }}
-        initialValues={{
-          select: 'closed',
-        }}
+        initialValues={
+          {
+            // select: 'closed',
+          }
+        }
         layout="horizontal"
         submitter={{
           searchConfig: {
@@ -317,15 +331,26 @@ const Form: React.FC<Props> = ({
             {item.type === 'select' ? (
               <ProFormSelect
                 {...commonProps(item)}
-                valueEnum={{
-                  open: '未解决',
-                  closed: '已解决',
-                }}
+                valueEnum={item.enum}
+                options={item.options}
+                request={item.request}
                 // fieldProps
-                rules={[{ required: true, message: 'Please select your country!' }]}
+                rules={
+                  item.required && [
+                    { required: true, message: item.message || `请输入${item.label}` },
+                  ]
+                }
               />
             ) : item.type === 'password' ? (
-              <ProFormText.Password {...commonProps(item)} rules={ruleRender(item)} />
+              <ProFormText.Password
+                {...commonProps(item)}
+                rules={ruleRender(item)}
+                fieldProps={{
+                  suffix: item.suffix,
+                  prefix: item.prefix,
+                  ...item.fieldProps,
+                }}
+              />
             ) : (
               <ProFormText
                 {...commonProps(item)}
@@ -339,14 +364,22 @@ const Form: React.FC<Props> = ({
             )}
           </div>
         ))}
+
         {/* <ProFormSelect
-            name="select"
+            name="select22"
             label="Select"
-            valueEnum={{
-              open: '未解决',
-              closed: '已解决',
+            options={[
+              { label: '全部', value: 'all' },
+              { label: '未解决', value: 'open' },
+              { label: '已解决', value: 'closed' },
+              { label: '解决中', value: 'processing' },
+            ]}
+            fieldProps={{
+              optionItemRender(item:any) {
+                console.log(item)
+                return item.label + ' - ' + item.value;
+              },
             }}
-            // disabled={true}
             placeholder="Please select a country"
             rules={[{ required: true, message: 'Please select your country!' }]}
           /> */}

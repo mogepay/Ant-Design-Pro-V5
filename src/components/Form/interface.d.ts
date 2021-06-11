@@ -65,11 +65,16 @@ export interface formProps {
   width?: number | 'sm' | 'md' | 'xl' | 'xs' | 'lg' | undefined;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
   rules: Array<RuleProps>;
+  message: string;
   rulesRender: Array<any>;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   fieldProps?: Object;
+  enum?: any;
+  options?: Array<{ label: any; value: any }>;
+  request?: () => void;
 }
 
 interface Props extends ProFormProps {

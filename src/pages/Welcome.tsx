@@ -195,45 +195,80 @@ const list: any = [
   //   tooltip: 'fieldProps若存在该属性，则prefix无效',
   //   prefix: <MailTwoTone />,
   // },
-  {
-    name: 'input22',
-    label: '前缀图标(自定义)',
-    tooltip: 'fieldProps若存在该属性，则suffix无效',
-    suffix: <MailTwoTone />,
-  },
+  // {
+  //   name: 'input22',
+  //   label: '前缀图标(自定义)',
+  //   tooltip: 'fieldProps若存在该属性，则suffix无效',
+  //   suffix: <MailTwoTone />,
+  // },
   // {
   //   name: 'input23',
   //   placeholder: '没有 label，自动对齐'
   // },
-  {
-    name: 'password',
-    label: '密码',
-    type: 'password',
-  },
-  {
-    name: 'password1',
-    label: '密码',
-    placeholder: '配合规则，图标',
-    rules: [
-      {
-        method: 'password',
-        message: '密码，长度必须为6至20位',
-      },
-    ],
-    prefix: <MailTwoTone />,
-    type: 'password',
-  },
+  // {
+  //   name: 'password',
+  //   label: '密码',
+  //   type: 'password',
+  // },
+  // {
+  //   name: 'password1',
+  //   label: '密码',
+  //   placeholder: '配合规则，图标',
+  //   rules: [
+  //     {
+  //       method: 'password',
+  //       message: '密码，长度必须为6至20位',
+  //     },
+  //   ],
+  //   prefix: <MailTwoTone />,
+  //   type: 'password',
+  // },
   {
     name: 'select',
-    label: '选择',
+    label: '选择valueEnum',
+    tooltip: 'onFinish的值是enum的属性名',
+    enum: {
+      0: '已选择',
+      1: '未选择',
+      2: '代选择',
+    },
+    type: 'select',
+  },
+  {
+    name: 'select1',
+    label: '选择options',
+    tooltip: 'onFinish的值是enum的属性名',
+    options: [
+      { label: '全部1', value: 'all' },
+      { label: '未解决', value: 'open' },
+      { label: '已解决', value: 'closed' },
+      { label: '解决中', value: 'processing' },
+    ],
+    type: 'select',
+  },
+  {
+    name: 'select2',
+    label: '选择request',
+    tooltip:
+      '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
+    request: async () => [
+      { label: '全部', value: 'all' },
+      { label: '未解决', value: 'open' },
+      { label: '已解决', value: 'closed' },
+      { label: '解决中', value: 'processing' },
+    ],
+    type: 'select',
+  },
+  {
+    name: 'select3',
+    label: '必填',
+    enum: {
+      0: '已选择',
+      1: '未选择',
+      2: '代选择',
+    },
     placeholder: '选择规则',
-    // rules: [
-    //   {
-    //     method: 'password',
-    //     message: '密码，长度必须为6至20位'
-    //   }
-    // ],
-    prefix: <MailTwoTone />,
+    required: true,
     type: 'select',
   },
 ];
