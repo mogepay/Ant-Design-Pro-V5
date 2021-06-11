@@ -57,7 +57,7 @@ export interface RuleProps {
 }
 
 export interface formProps {
-  type?: 'input' | 'select';
+  type?: 'input' | 'password' | 'select';
   name: string;
   label?: string;
   tooltip?: string;

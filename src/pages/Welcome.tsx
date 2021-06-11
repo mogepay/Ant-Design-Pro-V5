@@ -29,26 +29,26 @@ const list: any = [
   //   label: '为空时的文本样式',
   //   placeholder: '自定义placeholder'
   // },
-  {
-    name: 'input4',
-    label: '只读',
-    readonly: true,
-    tooltip: '只读层级高于disabled',
-    rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
-  },
   // {
   //   name: 'input4',
+  //   label: '只读',
+  //   readonly: true,
+  //   tooltip: '只读层级高于disabled',
+  //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
+  // },
+  // {
+  //   name: 'input5',
   //   label: '禁用',
   //   disabled:true
   // },
   // {
-  //   name: 'input5',
+  //   name: 'input6',
   //   label: '必填',
   //   tooltip: '此选项必填，并且不能为空格',
   //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
   // },
   // {
-  //   name: 'input6',
+  //   name: 'input7',
   //   label: '正则手机号',
   //   tooltip: '所有有规则的都会加入required，并且不能为空格，简化开发',
   //   rules: [
@@ -60,7 +60,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input7',
+  //   name: 'input8',
   //   label: '最小位数',
   //   rules: [
   //     {
@@ -69,7 +69,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input8',
+  //   name: 'input9',
   //   label: '最大位数',
   //   rules: [
   //     {
@@ -78,7 +78,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input9',
+  //   name: 'input10',
   //   label: '最小和最大',
   //   rules: [
   //     {
@@ -88,7 +88,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input10',
+  //   name: 'input11',
   //   label: '最小和最大',
   //   tooltip: '同时支持最小和最大位数,但提示语不同',
   //   rules: [
@@ -101,7 +101,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input11',
+  //   name: 'input12',
   //   label: '手机号验证',
   //   tooltip: "method: 'tel', 对应utils/Regexp的reTel",
   //   rules: [
@@ -112,7 +112,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input12',
+  //   name: 'input13',
   //   label: '密码',
   //   tooltip: "method: 'password', 对应utils/Regexp的rePassword",
   //   rules: [
@@ -122,7 +122,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input13',
+  //   name: 'input14',
   //   label: '姓名',
   //   tooltip: "method: 'name', 对应utils/Regexp的reName",
   //   rules: [
@@ -132,7 +132,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input14',
+  //   name: 'input15',
   //   label: '身份证',
   //   tooltip: "method: 'sfz', 对应utils/Regexp的reSfz",
   //   rules: [
@@ -142,7 +142,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input15',
+  //   name: 'input16',
   //   label: '银行卡号',
   //   tooltip: "method: 'card', 对应utils/Regexp的reCard",
   //   rules: [
@@ -152,7 +152,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input16',
+  //   name: 'input17',
   //   label: '邮箱',
   //   tooltip: "method: 'emil', 对应utils/Regexp的reEmil",
   //   rules: [
@@ -162,7 +162,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input17',
+  //   name: 'input18',
   //   label: '电话或邮箱',
   //   tooltip: "method: 'name', 对应utils/Regexp的reTelEmil",
   //   rules: [
@@ -172,7 +172,7 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input18',
+  //   name: 'input19',
   //   label: '规则rulesRender',
   //   tooltip: "走原本的rules，原本的必填，输入空格也可校验过",
   //   rulesRender: [
@@ -182,36 +182,60 @@ const list: any = [
   //   ],
   // },
   // {
-  //   name: 'input19',
+  //   name: 'input20',
   //   label: 'fieldProps',
   //   tooltip: "支持原本的输入组件，如大小，placeholder",
   //   fieldProps: {
   //     size: 'large'
   //   }
   // },
+  // {
+  //   name: 'input21',
+  //   label: '前缀图标(自定义)',
+  //   tooltip: 'fieldProps若存在该属性，则prefix无效',
+  //   prefix: <MailTwoTone />,
+  // },
   {
-    name: 'input20',
-    label: '前缀图标(自定义)',
-    tooltip: 'fieldProps若存在该属性，则prefix无效',
-    prefix: <MailTwoTone />,
-  },
-  {
-    name: 'input20',
+    name: 'input22',
     label: '前缀图标(自定义)',
     tooltip: 'fieldProps若存在该属性，则suffix无效',
     suffix: <MailTwoTone />,
   },
-  {
-    name: 'input21',
-    tooltip: '无 label',
-  },
   // {
-  //   name: 'captcha1',
-  //   label: '前缀图标(自定义)',
-  //   tooltip: 'fieldProps若存在该属性，则prefix无效',
-  //   prefix: <MailTwoTone />,
-  //   type: 'captcha',
+  //   name: 'input23',
+  //   placeholder: '没有 label，自动对齐'
   // },
+  {
+    name: 'password',
+    label: '密码',
+    type: 'password',
+  },
+  {
+    name: 'password1',
+    label: '密码',
+    placeholder: '配合规则，图标',
+    rules: [
+      {
+        method: 'password',
+        message: '密码，长度必须为6至20位',
+      },
+    ],
+    prefix: <MailTwoTone />,
+    type: 'password',
+  },
+  {
+    name: 'select',
+    label: '选择',
+    placeholder: '选择规则',
+    // rules: [
+    //   {
+    //     method: 'password',
+    //     message: '密码，长度必须为6至20位'
+    //   }
+    // ],
+    prefix: <MailTwoTone />,
+    type: 'select',
+  },
 ];
 
 const Welcome: React.FC<any> = (props) => {

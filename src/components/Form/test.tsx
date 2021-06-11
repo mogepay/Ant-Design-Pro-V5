@@ -61,6 +61,34 @@ const Form: React.FC<{}> = ({}) => {
         tooltip="最长为 24 位"
         placeholder="请输入名称"
       />
+      {/* <ProFormCaptcha
+          {...formItemLayout}
+          fieldProps={{
+            size: 'large',
+            prefix: <MailTwoTone />,
+          }}
+          captchaProps={{
+            size: 'large',
+          }}
+          label={'11'}
+          width='md'
+          // 手机号的 name，onGetCaptcha 会注入这个值
+          phoneName="phone"
+          name="captcha"
+          rules={[
+            {
+              required: true,
+              message: '请输入验证码',
+            },
+          ]}
+          placeholder="请输入验证码"
+          // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+          // throw new Error("获取验证码错误")
+          onGetCaptcha={async (phone) => {
+            await waitTime(1000);
+            message.success(`手机号 ${phone} 验证码发送成功!`);
+          }}
+        /> */}
     </>
   );
 };

@@ -17,10 +17,14 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @author Domesy
  *
  * @param formList 必填 表单配置的数据
+ * @param initialValues 初始值对象 设置默认初始值，属性名：formList的name字段 属性值：你想输入的默认字段
  * @param footer 按钮是否显示在页脚，如果自定义按钮则无效 默认：false
  * @param buttonConfig 按钮相关的配置
  * @param formLayout 栅格布局 与col类似,基础col的属性，将表格进行栅格布局，响应式布局等， 现在默认的居中，默认居中，有label字段，包含两个属性labelCol和wrapperCol
  * @param formTailLayout 与formLayout相同，但无label字段
+ *
+ * @initialValues
+ * @param select 属性值为原本的属性名，如 valueEnum 的属性名
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
@@ -32,9 +36,13 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param readonly 只读
  * @param disabled 不可编辑
  * @param rulesRender 适用于原本的rules
- * @param rules 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
+ * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
  * @param fieldProps 属性来支持设置输入组件的props
  * @param prefix 样式前缀
+ *
+ * @type
+ * @param input 就是最基本的input
+ * @param password 密码设置状态框, 包含input的全部属性
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -45,7 +53,6 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param max 限定最多几个字符，可与min配合使用
  * @param len 只限定几个字符能输入
  * @param method 简化开发设定常用的的值 具体有 'tel'：电话 'password'：密码 'name'：姓名 'card'：银行卡号 'sfz'：身份证 'emil'：邮箱 'telEmil'：电话+邮箱;
- *
  *
  * @buttonConfig
  * @param submitText 提交的按钮文字
@@ -209,6 +216,21 @@ const Form: React.FC<Props> = ({
     return rules;
   };
 
+  // 公共配置Props
+  const commonProps = (item: any) => {
+    const formLayout = item.label ? formItemLayout : formItemTailLayout;
+    return {
+      ...formLayout,
+      width: item.width || 'md',
+      name: item.name,
+      label: item.label,
+      placeholder: item.placeholder || `请输入${item.label || ''}`,
+      readonly: item.readonly,
+      tooltip: item.tooltip,
+      disabled: item.disabled,
+    };
+  };
+
   return (
     <>
       <ProForm
@@ -218,11 +240,9 @@ const Form: React.FC<Props> = ({
           console.log(values, '--2');
           message.success('提交成功');
         }}
-        // initialValues={
-        // {
-        //   input4: '11'
-        // }
-        // }
+        initialValues={{
+          select: 'closed',
+        }}
         layout="horizontal"
         submitter={{
           searchConfig: {
@@ -294,26 +314,21 @@ const Form: React.FC<Props> = ({
       >
         {formList.map((item, index) => (
           <div key={index}>
-            {
-              // item.type === 'select' ? '' :
+            {item.type === 'select' ? (
+              <ProFormSelect
+                {...commonProps(item)}
+                valueEnum={{
+                  open: '未解决',
+                  closed: '已解决',
+                }}
+                // fieldProps
+                rules={[{ required: true, message: 'Please select your country!' }]}
+              />
+            ) : item.type === 'password' ? (
+              <ProFormText.Password {...commonProps(item)} rules={ruleRender(item)} />
+            ) : (
               <ProFormText
-                labelCol={
-                  item.label
-                    ? formLayout?.labelCol || formItemLayout.labelCol
-                    : formTailLayout?.labelCol || formItemTailLayout.labelCol
-                }
-                wrapperCol={
-                  item.label
-                    ? formLayout?.wrapperCol || formItemLayout.wrapperCol
-                    : formTailLayout?.wrapperCol || formItemTailLayout.wrapperCol
-                }
-                readonly={item.readonly}
-                width={item.width || 'md'}
-                name={item.name}
-                label={item.label}
-                tooltip={item.tooltip}
-                disabled={item.disabled}
-                placeholder={item.placeholder || `请输入${item.label || ''}`}
+                {...commonProps(item)}
                 rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,
@@ -321,42 +336,20 @@ const Form: React.FC<Props> = ({
                   ...item.fieldProps,
                 }}
               />
-            }
+            )}
           </div>
         ))}
-        {/* <ProFormText
-                {...formTailLayout}
-                width={ 'md'}
-                name={12}
-              /> */}
-        {/* <ProFormCaptcha
-          {...formItemLayout}
-          fieldProps={{
-            size: 'large',
-            prefix: <MailTwoTone />,
-          }}
-          captchaProps={{
-            size: 'large',
-          }}
-          label={'11'}
-          width='md'
-          // 手机号的 name，onGetCaptcha 会注入这个值
-          phoneName="phone"
-          name="captcha"
-          rules={[
-            {
-              required: true,
-              message: '请输入验证码',
-            },
-          ]}
-          placeholder="请输入验证码"
-          // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
-          // throw new Error("获取验证码错误")
-          onGetCaptcha={async (phone) => {
-            await waitTime(1000);
-            message.success(`手机号 ${phone} 验证码发送成功!`);
-          }}
-        /> */}
+        {/* <ProFormSelect
+            name="select"
+            label="Select"
+            valueEnum={{
+              open: '未解决',
+              closed: '已解决',
+            }}
+            // disabled={true}
+            placeholder="Please select a country"
+            rules={[{ required: true, message: 'Please select your country!' }]}
+          /> */}
       </ProForm>
     </>
   );
