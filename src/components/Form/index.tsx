@@ -340,6 +340,12 @@ const Form: React.FC<Props> = ({
                     { required: true, message: item.message || `请输入${item.label}` },
                   ]
                 }
+                fieldProps={{
+                  optionItemRender: (item: any) => {
+                    return item.label + ' - ' + item.value;
+                  },
+                  ...item.fieldProps,
+                }}
               />
             ) : item.type === 'password' ? (
               <ProFormText.Password
