@@ -289,19 +289,6 @@ const Form: React.FC<Props> = ({
                     {position === 'right' && otherRender}
                   </FooterToolbar>
                 ) : (
-                  // <div
-                  //   style={
-                  //     buttonConfig?.renderStyle || {
-                  //       width: '70%',
-                  //       display: 'flex',
-                  //       justifyContent: 'center',
-                  //     }
-                  //   }
-                  // >
-                  //   {position === 'left' && otherRender}
-                  //   {dom}
-                  //   {position === 'right' && otherRender}
-                  // </div>
                   <ProFormField
                     labelCol={formTailLayout?.labelCol || formItemTailLayout.labelCol}
                     wrapperCol={formTailLayout?.wrapperCol || formItemTailLayout.wrapperCol}
