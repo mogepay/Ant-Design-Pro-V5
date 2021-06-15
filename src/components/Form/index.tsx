@@ -32,9 +32,10 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param label 字段名称
  * @param width 宽度
  * @param tooltip 提示语
- * @param placeholder 预设时的字段 默认 请输入 + label
+ * @param placeholder 预设时的字段 默认 请输入 + label（不一定都有）
  * @param readonly 只读
  * @param disabled 不可编辑
+ * @param fieldProps 属性来支持设置输入组件的props，在各种类型上提供一些简单的属性，这个属性如果自己设置相同的，会覆盖掉之前的
  *
  * @type
  * @param input 就是最基本的input
@@ -47,9 +48,9 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param enum 对象， 对应选择框的值，展示属性值，值为属性名
  * @param options 数组 包含label和value，展示label，值为value 并且等级高于enum
  * @param request 函数，返回对象为一个数组，包含label和value，展示label，值为value，并且等级高于enum和options
+ * @param optionItemRender 函数，默认将item传入 下拉框自定义样式
  *
  * @input和password的私有参数
- * @param fieldProps 属性来支持设置输入组件的props
  * @param prefix 样式前缀
  * @param suffix 样式后缀
  * @param rulesRender 适用于原本的rules
@@ -227,16 +228,27 @@ const Form: React.FC<Props> = ({
     return rules;
   };
 
-  // 公共配置Props
-  const commonProps = (item: any) => {
+  /**
+   * @module 公共配置Props
+   * @param type 传入的类型，通用但不是全部的Props，可以不用传
+   */
+  const commonProps = (item: any, type: string | boolean = false) => {
     const formLayout = item.label ? formItemLayout : formItemTailLayout;
+
+    let commonType: any = {};
+
+    if (type) {
+      const typeTip = type === 'select' ? '请选择' : '请输入';
+      commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
+    }
+
     return {
       ...item,
+      ...commonType,
       ...formLayout,
       width: item.width || 'md',
       name: item.name,
       label: item.label,
-      placeholder: item.placeholder || `请输入${item.label || ''}`,
       readonly: item.readonly,
       tooltip: item.tooltip,
       disabled: item.disabled,
@@ -317,26 +329,27 @@ const Form: React.FC<Props> = ({
           <div key={index}>
             {item.type === 'select' ? (
               <ProFormSelect
-                {...commonProps(item)}
+                {...commonProps(item, item.type)}
                 valueEnum={item.enum}
                 options={item.options}
                 request={item.request}
-                // fieldProps
                 rules={
                   item.required && [
                     { required: true, message: item.message || `请输入${item.label}` },
                   ]
                 }
                 fieldProps={{
-                  optionItemRender: (item: any) => {
-                    return item.label + ' - ' + item.value;
+                  optionItemRender: (ele: any) => {
+                    if (item.optionItemRender) {
+                      return item.optionItemRender(ele);
+                    }
                   },
                   ...item.fieldProps,
                 }}
               />
             ) : item.type === 'password' ? (
               <ProFormText.Password
-                {...commonProps(item)}
+                {...commonProps(item, item.type)}
                 rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,
@@ -346,7 +359,7 @@ const Form: React.FC<Props> = ({
               />
             ) : (
               <ProFormText
-                {...commonProps(item)}
+                {...commonProps(item, 'input')}
                 rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,

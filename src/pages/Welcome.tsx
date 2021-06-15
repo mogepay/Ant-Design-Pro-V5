@@ -271,6 +271,19 @@ const list: any = [
     required: true,
     type: 'select',
   },
+  {
+    name: 'select4',
+    label: '自定义下拉框样式',
+    enum: {
+      0: '已选择',
+      1: '未选择',
+      2: '代选择',
+    },
+    type: 'select',
+    optionItemRender: (item: any) => {
+      return item.label + ' - ' + item.value;
+    },
+  },
 ];
 
 const Welcome: React.FC<any> = (props) => {

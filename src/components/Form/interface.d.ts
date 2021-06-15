@@ -75,6 +75,7 @@ export interface formProps {
   enum?: any;
   options?: Array<{ label: any; value: any }>;
   request?: () => void;
+  optionItemRender?: (ele: any) => void;
 }
 
 interface Props extends ProFormProps {
