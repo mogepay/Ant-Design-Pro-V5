@@ -7,6 +7,8 @@ import { Button, OssUpLoad, Form } from '@/components';
 import { Jump } from '@/utils';
 import { text } from 'express';
 import ProCard from '@ant-design/pro-card';
+import moment from 'moment';
+import { DatePicker, Space } from 'antd';
 
 import { MailTwoTone } from '@ant-design/icons';
 const list: any = [
@@ -223,65 +225,119 @@ const list: any = [
   //   prefix: <MailTwoTone />,
   //   type: 'password',
   // },
+  // {
+  //   name: 'select',
+  //   label: '选择valueEnum',
+  //   tooltip: 'onFinish的值是enum的属性名',
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '代选择',
+  //   },
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select1',
+  //   label: '选择options',
+  //   tooltip: 'onFinish的值是enum的属性名',
+  //   options: [
+  //     { label: '全部1', value: 'all' },
+  //     { label: '未解决', value: 'open' },
+  //     { label: '已解决', value: 'closed' },
+  //     { label: '解决中', value: 'processing' },
+  //   ],
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select2',
+  //   label: '选择request',
+  //   tooltip:
+  //     '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
+  //   request: async () => [
+  //     { label: '全部', value: 'all' },
+  //     { label: '未解决', value: 'open' },
+  //     { label: '已解决', value: 'closed' },
+  //     { label: '解决中', value: 'processing' },
+  //   ],
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select3',
+  //   label: '必填',
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '代选择',
+  //   },
+  //   placeholder: '选择规则',
+  //   required: true,
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select4',
+  //   label: '自定义下拉框样式',
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '代选择',
+  //   },
+  //   type: 'select',
+  //   optionItemRender: (item: any) => {
+  //     return item.label + ' - ' + item.value;
+  //   },
+  // },
+  // {
+  //   name: 'date',
+  //   label: '日期',
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date1',
+  //   label: '必填日期',
+  //   type: 'date',
+  //   required: true
+  // },
   {
-    name: 'select',
-    label: '选择valueEnum',
-    tooltip: 'onFinish的值是enum的属性名',
-    enum: {
-      0: '已选择',
-      1: '未选择',
-      2: '代选择',
+    name: 'date2',
+    label: '日期',
+    type: 'date',
+  },
+  {
+    name: 'date3',
+    label: '前五天',
+    tooltip: `dateLimit: { subtract: 5 }`,
+    type: 'date',
+    dateLimit: {
+      subtract: 5,
     },
-    type: 'select',
   },
   {
-    name: 'select1',
-    label: '选择options',
-    tooltip: 'onFinish的值是enum的属性名',
-    options: [
-      { label: '全部1', value: 'all' },
-      { label: '未解决', value: 'open' },
-      { label: '已解决', value: 'closed' },
-      { label: '解决中', value: 'processing' },
-    ],
-    type: 'select',
-  },
-  {
-    name: 'select2',
-    label: '选择request',
-    tooltip:
-      '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
-    request: async () => [
-      { label: '全部', value: 'all' },
-      { label: '未解决', value: 'open' },
-      { label: '已解决', value: 'closed' },
-      { label: '解决中', value: 'processing' },
-    ],
-    type: 'select',
-  },
-  {
-    name: 'select3',
-    label: '必填',
-    enum: {
-      0: '已选择',
-      1: '未选择',
-      2: '代选择',
+    name: 'date4',
+    label: '后五天',
+    tooltip: `dateLimit: { add: 5 }`,
+    type: 'date',
+    dateLimit: {
+      add: 5,
     },
-    placeholder: '选择规则',
-    required: true,
-    type: 'select',
   },
   {
-    name: 'select4',
-    label: '自定义下拉框样式',
-    enum: {
-      0: '已选择',
-      1: '未选择',
-      2: '代选择',
+    name: 'date5',
+    label: '前五天，后五天',
+    tooltip: `dateLimit: { add: 5, subtract: 5 }`,
+    type: 'date',
+    dateLimit: {
+      add: 5,
+      subtract: 5,
     },
-    type: 'select',
-    optionItemRender: (item: any) => {
-      return item.label + ' - ' + item.value;
+  },
+  {
+    name: 'date6',
+    label: '前五天，不带今天',
+    tooltip: `dateLimit: { add: 5, subtract: 5 }`,
+    type: 'date',
+    dateLimit: {
+      noDay: true,
+      subtract: 5,
     },
   },
 ];
@@ -289,11 +345,25 @@ const list: any = [
 const Welcome: React.FC<any> = (props) => {
   useEffect(() => {}, []);
 
+  const disabledDate = (current: any) => {
+    // return current <= '2021-06-20'
+    // return new Date('2021-06-16') < new Date('2021-07-01');
+    // return current < moment().subtract(29, 'days') || current > moment();
+    return current > moment().add(1, 'days') || current < moment().subtract(2, 'days');
+    // return current < moment().subtract(29, 'days') || current > moment();
+  };
+
   return (
     <PageContainer>
       <Card>
         {/* <Button onClick={() => {}}>测试</Button> */}
         <Form formList={list} />
+        <DatePicker
+          format="YYYY-MM-DD HH:mm:ss"
+          disabledDate={disabledDate}
+          // disabledTime={disa bledDateTime}
+          showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+        />
       </Card>
     </PageContainer>
   );

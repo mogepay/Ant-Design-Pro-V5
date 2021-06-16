@@ -56,8 +56,15 @@ export interface RuleProps {
   method?: 'tel' | 'password' | 'name' | 'card' | 'sfz' | 'emil' | 'telEmil';
 }
 
+interface DateLimitProps {
+  method?: 'days';
+  add?: number;
+  subtract?: number;
+  noDay?: boolean;
+}
+
 export interface formProps {
-  type?: 'input' | 'password' | 'select';
+  type?: 'input' | 'password' | 'select' | 'date';
   name: string;
   label?: string;
   tooltip?: string;
@@ -76,6 +83,7 @@ export interface formProps {
   options?: Array<{ label: any; value: any }>;
   request?: () => void;
   optionItemRender?: (ele: any) => void;
+  dateLimit?: DateLimitProps;
 }
 
 interface Props extends ProFormProps {

@@ -1,11 +1,17 @@
 import React from 'react';
 import { message } from 'antd';
+import moment from 'moment';
 import ProForm, {
   ProFormText,
   ProFormCaptcha,
   ProFormDependency,
   ProFormSelect,
   ProFormField,
+  ProFormDatePicker,
+  ProFormDateTimePicker,
+  ProFormDateRangePicker,
+  ProFormDateTimeRangePicker,
+  ProFormTimePicker,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -35,26 +41,30 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param placeholder 预设时的字段 默认 请输入 + label（不一定都有）
  * @param readonly 只读
  * @param disabled 不可编辑
- * @param fieldProps 属性来支持设置输入组件的props，在各种类型上提供一些简单的属性，这个属性如果自己设置相同的，会覆盖掉之前的
+ * @param fieldProps 属性来支持原组件的props，在各种类型上提供一些简单的属性，这个属性如果自己设置相同的，会覆盖掉之前的
+ * @param required select 唯一的规则，只有是否必填(除input 和 password模式，加入必填)
  *
  * @type
  * @param input 就是最基本的input
  * @param password 密码设置状态框, 包含input的全部属性
  * @param select 选择框
  *
+ * @input和password的私有参数
+ * @param prefix 样式前缀
+ * @param suffix 样式后缀
+ * @param rulesRender 适用于原本的rules
+ * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
+ *
  * @select的私有参数
- * @param required select 唯一的规则，只有是否必填
  * @param message 必填时的消息 默认
  * @param enum 对象， 对应选择框的值，展示属性值，值为属性名
  * @param options 数组 包含label和value，展示label，值为value 并且等级高于enum
  * @param request 函数，返回对象为一个数组，包含label和value，展示label，值为value，并且等级高于enum和options
  * @param optionItemRender 函数，默认将item传入 下拉框自定义样式
  *
- * @input和password的私有参数
- * @param prefix 样式前缀
- * @param suffix 样式后缀
- * @param rulesRender 适用于原本的rules
- * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
+ * @date的私有参数
+ * @param method
+ * @param dateLimit
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -88,6 +98,8 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * 6. 可控制下列的框
  * 7. 可适用正则来控制对应的值
  * 8. 多个表单，最后统一initialValues提交
+ *
+ * // 日期的预设的范围， 日期的选择范围
  */
 
 const formItemLayout = {
@@ -232,21 +244,36 @@ const Form: React.FC<Props> = ({
    * @module 公共配置Props
    * @param type 传入的类型，通用但不是全部的Props，可以不用传
    */
-  const commonProps = (item: any, type: string | boolean = false) => {
+  const commonProps = (item: any, type: string | boolean) => {
     const formLayout = item.label ? formItemLayout : formItemTailLayout;
 
     let commonType: any = {};
 
     if (type) {
-      const typeTip = type === 'select' ? '请选择' : '请输入';
+      const typeTip = type === 'select' || type === 'date' ? '请选择' : '请输入';
       commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
+
+      if (!item.readonly && !item.disabled) {
+        commonType.rules =
+          type === 'input' || type === 'password'
+            ? ruleRender(item)
+            : item.required
+            ? [
+                {
+                  required: true,
+                  message: item.message || `${typeTip}${item.label}`,
+                },
+              ]
+            : undefined;
+      }
+
+      commonType.width = type === 'date' ? undefined : item.width || 'md';
     }
 
     return {
       ...item,
       ...commonType,
       ...formLayout,
-      width: item.width || 'md',
       name: item.name,
       label: item.label,
       readonly: item.readonly,
@@ -267,6 +294,7 @@ const Form: React.FC<Props> = ({
         initialValues={
           {
             // select: 'closed',
+            // date: '2021-04-06'
           }
         }
         layout="horizontal"
@@ -333,11 +361,6 @@ const Form: React.FC<Props> = ({
                 valueEnum={item.enum}
                 options={item.options}
                 request={item.request}
-                rules={
-                  item.required && [
-                    { required: true, message: item.message || `请输入${item.label}` },
-                  ]
-                }
                 fieldProps={{
                   optionItemRender: (ele: any) => {
                     if (item.optionItemRender) {
@@ -347,10 +370,31 @@ const Form: React.FC<Props> = ({
                   ...item.fieldProps,
                 }}
               />
+            ) : item.type === 'date' ? (
+              <ProFormDatePicker
+                {...commonProps(item, item.type)}
+                fieldProps={{
+                  disabledDate: (current: any) => {
+                    if (!item.dateLimit || Object.keys(item.dateLimit).length === 0)
+                      return undefined;
+                    const {
+                      add = 0,
+                      subtract = 0,
+                      noDay = false,
+                      method = 'days',
+                    } = item.dateLimit;
+
+                    return (
+                      current > moment().add(add, method) ||
+                      current < moment().subtract(noDay ? subtract : subtract + 1, method)
+                    );
+                  },
+                  ...item.fieldProps,
+                }}
+              />
             ) : item.type === 'password' ? (
               <ProFormText.Password
                 {...commonProps(item, item.type)}
-                rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,
                   prefix: item.prefix,
@@ -360,7 +404,6 @@ const Form: React.FC<Props> = ({
             ) : (
               <ProFormText
                 {...commonProps(item, 'input')}
-                rules={ruleRender(item)}
                 fieldProps={{
                   suffix: item.suffix,
                   prefix: item.prefix,
@@ -370,7 +413,12 @@ const Form: React.FC<Props> = ({
             )}
           </div>
         ))}
-
+        {/* <ProFormDatePicker name="date" label="日期" />
+        <ProFormDateTimePicker name="datetime" label="日期时间"  />
+        <ProFormDateRangePicker  name="dateRange" label="日期" />
+        <ProFormDateTimeRangePicker name="datetimeRange" label="日期时间" />
+        <ProFormTimePicker name="time" label="时间" />
+        <ProFormTimePicker.RangePicker name="timeRange" label="时间区间" /> */}
         {/* <ProFormSelect
             name="select22"
             label="Select"
