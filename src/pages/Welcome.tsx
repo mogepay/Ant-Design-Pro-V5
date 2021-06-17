@@ -363,8 +363,18 @@ const list: any = [
   // },
   {
     name: 'date9',
+    label: '禁用时间段',
+    tooltip: `dateLimit: { start: '2021-06-07' ,end: '2021-06-12'}`,
+    type: 'date',
+    dateLimit: {
+      start: '2021-06-07',
+      end: '2021-06-12',
+    },
+  },
+  {
+    name: 'date10',
     label: '只能选择今天之后的日期',
-    tooltip: `dateLimit: { add: 1, subtract: 1, method: 'months' }`,
+    tooltip: `dateLimit: { type: 1, method: 'months' }`,
     type: 'date',
     dateLimit: {
       type: 1,
@@ -372,14 +382,60 @@ const list: any = [
     },
   },
   {
-    name: 'date10',
+    name: 'date11',
     label: '只能选择今天之前的日期（包含当天）',
-    tooltip: `dateLimit: { add: 1, subtract: 1, method: 'months' }`,
+    tooltip: `dateLimit: { type: 2, method: 'months' }`,
     type: 'date',
     dateLimit: {
       type: 2,
       method: 'months',
     },
+  },
+  {
+    name: 'date12',
+    label: '只选择时间段',
+    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+    type: 'date',
+    dateLimit: {
+      type: 3,
+      start: '2021-06-07',
+      end: '2021-06-12',
+    },
+  },
+  {
+    name: 'date13',
+    label: '时间',
+    method: 'time',
+    tooltip: `method: 'time'`,
+    type: 'date',
+  },
+  {
+    name: 'date14',
+    label: '日期+时间',
+    method: 'dateTime',
+    tooltip: `method: 'dateTime',`,
+    type: 'date',
+  },
+  {
+    name: 'date15',
+    label: '日期时间段',
+    method: 'dateRange',
+    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+    type: 'date',
+  },
+  {
+    name: 'date16',
+    label: '时间+时间段',
+    method: 'timeRange',
+    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+    type: 'date',
+  },
+  {
+    name: 'date17',
+    label: '日期时间+日期时间段',
+    method: 'dateTimeRange',
+    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+    type: 'date',
   },
 ];
 
@@ -399,12 +455,6 @@ const Welcome: React.FC<any> = (props) => {
       <Card>
         {/* <Button onClick={() => {}}>测试</Button> */}
         <Form formList={list} />
-        <DatePicker
-          format="YYYY-MM-DD HH:mm:ss"
-          disabledDate={disabledDate}
-          // disabledTime={disa bledDateTime}
-          showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-        />
       </Card>
     </PageContainer>
   );

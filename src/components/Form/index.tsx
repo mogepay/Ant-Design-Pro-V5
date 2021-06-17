@@ -64,13 +64,20 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param optionItemRender 函数，默认将item传入 下拉框自定义样式
  *
  * @date的私有参数
- * @param method
+ * @param method 包含  date 日期  time 时间  dateTime 日起+时间 日期区间， 时间区间， 日期时间区间
+ * dateRange dateTimeRange 三者的placeholder设职位开始时间和结束时间，如果要修改，只能在fieldProps内修改
  * @param dateLimit
+ * 目前只设置了dateLimit，针对日期所创建的限定条件，无针对时间的限定条件，如果需要限定时间或者预设日期不满足于所开发的条件，请在fieldProps内自行设置
  *
  * @dateLimit
+ * start 和 end 优先级高于 add 和 subtract, start 和 end 可以使时间格式或这是 2021-06-02这样的格式
  * @param method 包含'days' 天  'months' 月 'weeks' 周 'years' 年 默认天（后面以天举例），限制天数
+ * @param start 开始日期时间段，如果无结束日期，则结束日期取当天时间，如果输入的开始日期大于结束日期，则会全部禁用
+ * @param end 结束日期时间段，如果无开始日期，则开始日期取当天时间，如果输入的开始日期大于结束日期，则会全部禁用
  * @param add 当前日期的后几天，包含当天
  * @param subtract 当前日期的前几天，包含当天，当method为天时 如果只选择当天，可设置subtract为-1
+ * @param type 为了简洁开发，使用 type 来简易封装 type = 1： 只能选择今天之后的日期 2： 只能选择今天之前的日期（包含当天）
+3 只选择时间段
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -246,6 +253,59 @@ const Form: React.FC<Props> = ({
     return rules;
   };
 
+  // 日期限定规则规则
+  const DateRender = (item: any) => {
+    const dateRule = (current: any) => {
+      if (!item.dateLimit || Object.keys(item.dateLimit).length === 0) return undefined;
+      const { add = 0, subtract = 0, method = 'days', type = 0, start, end } = item.dateLimit;
+      if (type === 1) return current && current < moment().endOf('day');
+      if (type === 2) return current && current > moment().endOf('day');
+
+      if (start || end) {
+        const startDate = new Date(start || Method.getDate());
+        const endDate = new Date(end || Method.getDate());
+
+        if (type !== 3) {
+          return (
+            current >
+              moment()
+                .year(startDate.getFullYear())
+                .month(startDate.getMonth())
+                .date(startDate.getDate() - 1) &&
+            current <
+              moment().year(endDate.getFullYear()).month(endDate.getMonth()).date(endDate.getDate())
+          );
+        } else {
+          return (
+            current <
+              moment()
+                .year(startDate.getFullYear())
+                .month(startDate.getMonth())
+                .date(startDate.getDate() - 1) ||
+            current >
+              moment().year(endDate.getFullYear()).month(endDate.getMonth()).date(endDate.getDate())
+          );
+        }
+      }
+
+      return (
+        current > moment().add(add, method) ||
+        current < moment().subtract(method === 'days' ? subtract + 1 : subtract, method)
+      );
+    };
+
+    return {
+      disabledDate: (current: any) => dateRule(current),
+      placeholder:
+        item.method === 'dateRange' ||
+        item.method === 'timeRange' ||
+        item.method === 'dateTimeRange'
+          ? ['开始时间', '结束时间']
+          : undefined,
+      ...item.fieldProps,
+    };
+  };
+
   /**
    * @module 公共配置Props
    * @param type 传入的类型，通用但不是全部的Props，可以不用传
@@ -377,66 +437,31 @@ const Form: React.FC<Props> = ({
                 }}
               />
             ) : item.type === 'date' ? (
-              <ProFormDatePicker
-                {...commonProps(item, item.type)}
-                fieldProps={{
-                  disabledDate: (current: any) => {
-                    if (!item.dateLimit || Object.keys(item.dateLimit).length === 0)
-                      return undefined;
-                    const { add = 0, subtract = 0, method = 'days', type = 0 } = item.dateLimit;
-
-                    console.log(Method.getDate());
-                    const date = new Date('2021-06-09');
-                    const date1 = new Date('2021-06-11');
-
-                    return (
-                      current <
-                        moment()
-                          .year(date.getFullYear())
-                          .month(date.getMonth())
-                          .date(date.getDate() - 1) ||
-                      current >
-                        moment()
-                          .year(date1.getFullYear())
-                          .month(date1.getMonth())
-                          .date(date1.getDate())
-                    );
-
-                    // return current > moment().year(date.getFullYear()).month(date.getMonth()).date(date.getDate() - 1)
-
-                    // return current < moment().year(date.getFullYear()).month(date.getMonth()).date(date.getDate() - 1)
-
-                    return (
-                      current >
-                        moment()
-                          .year(date.getFullYear())
-                          .month(date.getMonth())
-                          .date(date.getDate() - 1) &&
-                      current <
-                        moment()
-                          .year(date1.getFullYear())
-                          .month(date1.getMonth())
-                          .date(date1.getDate())
-                    );
-
-                    // const test = '2021-06-18'
-
-                    // const test =new Date('2021-06-18')
-                    // return test && test > moment(current)
-                    console.log(moment(current), '---');
-
-                    if (type === 1) return current && current < moment().endOf('day');
-                    if (type === 2) return current && current > moment().endOf('day');
-                    // return current &&current.endOf('day') >= moment();
-                    return (
-                      current > moment().add(add, method) ||
-                      current <
-                        moment().subtract(method === 'days' ? subtract + 1 : subtract, method)
-                    );
-                  },
-                  ...item.fieldProps,
-                }}
-              />
+              item.method === 'time' ? (
+                <ProFormTimePicker {...commonProps(item, item.type)} />
+              ) : item.method === 'dateTime' ? (
+                <ProFormDateTimePicker
+                  {...commonProps(item, item.type)}
+                  fieldProps={DateRender(item)}
+                />
+              ) : item.method === 'dateRange' ? (
+                <ProFormDateRangePicker
+                  {...commonProps(item, item.type)}
+                  fieldProps={DateRender(item)}
+                />
+              ) : item.method === 'timeRange' ? (
+                <ProFormTimePicker.RangePicker {...commonProps(item, item.type)} />
+              ) : item.method === 'dateTimeRange' ? (
+                <ProFormDateTimeRangePicker
+                  {...commonProps(item, item.type)}
+                  fieldProps={DateRender(item)}
+                />
+              ) : (
+                <ProFormDatePicker
+                  {...commonProps(item, item.type)}
+                  fieldProps={DateRender(item)}
+                />
+              )
             ) : item.type === 'password' ? (
               <ProFormText.Password
                 {...commonProps(item, item.type)}
@@ -458,30 +483,6 @@ const Form: React.FC<Props> = ({
             )}
           </div>
         ))}
-        {/* <ProFormDatePicker name="date" label="日期" />
-        <ProFormDateTimePicker name="datetime" label="日期时间"  />
-        <ProFormDateRangePicker  name="dateRange" label="日期" />
-        <ProFormDateTimeRangePicker name="datetimeRange" label="日期时间" />
-        <ProFormTimePicker name="time" label="时间" />
-        <ProFormTimePicker.RangePicker name="timeRange" label="时间区间" /> */}
-        {/* <ProFormSelect
-            name="select22"
-            label="Select"
-            options={[
-              { label: '全部', value: 'all' },
-              { label: '未解决', value: 'open' },
-              { label: '已解决', value: 'closed' },
-              { label: '解决中', value: 'processing' },
-            ]}
-            fieldProps={{
-              optionItemRender(item:any) {
-                console.log(item)
-                return item.label + ' - ' + item.value;
-              },
-            }}
-            placeholder="Please select a country"
-            rules={[{ required: true, message: 'Please select your country!' }]}
-          /> */}
       </ProForm>
     </>
   );

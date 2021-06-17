@@ -61,6 +61,8 @@ interface DateLimitProps {
   add?: number;
   subtract?: number;
   type?: number;
+  start?: 'string';
+  end?: 'string';
 }
 
 export interface formProps {
@@ -84,6 +86,7 @@ export interface formProps {
   request?: () => void;
   optionItemRender?: (ele: any) => void;
   dateLimit?: DateLimitProps;
+  method?: 'date' | 'time' | 'dateTime' | 'dateRange' | 'timeRange' | 'dateTimeRange';
 }
 
 interface Props extends ProFormProps {
