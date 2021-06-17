@@ -16,6 +16,7 @@ import ProForm, {
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import Props, { formProps, RuleProps } from './interface.d';
+// import { Method } from '@/utils'
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 
 /**
@@ -65,6 +66,11 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @date的私有参数
  * @param method
  * @param dateLimit
+ *
+ * @dateLimit
+ * @param method 包含'days' 天  'months' 月 'weeks' 周 'years' 年 默认天（后面以天举例），限制天数
+ * @param add 当前日期的后几天，包含当天
+ * @param subtract 当前日期的前几天，包含当天，当method为天时 如果只选择当天，可设置subtract为-1
  *
  * @rules
  * @param message 验证失败时返回的字段，可单独设置，下面的字段统一的默认message
@@ -377,16 +383,55 @@ const Form: React.FC<Props> = ({
                   disabledDate: (current: any) => {
                     if (!item.dateLimit || Object.keys(item.dateLimit).length === 0)
                       return undefined;
-                    const {
-                      add = 0,
-                      subtract = 0,
-                      noDay = false,
-                      method = 'days',
-                    } = item.dateLimit;
+                    const { add = 0, subtract = 0, method = 'days', type = 0 } = item.dateLimit;
+
+                    // console.log(Method)
+                    const date = new Date('2021-06-09');
+                    const date1 = new Date('2021-06-11');
 
                     return (
+                      current <
+                        moment()
+                          .year(date.getFullYear())
+                          .month(date.getMonth())
+                          .date(date.getDate() - 1) ||
+                      current >
+                        moment()
+                          .year(date1.getFullYear())
+                          .month(date1.getMonth())
+                          .date(date1.getDate())
+                    );
+
+                    // return current > moment().year(date.getFullYear()).month(date.getMonth()).date(date.getDate() - 1)
+
+                    // return current < moment().year(date.getFullYear()).month(date.getMonth()).date(date.getDate() - 1)
+
+                    return (
+                      current >
+                        moment()
+                          .year(date.getFullYear())
+                          .month(date.getMonth())
+                          .date(date.getDate() - 1) &&
+                      current <
+                        moment()
+                          .year(date1.getFullYear())
+                          .month(date1.getMonth())
+                          .date(date1.getDate())
+                    );
+
+                    // const test = '2021-06-18'
+
+                    // const test =new Date('2021-06-18')
+                    // return test && test > moment(current)
+                    console.log(moment(current), '---');
+
+                    if (type === 1) return current && current < moment().endOf('day');
+                    if (type === 2) return current && current > moment().endOf('day');
+                    // return current &&current.endOf('day') >= moment();
+                    return (
                       current > moment().add(add, method) ||
-                      current < moment().subtract(noDay ? subtract : subtract + 1, method)
+                      current <
+                        moment().subtract(method === 'days' ? subtract + 1 : subtract, method)
                     );
                   },
                   ...item.fieldProps,

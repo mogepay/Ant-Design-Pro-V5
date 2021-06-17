@@ -297,47 +297,88 @@ const list: any = [
   //   type: 'date',
   //   required: true
   // },
+  // {
+  //   name: 'date2',
+  //   label: '日期',
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date3',
+  //   label: '前五天',
+  //   tooltip: `dateLimit: { subtract: 5 }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     subtract: 5,
+  //   },
+  // },
+  // {
+  //   name: 'date4',
+  //   label: '后五天',
+  //   tooltip: `dateLimit: { add: 5 }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     add: 5,
+  //   },
+  // },
+  // {
+  //   name: 'date5',
+  //   label: '前五天，后五天',
+  //   tooltip: `dateLimit: { add: 5, subtract: 5 }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     add: 5,
+  //     subtract: 5,
+  //   },
+  // },
+  // {
+  //   name: 'date6',
+  //   label: '前1个月',
+  //   tooltip: `dateLimit: { subtract: 1, method: 'months' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     subtract: 1,
+  //     method: 'months'
+  //   },
+  // },
+  // {
+  //   name: 'date7',
+  //   label: '后1个月',
+  //   tooltip: `dateLimit: { add: 1, method: 'months' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     add: 1,
+  //     method: 'months'
+  //   },
+  // },
+  // {
+  //   name: 'date8',
+  //   label: '前后1个月',
+  //   tooltip: `dateLimit: { add: 1, subtract: 1, method: 'months' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     add: 1,
+  //     subtract: 1,
+  //     method: 'months'
+  //   },
+  // },
   {
-    name: 'date2',
-    label: '日期',
-    type: 'date',
-  },
-  {
-    name: 'date3',
-    label: '前五天',
-    tooltip: `dateLimit: { subtract: 5 }`,
+    name: 'date9',
+    label: '只能选择今天之后的日期',
+    tooltip: `dateLimit: { add: 1, subtract: 1, method: 'months' }`,
     type: 'date',
     dateLimit: {
-      subtract: 5,
+      type: 1,
+      method: 'months',
     },
   },
   {
-    name: 'date4',
-    label: '后五天',
-    tooltip: `dateLimit: { add: 5 }`,
+    name: 'date10',
+    label: '只能选择今天之前的日期（包含当天）',
+    tooltip: `dateLimit: { add: 1, subtract: 1, method: 'months' }`,
     type: 'date',
     dateLimit: {
-      add: 5,
-    },
-  },
-  {
-    name: 'date5',
-    label: '前五天，后五天',
-    tooltip: `dateLimit: { add: 5, subtract: 5 }`,
-    type: 'date',
-    dateLimit: {
-      add: 5,
-      subtract: 5,
-    },
-  },
-  {
-    name: 'date6',
-    label: '前五天，不带今天',
-    tooltip: `dateLimit: { add: 5, subtract: 5 }`,
-    type: 'date',
-    dateLimit: {
-      noDay: true,
-      subtract: 5,
+      type: 2,
+      method: 'months',
     },
   },
 ];

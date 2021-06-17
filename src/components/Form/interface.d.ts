@@ -57,10 +57,10 @@ export interface RuleProps {
 }
 
 interface DateLimitProps {
-  method?: 'days';
+  method?: 'days' | 'months' | 'weeks' | 'years';
   add?: number;
   subtract?: number;
-  noDay?: boolean;
+  type?: number;
 }
 
 export interface formProps {
