@@ -16,7 +16,7 @@ import ProForm, {
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import Props, { formProps, RuleProps } from './interface.d';
-// import { Method } from '@/utils'
+import { Method } from '@/utils';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 
 /**
@@ -385,7 +385,7 @@ const Form: React.FC<Props> = ({
                       return undefined;
                     const { add = 0, subtract = 0, method = 'days', type = 0 } = item.dateLimit;
 
-                    // console.log(Method)
+                    console.log(Method.getDate());
                     const date = new Date('2021-06-09');
                     const date1 = new Date('2021-06-11');
 

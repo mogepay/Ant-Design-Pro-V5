@@ -104,6 +104,46 @@ class Method {
     });
     return data;
   };
+
+  /**
+   * @module 获取年月日
+   *
+   * @param {*} type
+   * @param {*} show
+   */
+  static getDate = (type?: any, show?: any) => {
+    let dd = new Date();
+    let option: any = {};
+    let isShow = 0;
+    if (type) {
+      option = {
+        year: type.year || '',
+        mounth: type.mounth || '',
+        day: type.day || '',
+      };
+    } else {
+      option = {
+        year: '-',
+        mounth: '-',
+        day: '',
+      };
+    }
+    if (show) {
+      isShow = show;
+    }
+    let y = dd.getFullYear();
+    let m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1;
+    let d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate();
+    let result = '';
+    if (isShow == 0) {
+      result = `${y}${option.year}${m}${option.mounth}${d}${option.day}`;
+    } else if (isShow == 1) {
+      result = `${m}${option.mounth}${d}${option.day}`;
+    } else if (isShow == 2) {
+      result = `${d}${option.day}`;
+    }
+    return result;
+  };
 }
 
 export default Method;
