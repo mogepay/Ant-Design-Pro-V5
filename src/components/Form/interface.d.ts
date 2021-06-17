@@ -66,7 +66,7 @@ interface DateLimitProps {
 }
 
 export interface formProps {
-  type?: 'input' | 'password' | 'select' | 'date';
+  type?: 'input' | 'password' | 'select' | 'date' | 'switch';
   name: string;
   label?: string;
   tooltip?: string;
@@ -87,6 +87,11 @@ export interface formProps {
   optionItemRender?: (ele: any) => void;
   dateLimit?: DateLimitProps;
   method?: 'date' | 'time' | 'dateTime' | 'dateRange' | 'timeRange' | 'dateTimeRange';
+  openText?: React.ReactNode;
+  closeText?: React.ReactNode;
+  loading?: boolean;
+  ranges?: Object;
+  default?: any;
 }
 
 interface Props extends ProFormProps {

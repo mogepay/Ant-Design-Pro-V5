@@ -361,68 +361,68 @@ const list: any = [
   //     method: 'months'
   //   },
   // },
-  {
-    name: 'date9',
-    label: '禁用时间段',
-    tooltip: `dateLimit: { start: '2021-06-07' ,end: '2021-06-12'}`,
-    type: 'date',
-    dateLimit: {
-      start: '2021-06-07',
-      end: '2021-06-12',
-    },
-  },
-  {
-    name: 'date10',
-    label: '只能选择今天之后的日期',
-    tooltip: `dateLimit: { type: 1, method: 'months' }`,
-    type: 'date',
-    dateLimit: {
-      type: 1,
-      method: 'months',
-    },
-  },
-  {
-    name: 'date11',
-    label: '只能选择今天之前的日期（包含当天）',
-    tooltip: `dateLimit: { type: 2, method: 'months' }`,
-    type: 'date',
-    dateLimit: {
-      type: 2,
-      method: 'months',
-    },
-  },
-  {
-    name: 'date12',
-    label: '只选择时间段',
-    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
-    type: 'date',
-    dateLimit: {
-      type: 3,
-      start: '2021-06-07',
-      end: '2021-06-12',
-    },
-  },
-  {
-    name: 'date13',
-    label: '时间',
-    method: 'time',
-    tooltip: `method: 'time'`,
-    type: 'date',
-  },
-  {
-    name: 'date14',
-    label: '日期+时间',
-    method: 'dateTime',
-    tooltip: `method: 'dateTime',`,
-    type: 'date',
-  },
-  {
-    name: 'date15',
-    label: '日期时间段',
-    method: 'dateRange',
-    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
-    type: 'date',
-  },
+  // {
+  //   name: 'date9',
+  //   label: '禁用时间段',
+  //   tooltip: `dateLimit: { start: '2021-06-07' ,end: '2021-06-12'}`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     start: '2021-06-07',
+  //     end: '2021-06-12',
+  //   },
+  // },
+  // {
+  //   name: 'date10',
+  //   label: '只能选择今天之后的日期',
+  //   tooltip: `dateLimit: { type: 1, method: 'months' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     type: 1,
+  //     method: 'months',
+  //   },
+  // },
+  // {
+  //   name: 'date11',
+  //   label: '只能选择今天之前的日期（包含当天）',
+  //   tooltip: `dateLimit: { type: 2, method: 'months' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     type: 2,
+  //     method: 'months',
+  //   },
+  // },
+  // {
+  //   name: 'date12',
+  //   label: '只选择时间段',
+  //   tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+  //   type: 'date',
+  //   dateLimit: {
+  //     type: 3,
+  //     start: '2021-06-07',
+  //     end: '2021-06-12',
+  //   },
+  // },
+  // {
+  //   name: 'date13',
+  //   label: '时间',
+  //   method: 'time',
+  //   tooltip: `method: 'time'`,
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date14',
+  //   label: '日期+时间',
+  //   method: 'dateTime',
+  //   tooltip: `method: 'dateTime',`,
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date15',
+  //   label: '日期时间段',
+  //   method: 'dateRange',
+  //   tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+  //   type: 'date',
+  // },
   {
     name: 'date16',
     label: '时间+时间段',
@@ -437,18 +437,57 @@ const list: any = [
     tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
     type: 'date',
   },
+  {
+    name: 'date18',
+    label: '预设状态',
+    method: 'dateTimeRange',
+    tooltip: ``,
+    ranges: {
+      今天: [moment(), moment()],
+      本月: [moment().startOf('month'), moment().endOf('month')],
+    },
+    type: 'date',
+  },
+  // {
+  //   name: 'switch',
+  //   label: '开关',
+  //   tooltip: `type: 'switch'`,
+  //   type: 'switch',
+  // },
+  // {
+  //   name: 'switch1',
+  //   label: '开关文字',
+  //   openText: '开启',
+  //   closeText: '关闭',
+  //   tooltip: `openText: '开启',closeText: '关闭',`,
+  //   type: 'switch',
+  // },
+  // {
+  //   name: 'switch2',
+  //   label: '开关图标',
+  //   openText: <MailTwoTone />,
+  //   tooltip: ` openText: <MailTwoTone />,`,
+  //   type: 'switch',
+  // },
+  // {
+  //   name: 'switch3',
+  //   label: '默认开启',
+  //   default: true,
+  //   tooltip: `default: true,`,
+  //   type: 'switch',
+  // },
+  // {
+  //   name: 'switch4',
+  //   label: '开关加载',
+  //   default: true,
+  //   loading: true,
+  //   tooltip: `default: true,loading: true,`,
+  //   type: 'switch',
+  // },
 ];
 
 const Welcome: React.FC<any> = (props) => {
   useEffect(() => {}, []);
-
-  const disabledDate = (current: any) => {
-    // return current <= '2021-06-20'
-    // return new Date('2021-06-16') < new Date('2021-07-01');
-    // return current < moment().subtract(29, 'days') || current > moment();
-    return current > moment().add(1, 'days') || current < moment().subtract(2, 'days');
-    // return current < moment().subtract(29, 'days') || current > moment();
-  };
 
   return (
     <PageContainer>

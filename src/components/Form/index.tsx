@@ -12,12 +12,14 @@ import ProForm, {
   ProFormDateRangePicker,
   ProFormDateTimeRangePicker,
   ProFormTimePicker,
+  ProFormSwitch,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import Props, { formProps, RuleProps } from './interface.d';
 import { Method } from '@/utils';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
+import { Loading } from '../../.umi/plugin-dva/connect';
 
 /**
  * @module Form表单
@@ -49,6 +51,7 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param input 就是最基本的input
  * @param password 密码设置状态框, 包含input的全部属性
  * @param select 选择框
+ * @param switch 开关
  *
  * @input和password的私有参数
  * @param prefix 样式前缀
@@ -63,9 +66,16 @@ import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/u
  * @param request 函数，返回对象为一个数组，包含label和value，展示label，值为value，并且等级高于enum和options
  * @param optionItemRender 函数，默认将item传入 下拉框自定义样式
  *
+ * @select的私有参数
+ * @param default 布尔是否默认开启
+ * @param openText 开启是加载的文字或图标
+ * @param closeText 关闭是加载的文字或图标
+ * @param loading 是否是加载时
+ *
  * @date的私有参数
- * @param method 包含  date 日期  time 时间  dateTime 日起+时间 日期区间， 时间区间， 日期时间区间
- * dateRange dateTimeRange 三者的placeholder设职位开始时间和结束时间，如果要修改，只能在fieldProps内修改
+ * @param method 包含  date 日期  time 时间  dateTime 日起+时间 dateRange 日期区间， timeRange 时间区间，dateTimeRange 日期时间区间
+ * dateRange timeRange dateTimeRange  三者的placeholder设职位开始时间和结束时间，如果要修改，只能在fieldProps内修改
+ * @param ranges 预设状态，是个对象，属性名为展示的名称，属性值是范围，是 [moment(), moment()],此方法只针对 dateRange timeRange  dateTimeRange 的设定
  * @param dateLimit
  * 目前只设置了dateLimit，针对日期所创建的限定条件，无针对时间的限定条件，如果需要限定时间或者预设日期不满足于所开发的条件，请在fieldProps内自行设置
  *
@@ -296,6 +306,7 @@ const Form: React.FC<Props> = ({
 
     return {
       disabledDate: (current: any) => dateRule(current),
+      ranges: item.ranges,
       placeholder:
         item.method === 'dateRange' ||
         item.method === 'timeRange' ||
@@ -361,6 +372,7 @@ const Form: React.FC<Props> = ({
           {
             // select: 'closed',
             // date: '2021-04-06'
+            // switch: true
           }
         }
         layout="horizontal"
@@ -433,6 +445,17 @@ const Form: React.FC<Props> = ({
                       return item.optionItemRender(ele);
                     }
                   },
+                  ...item.fieldProps,
+                }}
+              />
+            ) : item.type === 'switch' ? (
+              <ProFormSwitch
+                {...commonProps(item, item.type)}
+                fieldProps={{
+                  checkedChildren: item.openText,
+                  unCheckedChildren: item.closeText,
+                  loading: item.loading,
+                  defaultChecked: item.default,
                   ...item.fieldProps,
                 }}
               />
