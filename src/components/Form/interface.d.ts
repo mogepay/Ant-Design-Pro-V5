@@ -66,7 +66,16 @@ interface DateLimitProps {
 }
 
 export interface formProps {
-  type?: 'input' | 'password' | 'select' | 'date' | 'switch' | 'checkbox' | 'radio' | 'textArea';
+  type?:
+    | 'input'
+    | 'password'
+    | 'select'
+    | 'date'
+    | 'switch'
+    | 'checkbox'
+    | 'radio'
+    | 'textArea'
+    | 'rate';
   name: string;
   label?: string;
   tooltip?: string;
@@ -76,6 +85,7 @@ export interface formProps {
   disabled?: boolean;
   required?: boolean;
   rules: Array<RuleProps>;
+  extra?: React.ReactNode;
   message: string;
   rulesRender: Array<any>;
   prefix?: React.ReactNode;
@@ -96,6 +106,10 @@ export interface formProps {
   showCount?: boolean;
   autoSize?: boolean;
   rows?: number;
+  half?: boolean;
+  tooltips?: Array<string>;
+  styleNode?: React.ReactNode | Function;
+  color: string;
 }
 
 interface Props extends ProFormProps {

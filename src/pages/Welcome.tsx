@@ -10,7 +10,7 @@ import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
 import { DatePicker, Space } from 'antd';
 
-import { MailTwoTone } from '@ant-design/icons';
+import { MailTwoTone, HeartOutlined } from '@ant-design/icons';
 const list: any = [
   // {
   //   name: 'input',
@@ -34,24 +34,35 @@ const list: any = [
   // },
   // {
   //   name: 'input4',
+  //   label: '额外配置信息',
+  //   extra: <span style={{color: 'red'}}>欢迎使用动态表单</span>,
+  //   placeholder: '自定义placeholder'
+  // },
+  // {
+  //   name: 'input5',
   //   label: '只读',
   //   readonly: true,
   //   tooltip: '只读层级高于disabled',
   //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
   // },
   // {
-  //   name: 'input5',
+  //   name: 'input6',
   //   label: '禁用',
   //   disabled:true
   // },
   // {
-  //   name: 'input6',
+  //   name: 'input7',
+  //   label: '默认输入值',
+  //   default: 'Domesy',
+  // },
+  // {
+  //   name: 'input8',
   //   label: '必填',
   //   tooltip: '此选项必填，并且不能为空格',
   //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
   // },
   // {
-  //   name: 'input7',
+  //   name: 'input9',
   //   label: '正则手机号',
   //   tooltip: '所有有规则的都会加入required，并且不能为空格，简化开发',
   //   rules: [
@@ -697,12 +708,101 @@ const list: any = [
   //   default: 'DomeSy TextArea',
   //   type: 'textArea',
   // },
+  // {
+  //   name: 'textArea6',
+  //   label: '禁用',
+  //   tooltip: `disabled: true`,
+  //   disabled: true,
+  //   type: 'textArea',
+  // },
   {
-    name: 'textArea6',
-    label: '禁用',
+    name: 'rate',
+    label: '评星',
+    tooltip: `type: 'rate'`,
+    type: 'rate',
+  },
+  {
+    name: 'rate1',
+    label: '只能选全星',
+    half: true,
+    tooltip: `type: 'rate'`,
+    type: 'rate',
+  },
+  {
+    name: 'rate2',
+    label: '设置星数',
+    max: 8,
+    tooltip: `max: 8`,
+    type: 'rate',
+  },
+  {
+    name: 'rate3',
+    label: '额外配置信息',
+    half: true,
+    tooltips: ['terrible', 'bad', 'normal', 'good', 'wonderful'],
+    tooltip: `type: 'rate'`,
+    type: 'rate',
+  },
+  {
+    name: 'rate4',
+    label: '设置颜色',
+    color: 'rgba(12,218,22,.8)',
+    tooltip: `color: 'rgba(12,218,22,.8)'' | yellow | #000`,
+    type: 'rate',
+  },
+  {
+    name: 'rate5',
+    label: '必填',
+    required: true,
+    tooltip: `{ required: true }`,
+    type: 'rate',
+  },
+  {
+    name: 'rate6',
+    label: '默认',
+    default: 1.5,
+    tooltip: `disabled: 1.5`,
+    type: 'rate',
+  },
+  {
+    name: 'rate7',
+    label: '不可修改',
+    default: 2.5,
     tooltip: `disabled: true`,
     disabled: true,
-    type: 'textArea',
+    type: 'rate',
+  },
+  {
+    name: 'rate8',
+    label: '自定义图标',
+    styleNode: <HeartOutlined />,
+    tooltip: `styleNode: <HeartOutlined />`,
+    type: 'rate',
+  },
+  {
+    name: 'rate9',
+    label: '自定义字母',
+    styleNode: 'D',
+    tooltip: `styleNode: 'D'`,
+    type: 'rate',
+  },
+  {
+    name: 'rate10',
+    label: '自定义文字',
+    styleNode: '好',
+    tooltip: `styleNode: '好'`,
+    type: 'rate',
+  },
+  {
+    name: 'rate11',
+    label: '自定义字符',
+    max: 6,
+    styleNode: ({ index }: any) => {
+      const data = ['D', 'O', 'M', 'E', 'S', 'Y'];
+      return data[index];
+    },
+    tooltip: `styleNode: ({index}:any) => Array[index]`,
+    type: 'rate',
   },
 ];
 

@@ -16,6 +16,7 @@ import ProForm, {
   ProFormCheckbox,
   ProFormRadio,
   ProFormTextArea,
+  ProFormRate,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -45,6 +46,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param width 宽度
  * @param default 默认初始值，每个type对应不同的值，如是input他就是字符串，开关时是布尔值
  * @param tooltip 提示语
+ * @param extra 额外节点 React.ReactNode
  * @param placeholder 预设时的字段 默认 请输入 + label（不一定都有）
  * @param readonly 只读
  * @param disabled 不可编辑
@@ -59,6 +61,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param radio 单选
  * @param switch 开关
  * @param textArea 文本框
+ * @param rate 星级评价
  *
  * @input和password的私有参数
  * @param prefix 样式前缀
@@ -96,6 +99,13 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param closeText 关闭是加载的文字或图标
  * @param loading 是否是加载时
  *
+ * @rate的私有参数
+ * @param color  设置星的颜色 string
+ * @param max 设置星的个数，默认为5
+ * @param half 是否选整个星，而不是半星，默认false
+ * @param tooltips 移动到星星上方的字样，Array<string> ，数组对应的顺序对应星星上面的数据
+ * @param styleNode 星星的默认样式，可字母，可icon，可文字，也可以自定义文字
+ * 
  * @date的私有参数
  * @param method 包含  date 日期  time 时间  dateTime 日起+时间 dateRange 日期区间， timeRange 时间区间，dateTimeRange 日期时间区间
  * dateRange timeRange dateTimeRange  三者的placeholder设职位开始时间和结束时间，如果要修改，只能在fieldProps内修改
@@ -352,7 +362,11 @@ const Form: React.FC<Props> = ({
 
     if (type) {
       const typeTip =
-        type === 'select' || item.type === 'checkbox' || item.type === 'radio' || type === 'date'
+        type === 'select' ||
+        item.type === 'checkbox' ||
+        item.type === 'radio' ||
+        type === 'date' ||
+        type === 'rate'
           ? '请选择'
           : '请输入';
       commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
@@ -387,6 +401,7 @@ const Form: React.FC<Props> = ({
       ...formLayout,
       name: item.name,
       label: item.label,
+      extra: item.extra,
       initialValue: item.default,
       readonly: item.readonly,
       tooltip: item.tooltip,
@@ -478,6 +493,18 @@ const Form: React.FC<Props> = ({
                       return item.optionItemRender(ele);
                     }
                   },
+                  ...item.fieldProps,
+                }}
+              />
+            ) : item.type === 'rate' ? (
+              <ProFormRate
+                {...commonProps(item, item.type)}
+                fieldProps={{
+                  allowHalf: !item.half,
+                  count: item.max,
+                  tooltips: item.tooltips,
+                  character: item.styleNode,
+                  style: { color: item.color || '#1890ff' },
                   ...item.fieldProps,
                 }}
               />
