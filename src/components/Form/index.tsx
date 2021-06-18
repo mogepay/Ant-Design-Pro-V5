@@ -17,6 +17,7 @@ import ProForm, {
   ProFormRadio,
   ProFormTextArea,
   ProFormRate,
+  ProFormSlider,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -41,7 +42,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
- * @param name 必填(最后获取的值)，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段
+ * @param name 必填(最后获取的值)，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段,如果有相同的name，有可能会直接报错
  * @param label 字段名称
  * @param width 宽度
  * @param default 默认初始值，每个type对应不同的值，如是input他就是字符串，开关时是布尔值
@@ -62,6 +63,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param switch 开关
  * @param textArea 文本框
  * @param rate 星级评价
+ * @param slider 滑动输入条
  *
  * @input和password的私有参数
  * @param prefix 样式前缀
@@ -105,6 +107,15 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param half 是否选整个星，而不是半星，默认false
  * @param tooltips 移动到星星上方的字样，Array<string> ，数组对应的顺序对应星星上面的数据
  * @param styleNode 星星的默认样式，可字母，可icon，可文字，也可以自定义文字
+ * 
+ * @slider的私有参数
+ * slider 有两种状态，第一种是单项，第二种是双向，单项时是纯选中的样式，双向时是以数组的形式展示，无论是默认值还是最终onFinsh的值都是这样返还的
+ * @param range 布尔值 是否双向滑动 默认false
+ * @param marks 对象，属性名为刻度尺，属性值为对应刻度尺下方展示的值，属性值可以使字符串和对象，字符串时就是展示的值，对象时有个style可以设置样式，label为展示的字体，类型为React.ReactNode(属性名必须在min-max范围内，否则会出现混乱现象)
+ * @param max 布尔值 是否双向滑动
+ * @param min 布尔值 是否双向滑动
+ * @param step 布尔值 是否双向滑动
+ * 
  * 
  * @date的私有参数
  * @param method 包含  date 日期  time 时间  dateTime 日起+时间 dateRange 日期区间， timeRange 时间区间，dateTimeRange 日期时间区间
@@ -495,6 +506,15 @@ const Form: React.FC<Props> = ({
                   },
                   ...item.fieldProps,
                 }}
+              />
+            ) : item.type === 'slider' ? (
+              <ProFormSlider
+                {...commonProps(item, item.type)}
+                range={item.range}
+                max={item.max}
+                min={item.min}
+                marks={item.marks}
+                step={item.step ? Math.abs(item.step) : undefined}
               />
             ) : item.type === 'rate' ? (
               <ProFormRate

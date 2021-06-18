@@ -75,7 +75,8 @@ export interface formProps {
     | 'checkbox'
     | 'radio'
     | 'textArea'
-    | 'rate';
+    | 'rate'
+    | 'slider';
   name: string;
   label?: string;
   tooltip?: string;
@@ -103,6 +104,7 @@ export interface formProps {
   ranges?: Object;
   default?: any;
   max?: number;
+  min?: number;
   showCount?: boolean;
   autoSize?: boolean;
   rows?: number;
@@ -110,6 +112,9 @@ export interface formProps {
   tooltips?: Array<string>;
   styleNode?: React.ReactNode | Function;
   color: string;
+  range: boolean;
+  marks: Object;
+  step: number;
 }
 
 interface Props extends ProFormProps {
