@@ -66,7 +66,7 @@ interface DateLimitProps {
 }
 
 export interface formProps {
-  type?: 'input' | 'password' | 'select' | 'date' | 'switch';
+  type?: 'input' | 'password' | 'select' | 'date' | 'switch' | 'checkbox' | 'radio';
   name: string;
   label?: string;
   tooltip?: string;
@@ -82,7 +82,7 @@ export interface formProps {
   suffix?: React.ReactNode;
   fieldProps?: Object;
   enum?: any;
-  options?: Array<{ label: any; value: any }>;
+  options?: Array<any>;
   request?: () => void;
   optionItemRender?: (ele: any) => void;
   dateLimit?: DateLimitProps;

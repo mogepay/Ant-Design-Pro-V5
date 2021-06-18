@@ -13,6 +13,8 @@ import ProForm, {
   ProFormDateTimeRangePicker,
   ProFormTimePicker,
   ProFormSwitch,
+  ProFormCheckbox,
+  ProFormRadio,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -40,6 +42,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param name 必填(最后获取的值)，值唯一，你可以这么理解，如果name=‘input’，那么最后返回的字段就是input，所以这个一般是接口所需要的提交字段
  * @param label 字段名称
  * @param width 宽度
+ * @param default 默认初始值，每个type对应不同的值，如是input他就是字符串，开关时是布尔值
  * @param tooltip 提示语
  * @param placeholder 预设时的字段 默认 请输入 + label（不一定都有）
  * @param readonly 只读
@@ -51,6 +54,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param input 就是最基本的input
  * @param password 密码设置状态框, 包含input的全部属性
  * @param select 选择框
+ * @param checkbox 多选
  * @param switch 开关
  *
  * @input和password的私有参数
@@ -66,8 +70,19 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param request 函数，返回对象为一个数组，包含label和value，展示label，值为value，并且等级高于enum和options
  * @param optionItemRender 函数，默认将item传入 下拉框自定义样式
  *
- * @select的私有参数
- * @param default 布尔是否默认开启
+ * @checkbox的私有参数
+ * @param message 与select相同
+ * @param enum 与select相同
+ * @param options 与select相同
+ * @param request 与select相同
+ * 
+ * @radio的私有参数
+ * @param message 与select相同
+ * @param enum 与select相同
+ * @param options 与select相同
+ * @param request 与select相同
+ * 
+ * @switch的私有参数
  * @param openText 开启是加载的文字或图标
  * @param closeText 关闭是加载的文字或图标
  * @param loading 是否是加载时
@@ -327,9 +342,13 @@ const Form: React.FC<Props> = ({
     let commonType: any = {};
 
     if (type) {
-      const typeTip = type === 'select' || type === 'date' ? '请选择' : '请输入';
+      const typeTip =
+        type === 'select' || item.type === 'checkbox' || item.type === 'radio' || type === 'date'
+          ? '请选择'
+          : '请输入';
       commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
 
+      // 只读和禁用不能设置必填
       if (!item.readonly && !item.disabled) {
         commonType.rules =
           type === 'input' || type === 'password'
@@ -344,6 +363,12 @@ const Form: React.FC<Props> = ({
             : undefined;
       }
 
+      if (item.type === 'select' || item.type === 'checkbox' || item.type === 'radio') {
+        commonType.valueEnum = item.enum;
+        commonType.options = item.options;
+        commonType.request = item.request;
+      }
+
       commonType.width = type === 'date' ? undefined : item.width || 'md';
     }
 
@@ -353,6 +378,7 @@ const Form: React.FC<Props> = ({
       ...formLayout,
       name: item.name,
       label: item.label,
+      initialValue: item.default,
       readonly: item.readonly,
       tooltip: item.tooltip,
       disabled: item.disabled,
@@ -373,6 +399,7 @@ const Form: React.FC<Props> = ({
             // select: 'closed',
             // date: '2021-04-06'
             // switch: true
+            // checkbox: ['农业', '制造业']
           }
         }
         layout="horizontal"
@@ -436,9 +463,6 @@ const Form: React.FC<Props> = ({
             {item.type === 'select' ? (
               <ProFormSelect
                 {...commonProps(item, item.type)}
-                valueEnum={item.enum}
-                options={item.options}
-                request={item.request}
                 fieldProps={{
                   optionItemRender: (ele: any) => {
                     if (item.optionItemRender) {
@@ -448,6 +472,10 @@ const Form: React.FC<Props> = ({
                   ...item.fieldProps,
                 }}
               />
+            ) : item.type === 'checkbox' ? (
+              <ProFormCheckbox.Group {...commonProps(item, item.type)} />
+            ) : item.type === 'radio' ? (
+              <ProFormRadio.Group {...commonProps(item, item.type)} />
             ) : item.type === 'switch' ? (
               <ProFormSwitch
                 {...commonProps(item, item.type)}
@@ -455,7 +483,6 @@ const Form: React.FC<Props> = ({
                   checkedChildren: item.openText,
                   unCheckedChildren: item.closeText,
                   loading: item.loading,
-                  defaultChecked: item.default,
                   ...item.fieldProps,
                 }}
               />
@@ -497,6 +524,7 @@ const Form: React.FC<Props> = ({
             ) : (
               <ProFormText
                 {...commonProps(item, 'input')}
+                // initialValue={item.default}
                 fieldProps={{
                   suffix: item.suffix,
                   prefix: item.prefix,

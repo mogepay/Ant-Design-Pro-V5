@@ -29,6 +29,7 @@ const list: any = [
   // {
   //   name: 'input3',
   //   label: '为空时的文本样式',
+  //   default: '111',
   //   placeholder: '自定义placeholder'
   // },
   // {
@@ -226,67 +227,6 @@ const list: any = [
   //   type: 'password',
   // },
   // {
-  //   name: 'select',
-  //   label: '选择valueEnum',
-  //   tooltip: 'onFinish的值是enum的属性名',
-  //   enum: {
-  //     0: '已选择',
-  //     1: '未选择',
-  //     2: '代选择',
-  //   },
-  //   type: 'select',
-  // },
-  // {
-  //   name: 'select1',
-  //   label: '选择options',
-  //   tooltip: 'onFinish的值是enum的属性名',
-  //   options: [
-  //     { label: '全部1', value: 'all' },
-  //     { label: '未解决', value: 'open' },
-  //     { label: '已解决', value: 'closed' },
-  //     { label: '解决中', value: 'processing' },
-  //   ],
-  //   type: 'select',
-  // },
-  // {
-  //   name: 'select2',
-  //   label: '选择request',
-  //   tooltip:
-  //     '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
-  //   request: async () => [
-  //     { label: '全部', value: 'all' },
-  //     { label: '未解决', value: 'open' },
-  //     { label: '已解决', value: 'closed' },
-  //     { label: '解决中', value: 'processing' },
-  //   ],
-  //   type: 'select',
-  // },
-  // {
-  //   name: 'select3',
-  //   label: '必填',
-  //   enum: {
-  //     0: '已选择',
-  //     1: '未选择',
-  //     2: '代选择',
-  //   },
-  //   placeholder: '选择规则',
-  //   required: true,
-  //   type: 'select',
-  // },
-  // {
-  //   name: 'select4',
-  //   label: '自定义下拉框样式',
-  //   enum: {
-  //     0: '已选择',
-  //     1: '未选择',
-  //     2: '代选择',
-  //   },
-  //   type: 'select',
-  //   optionItemRender: (item: any) => {
-  //     return item.label + ' - ' + item.value;
-  //   },
-  // },
-  // {
   //   name: 'date',
   //   label: '日期',
   //   type: 'date',
@@ -423,31 +363,31 @@ const list: any = [
   //   tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
   //   type: 'date',
   // },
-  {
-    name: 'date16',
-    label: '时间+时间段',
-    method: 'timeRange',
-    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
-    type: 'date',
-  },
-  {
-    name: 'date17',
-    label: '日期时间+日期时间段',
-    method: 'dateTimeRange',
-    tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
-    type: 'date',
-  },
-  {
-    name: 'date18',
-    label: '预设状态',
-    method: 'dateTimeRange',
-    tooltip: ``,
-    ranges: {
-      今天: [moment(), moment()],
-      本月: [moment().startOf('month'), moment().endOf('month')],
-    },
-    type: 'date',
-  },
+  // {
+  //   name: 'date16',
+  //   label: '时间+时间段',
+  //   method: 'timeRange',
+  //   tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date17',
+  //   label: '日期时间+日期时间段',
+  //   method: 'dateTimeRange',
+  //   tooltip: `dateLimit: { type: 3, start: '2021-06-07', end: '2021-06-12' }`,
+  //   type: 'date',
+  // },
+  // {
+  //   name: 'date18',
+  //   label: '预设状态',
+  //   method: 'dateTimeRange',
+  //   tooltip: ``,
+  //   ranges: {
+  //     今天: [moment(), moment()],
+  //     本月: [moment().startOf('month'), moment().endOf('month')],
+  //   },
+  //   type: 'date',
+  // },
   // {
   //   name: 'switch',
   //   label: '开关',
@@ -484,6 +424,238 @@ const list: any = [
   //   tooltip: `default: true,loading: true,`,
   //   type: 'switch',
   // },
+  // {
+  //   name: 'select',
+  //   label: 'options字符串',
+  //   tooltip: '可以是数组为字符串，最后的值就是字符串本身',
+  //   options: [
+  //     '已选择',
+  //     '未选择',
+  //     '待选择'
+  //   ],
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select1',
+  //   label: '选择options',
+  //   tooltip: 'onFinish的值是enum的属性名',
+  //   options: [
+  //     { label: '全部1', value: 'all' },
+  //     { label: '未解决', value: 'open' },
+  //     { label: '已解决', value: 'closed' },
+  //     { label: '解决中', value: 'processing' },
+  //   ],
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select2',
+  //   label: '选择valueEnum',
+  //   tooltip: `enum,简化options`,
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '待选择',
+  //   },
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select3',
+  //   label: '选择request',
+  //   tooltip: '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
+  //   request: async () => [
+  //     { label: '全部', value: 'all' },
+  //     { label: '未解决', value: 'open' },
+  //     { label: '已解决', value: 'closed' },
+  //     { label: '解决中', value: 'processing' },
+  //   ],
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select4',
+  //   label: '必填',
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '代选择',
+  //   },
+  //   placeholder: '选择规则',
+  //   required: true,
+  //   type: 'select',
+  // },
+  // {
+  //   name: 'select5',
+  //   label: '自定义下拉框样式',
+  //   enum: {
+  //     0: '已选择',
+  //     1: '未选择',
+  //     2: '代选择',
+  //   },
+  //   type: 'select',
+  //   optionItemRender: (item: any) => {
+  //     return item.label + ' - ' + item.value;
+  //   },
+  // },
+  // {
+  //   name: 'checkbox',
+  //   label: 'option',
+  //   tooltip: `type: 'checkbox'，option为字符串`,
+  //   options: [
+  //     'React',
+  //     'Hook',
+  //     'DomesyPro'
+  //   ],
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox1',
+  //   label: 'option',
+  //   tooltip: `option为对象`,
+  //   options: [
+  //     { label: 'React', value: 0 },
+  //     { label: 'Hook', value: 1 },
+  //     { label: 'DomesyPro', value: 2 },
+  //   ],
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox2',
+  //   label: 'enum',
+  //   tooltip: `enum,简化options`,
+  //   enum: {
+  //     0: 'React',
+  //     1: 'Hook',
+  //     2: 'DomesyPro',
+  //   },
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox3',
+  //   label: 'request',
+  //   tooltip: '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
+  //   request: async () => [
+  //     { label: 'React', value: 0 },
+  //     { label: 'Hook', value: 1 },
+  //     { label: 'DomesyPro', value: 2 }
+  //   ],
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox4',
+  //   label: '必填',
+  //   required: true,
+  //   tooltip: 'required: true',
+  //   message: '请选择checkbox',
+  //   enum: {
+  //     0: 'React',
+  //     1: 'Hook',
+  //     2: 'DomesyPro',
+  //   },
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox5',
+  //   label: '设置默认值',
+  //   tooltip: `default: ['2', '0'] `,
+  //   default: ['2', '0'],
+  //   enum: {
+  //     0: 'React',
+  //     1: 'Hook',
+  //     2: 'DomesyPro',
+  //   },
+  //   type: 'checkbox',
+  // },
+  // {
+  //   name: 'checkbox6',
+  //   label: '禁用',
+  //   tooltip: `disabled: true, default: ['2']`,
+  //   disabled: true,
+  //   default: ['2'],
+  //   enum: {
+  //     0: 'React',
+  //     1: 'Hook',
+  //     2: 'DomesyPro',
+  //   },
+  //   type: 'checkbox',
+  // },
+  {
+    name: 'radio',
+    label: 'option',
+    tooltip: `type: 'radio'，option为字符串`,
+    options: ['React', 'Hook', 'DomesyPro'],
+    type: 'radio',
+  },
+  {
+    name: 'radio1',
+    label: 'option',
+    tooltip: `option为对象`,
+    options: [
+      { label: 'React', value: 0 },
+      { label: 'Hook', value: 1 },
+      { label: 'DomesyPro', value: 2 },
+    ],
+    type: 'radio',
+  },
+  {
+    name: 'radio2',
+    label: 'enum',
+    tooltip: `enum,简化options`,
+    enum: {
+      0: 'React',
+      1: 'Hook',
+      2: 'DomesyPro',
+    },
+    type: 'radio',
+  },
+  {
+    name: 'radio3',
+    label: 'request',
+    tooltip:
+      '接收一个函数，可以动态调取接口，返回的值需要有label，和value，onFinish的值是value,并且层级大于enum',
+    request: async () => [
+      { label: 'React', value: 0 },
+      { label: 'Hook', value: 1 },
+      { label: 'DomesyPro', value: 2 },
+    ],
+    type: 'radio',
+  },
+  {
+    name: 'radio4',
+    label: '必填',
+    required: true,
+    tooltip: 'required: true',
+    message: '请选择radio',
+    enum: {
+      0: 'React',
+      1: 'Hook',
+      2: 'DomesyPro',
+    },
+    type: 'radio',
+  },
+  {
+    name: 'radio5',
+    label: '设置默认值',
+    tooltip: `default: '2' `,
+    default: '2',
+    enum: {
+      0: 'React',
+      1: 'Hook',
+      2: 'DomesyPro',
+    },
+    type: 'radio',
+  },
+  {
+    name: 'radio6',
+    label: '禁用',
+    tooltip: `disabled: true, default: '2'`,
+    disabled: true,
+    default: '2',
+    enum: {
+      0: 'React',
+      1: 'Hook',
+      2: 'DomesyPro',
+    },
+    type: 'radio',
+  },
 ];
 
 const Welcome: React.FC<any> = (props) => {
