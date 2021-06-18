@@ -66,7 +66,7 @@ interface DateLimitProps {
 }
 
 export interface formProps {
-  type?: 'input' | 'password' | 'select' | 'date' | 'switch' | 'checkbox' | 'radio';
+  type?: 'input' | 'password' | 'select' | 'date' | 'switch' | 'checkbox' | 'radio' | 'textArea';
   name: string;
   label?: string;
   tooltip?: string;
@@ -92,6 +92,10 @@ export interface formProps {
   loading?: boolean;
   ranges?: Object;
   default?: any;
+  max?: number;
+  showCount?: boolean;
+  autoSize?: boolean;
+  rows?: number;
 }
 
 interface Props extends ProFormProps {

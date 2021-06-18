@@ -15,6 +15,7 @@ import ProForm, {
   ProFormSwitch,
   ProFormCheckbox,
   ProFormRadio,
+  ProFormTextArea,
 } from '@ant-design/pro-form';
 import { MailTwoTone } from '@ant-design/icons';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -55,7 +56,9 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param password 密码设置状态框, 包含input的全部属性
  * @param select 选择框
  * @param checkbox 多选
+ * @param radio 单选
  * @param switch 开关
+ * @param textArea 文本框
  *
  * @input和password的私有参数
  * @param prefix 样式前缀
@@ -81,6 +84,12 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param enum 与select相同
  * @param options 与select相同
  * @param request 与select相同
+ * 
+ * @textArea的私有参数
+ * @param showCount 是否显示字数 布尔
+ * @param max 限制最大字数 Number
+ * @param autoSize 自适应内容高度， 为true自适应
+ * @param rows 限定高度，固定文本框的高度
  * 
  * @switch的私有参数
  * @param openText 开启是加载的文字或图标
@@ -469,6 +478,16 @@ const Form: React.FC<Props> = ({
                       return item.optionItemRender(ele);
                     }
                   },
+                  ...item.fieldProps,
+                }}
+              />
+            ) : item.type === 'textArea' ? (
+              <ProFormTextArea
+                {...commonProps(item, item.type)}
+                fieldProps={{
+                  autoSize: item.rows ? { minRows: item.rows } : item.autoSize,
+                  showCount: item.showCount || item.max,
+                  maxLength: item.max,
                   ...item.fieldProps,
                 }}
               />
