@@ -101,8 +101,9 @@ const OssUpLoad: React.FC<Props> = ({
   const [previewTitle, setPreviewTitle] = useState<any>(''); // 图片名称
   const [previewImage, setPreviewImage] = useState<any>(''); // 图片展示的数据
 
+  // 预览
   const handlePreview = async (file: any) => {
-    if (file.type.indexOf('image') === -1) return;
+    if (file.type && file.type.indexOf('image') === -1) return;
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -221,6 +222,8 @@ const OssUpLoad: React.FC<Props> = ({
         if (getFiles) {
           const getFileResult = getFilesList.filter((item) => item.file.uid !== file.uid);
           setGetFilesList(getFileResult);
+          // 删除文件
+          getFiles(getFileResult);
         }
         if (onRemove) onRemove(file);
       }}
