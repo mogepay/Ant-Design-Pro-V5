@@ -26,6 +26,8 @@ import { Method } from '@/utils';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 import { Loading } from '../../.umi/plugin-dva/connect';
 
+// 输入规则不一定要必填，因为可以不填，如果填了就必须按照规定去填
+
 /**
  * @module Form表单
  * @author Domesy
@@ -66,10 +68,14 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param slider 滑动输入条
  *
  * @input和password的私有参数
+ * @param addonAfter 前缀 带个灰色的背景框
+ * @param addonBefore 后缀 带个灰色的背景框
  * @param prefix 样式前缀
  * @param suffix 样式后缀
+ * addonAfter addonBefore prefix suffix 类型都是ReactNode
  * @param rulesRender 适用于原本的rules
  * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
+ * @param noRequired 在很少的情况下，不需要规则必填，但填必须按照规则去填,可以按此规则 布尔值
  *
  * @select的私有参数
  * @param message 必填时的消息 默认
@@ -298,7 +304,7 @@ const Form: React.FC<Props> = ({
         rules = [...rules, result];
       }
     });
-    if (!require.flag) {
+    if (!require.flag && !data.noRequired) {
       const result = {
         required: true,
         message: require.message || `请输入${data.label || ''}`,
@@ -368,7 +374,6 @@ const Form: React.FC<Props> = ({
    */
   const commonProps = (item: any, type: string | boolean) => {
     const formLayout = item.label ? formItemLayout : formItemTailLayout;
-
     let commonType: any = {};
 
     if (type) {
@@ -582,6 +587,8 @@ const Form: React.FC<Props> = ({
               <ProFormText.Password
                 {...commonProps(item, item.type)}
                 fieldProps={{
+                  addonAfter: item.addonAfter,
+                  addonBefore: item.addonBefore,
                   suffix: item.suffix,
                   prefix: item.prefix,
                   ...item.fieldProps,
@@ -592,6 +599,8 @@ const Form: React.FC<Props> = ({
                 {...commonProps(item, 'input')}
                 // initialValue={item.default}
                 fieldProps={{
+                  addonAfter: item.addonAfter,
+                  addonBefore: item.addonBefore,
                   suffix: item.suffix,
                   prefix: item.prefix,
                   ...item.fieldProps,

@@ -84,13 +84,16 @@ export interface formProps {
   width?: number | 'sm' | 'md' | 'xl' | 'xs' | 'lg' | undefined;
   placeholder?: string;
   disabled?: boolean;
+  addonAfter?: React.ReactNode;
+  addonBefore?: React.ReactNode;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   required?: boolean;
+  noRequired?: boolean;
   rules: Array<RuleProps>;
   extra?: React.ReactNode;
   message: string;
   rulesRender: Array<any>;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
   fieldProps?: Object;
   enum?: any;
   options?: Array<any>;
