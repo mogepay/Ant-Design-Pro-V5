@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ConnectState } from '@/models/connect';
-import { Card, Select, Col, Dropdown, Menu, Row } from 'antd';
+import { Card, Select, message, Col, Dropdown, Menu, Row } from 'antd';
 import { connect } from 'umi';
 import { Button, OssUpLoad, Form } from '@/components';
 import { Jump } from '@/utils';
@@ -12,282 +12,321 @@ import { DatePicker, Space } from 'antd';
 
 import { MailTwoTone, HeartOutlined } from '@ant-design/icons';
 const { Option } = Select;
+
+const waitTime = (time: number = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
 const list: any = [
+  // {
+  //   name: 'input',
+  //   label: '普通输入框',
+  //   tooltip: 'type: input',
+  // },
+  // {
+  //   name: 'input1',
+  //   label: '宽度',
+  //   tooltip: `width: 'sm'`,
+  //   width: 'sm',
+  // },
+  // {
+  //   name: 'input2',
+  //   label: '提示语',
+  //   tooltip: `我是提示语 tooltip: '我是提示语'`,
+  // },
+  // {
+  //   name: 'input3',
+  //   label: '为空时的文本样式',
+  //   default: '111',
+  //   tooltip: `default: '111'`,
+  //   placeholder: '自定义placeholder',
+  // },
+  // {
+  //   name: 'input4',
+  //   label: '额外配置信息',
+  //   tooltip: `extra: <span style={{color: 'red'}}>欢迎使用动态表单</span>`,
+  //   extra: <span style={{ color: 'red' }}>欢迎使用动态表单</span>,
+  //   placeholder: '自定义placeholder',
+  // },
+  // {
+  //   name: 'input5',
+  //   label: '只读',
+  //   readonly: true,
+  //   tooltip: `readonly: true`,
+  //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
+  // },
+  // {
+  //   name: 'input6',
+  //   label: '禁用',
+  //   tooltip: `label: '禁用'`,
+  //   disabled: true,
+  // },
+  // {
+  //   name: 'input7',
+  //   label: '默认输入值',
+  //   tooltip: `default: 'Domesy'`,
+  //   default: 'Domesy',
+  // },
+  // {
+  //   name: 'input8',
+  //   label: '前缀图标(自定义)',
+  //   tooltip: 'prefix: <MailTwoTone />',
+  //   prefix: <MailTwoTone />,
+  // },
+  // {
+  //   name: 'input9',
+  //   label: '前缀图标(自定义)',
+  //   tooltip: 'suffix: <MailTwoTone />',
+  //   suffix: <MailTwoTone />,
+  // },
+  // {
+  //   name: 'input10',
+  //   label: '前置',
+  //   tooltip: 'addonAfter: "http"',
+  //   addonBefore: '.com',
+  // },
+  // {
+  //   name: 'input11',
+  //   label: '后置',
+  //   tooltip: 'addonBefore: ".com"',
+  //   addonAfter: 'http',
+  // },
+  // {
+  //   name: 'input12',
+  //   label: '前后置',
+  //   tooltip: 'addonBefore: React.Node, addonAfter: React.Node',
+  //   extra:
+  //     '无论是addonBefore、addonAfter还是suffix、prefix都不会将值传入，如果想要选择应该自行修改值',
+  //   addonBefore: (
+  //     <Select defaultValue="http://" className="select-before">
+  //       <Option value="http://">http://</Option>
+  //       <Option value="https://">https://</Option>
+  //     </Select>
+  //   ),
+  //   addonAfter: (
+  //     <Select defaultValue=".com" className="select-after">
+  //       <Option value=".com">.com</Option>
+  //       <Option value=".jp">.jp</Option>
+  //       <Option value=".cn">.cn</Option>
+  //       <Option value=".org">.org</Option>
+  //     </Select>
+  //   ),
+  // },
+  // {
+  //   name: 'input13',
+  //   label: '必填',
+  //   tooltip: '此选项必填，并且不能为空格',
+  //   rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
+  // },
+  // {
+  //   name: 'input14',
+  //   label: '正则手机号',
+  //   tooltip: '所有有规则的都会加入required，并且不能为空格，简化开发',
+  //   rules: [
+  //     {
+  //       pattern: /^1\d{10}$/,
+  //       message: '满足规则为校验正确否则不正确',
+  //       reMessage: '为空时的提示语',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input15',
+  //   label: '最小位数',
+  //   rules: [
+  //     {
+  //       min: 3,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input16',
+  //   label: '最大位数',
+  //   rules: [
+  //     {
+  //       max: 5,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input17',
+  //   label: '最小和最大',
+  //   rules: [
+  //     {
+  //       min: 3,
+  //       max: 5,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input18',
+  //   label: '最小和最大',
+  //   tooltip: '同时支持最小和最大位数,但提示语不同',
+  //   rules: [
+  //     {
+  //       min: 3,
+  //     },
+  //     {
+  //       max: 5,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input19',
+  //   label: '手机号验证',
+  //   tooltip: "method: 'tel', 对应utils/Regexp的reTel",
+  //   rules: [
+  //     {
+  //       method: 'tel',
+  //       message: '11',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input20',
+  //   label: '密码',
+  //   tooltip: "method: 'password', 对应utils/Regexp的rePassword",
+  //   rules: [
+  //     {
+  //       method: 'password',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input21',
+  //   label: '姓名',
+  //   tooltip: "method: 'name', 对应utils/Regexp的reName",
+  //   rules: [
+  //     {
+  //       method: 'name',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input22',
+  //   label: '身份证',
+  //   tooltip: "method: 'sfz', 对应utils/Regexp的reSfz",
+  //   rules: [
+  //     {
+  //       method: 'sfz',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input23',
+  //   label: '银行卡号',
+  //   tooltip: "method: 'card', 对应utils/Regexp的reCard",
+  //   rules: [
+  //     {
+  //       method: 'card',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input24',
+  //   label: '邮箱',
+  //   tooltip: "method: 'emil', 对应utils/Regexp的reEmil",
+  //   rules: [
+  //     {
+  //       method: 'emil',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input25',
+  //   label: '电话或邮箱',
+  //   tooltip: "method: 'name', 对应utils/Regexp的reTelEmil",
+  //   rules: [
+  //     {
+  //       method: 'telEmil',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input26',
+  //   label: '规则rulesRender',
+  //   tooltip: '走原本的rules，原本的必填，输入空格也可校验过',
+  //   rulesRender: [
+  //     {
+  //       required: 'true',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'input27',
+  //   label: 'fieldProps',
+  //   noRequired: true,
+  //   rules: [
+  //     {
+  //       method: 'telEmil',
+  //     },
+  //   ],
+  //   tooltip: '支持原本的输入组件，如大小，placeholder',
+  //   extra: '在很少的情况下，不需要规则必填，但填必须按照规则去填',
+  // },
+  // {
+  //   name: 'input28',
+  //   label: 'fieldProps',
+  //   tooltip: '支持原本的输入组件，如大小，placeholder',
+  //   fieldProps: {
+  //     size: 'large',
+  //   },
+  // },
+  // {
+  //   name: 'input29',
+  //   placeholder: '没有 label，自动对齐',
+  // },
+  // {
+  //   name: 'password',
+  //   label: '密码',
+  //   type: 'password',
+  // },
+  // {
+  //   name: 'password1',
+  //   label: '密码',
+  //   placeholder: '配合规则，图标',
+  //   rules: [
+  //     {
+  //       method: 'password',
+  //       message: '密码，长度必须为6至20位',
+  //     },
+  //   ],
+  //   prefix: <MailTwoTone />,
+  //   type: 'password',
+  // },
   {
-    name: 'input',
-    label: '普通输入框',
-    tooltip: 'type: input',
-  },
-  {
-    name: 'input1',
-    label: '宽度',
-    tooltip: `width: 'sm'`,
-    width: 'sm',
-  },
-  {
-    name: 'input2',
-    label: '提示语',
-    tooltip: `我是提示语 tooltip: '我是提示语'`,
-  },
-  {
-    name: 'input3',
-    label: '为空时的文本样式',
-    default: '111',
-    tooltip: `default: '111'`,
-    placeholder: '自定义placeholder',
-  },
-  {
-    name: 'input4',
-    label: '额外配置信息',
-    tooltip: `extra: <span style={{color: 'red'}}>欢迎使用动态表单</span>`,
-    extra: <span style={{ color: 'red' }}>欢迎使用动态表单</span>,
-    placeholder: '自定义placeholder',
-  },
-  {
-    name: 'input5',
-    label: '只读',
-    readonly: true,
-    tooltip: `readonly: true`,
-    rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
-  },
-  {
-    name: 'input6',
-    label: '禁用',
-    tooltip: `label: '禁用'`,
-    disabled: true,
-  },
-  {
-    name: 'input7',
-    label: '默认输入值',
-    tooltip: `default: 'Domesy'`,
-    default: 'Domesy',
-  },
-  {
-    name: 'input8',
-    label: '前缀图标(自定义)',
-    tooltip: 'prefix: <MailTwoTone />',
+    name: 'captcha',
+    label: '验证码',
+    tooltip: `type: captcha`,
     prefix: <MailTwoTone />,
+    type: 'captcha',
   },
   {
-    name: 'input9',
-    label: '前缀图标(自定义)',
-    tooltip: 'suffix: <MailTwoTone />',
-    suffix: <MailTwoTone />,
+    name: 'captcha1',
+    label: '获取点击验证码事件',
+    tooltip: `getCaptcha:async (phone:any) => message.success('获取点击事件')`,
+    type: 'captcha',
+    getCaptcha: async (phone: any) => message.success('获取点击事件'),
   },
   {
-    name: 'input10',
-    label: '前置',
-    tooltip: 'addonAfter: "http"',
-    addonBefore: '.com',
-  },
-  {
-    name: 'input11',
-    label: '后置',
-    tooltip: 'addonBefore: ".com"',
-    addonAfter: 'http',
-  },
-  {
-    name: 'input12',
-    label: '前后置',
-    tooltip: 'addonBefore: React.Node, addonAfter: React.Node',
-    extra:
-      '无论是addonBefore、addonAfter还是suffix、prefix都不会将值传入，如果想要选择应该自行修改值',
-    addonBefore: (
-      <Select defaultValue="http://" className="select-before">
-        <Option value="http://">http://</Option>
-        <Option value="https://">https://</Option>
-      </Select>
-    ),
-    addonAfter: (
-      <Select defaultValue=".com" className="select-after">
-        <Option value=".com">.com</Option>
-        <Option value=".jp">.jp</Option>
-        <Option value=".cn">.cn</Option>
-        <Option value=".org">.org</Option>
-      </Select>
-    ),
-  },
-  {
-    name: 'input13',
-    label: '必填',
-    tooltip: '此选项必填，并且不能为空格',
-    rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
-  },
-  {
-    name: 'input14',
-    label: '正则手机号',
-    tooltip: '所有有规则的都会加入required，并且不能为空格，简化开发',
-    rules: [
-      {
-        pattern: /^1\d{10}$/,
-        message: '满足规则为校验正确否则不正确',
-        reMessage: '为空时的提示语',
-      },
-    ],
-  },
-  {
-    name: 'input15',
-    label: '最小位数',
-    rules: [
-      {
-        min: 3,
-      },
-    ],
-  },
-  {
-    name: 'input16',
-    label: '最大位数',
-    rules: [
-      {
-        max: 5,
-      },
-    ],
-  },
-  {
-    name: 'input17',
-    label: '最小和最大',
-    rules: [
-      {
-        min: 3,
-        max: 5,
-      },
-    ],
-  },
-  {
-    name: 'input18',
-    label: '最小和最大',
-    tooltip: '同时支持最小和最大位数,但提示语不同',
-    rules: [
-      {
-        min: 3,
-      },
-      {
-        max: 5,
-      },
-    ],
-  },
-  {
-    name: 'input19',
-    label: '手机号验证',
-    tooltip: "method: 'tel', 对应utils/Regexp的reTel",
-    rules: [
-      {
-        method: 'tel',
-        message: '11',
-      },
-    ],
-  },
-  {
-    name: 'input20',
-    label: '密码',
-    tooltip: "method: 'password', 对应utils/Regexp的rePassword",
-    rules: [
-      {
-        method: 'password',
-      },
-    ],
-  },
-  {
-    name: 'input21',
-    label: '姓名',
-    tooltip: "method: 'name', 对应utils/Regexp的reName",
-    rules: [
-      {
-        method: 'name',
-      },
-    ],
-  },
-  {
-    name: 'input22',
-    label: '身份证',
-    tooltip: "method: 'sfz', 对应utils/Regexp的reSfz",
-    rules: [
-      {
-        method: 'sfz',
-      },
-    ],
-  },
-  {
-    name: 'input23',
-    label: '银行卡号',
-    tooltip: "method: 'card', 对应utils/Regexp的reCard",
-    rules: [
-      {
-        method: 'card',
-      },
-    ],
-  },
-  {
-    name: 'input24',
-    label: '邮箱',
-    tooltip: "method: 'emil', 对应utils/Regexp的reEmil",
-    rules: [
-      {
-        method: 'emil',
-      },
-    ],
-  },
-  {
-    name: 'input25',
-    label: '电话或邮箱',
-    tooltip: "method: 'name', 对应utils/Regexp的reTelEmil",
-    rules: [
-      {
-        method: 'telEmil',
-      },
-    ],
-  },
-  {
-    name: 'input26',
-    label: '规则rulesRender',
-    tooltip: '走原本的rules，原本的必填，输入空格也可校验过',
-    rulesRender: [
-      {
-        required: 'true',
-      },
-    ],
-  },
-  {
-    name: 'input27',
-    label: 'fieldProps',
-    noRequired: true,
-    rules: [
-      {
-        method: 'telEmil',
-      },
-    ],
-    tooltip: '支持原本的输入组件，如大小，placeholder',
-    extra: '在很少的情况下，不需要规则必填，但填必须按照规则去填',
-  },
-  {
-    name: 'input28',
-    label: 'fieldProps',
-    tooltip: '支持原本的输入组件，如大小，placeholder',
-    fieldProps: {
-      size: 'large',
+    name: 'captcha2',
+    label: '自定义文字',
+    tooltip: `captchaTextRender: (timing: boolean, count: number) => {return ...}`,
+    type: 'captcha',
+    captchaTextRender: (timing: boolean, count: number) => {
+      return timing ? `你还有${count}秒见到 Domesy` : 'Domesy';
     },
   },
   {
-    name: 'input29',
-    placeholder: '没有 label，自动对齐',
-  },
-  {
-    name: 'password',
-    label: '密码',
-    type: 'password',
-  },
-  {
-    name: 'password1',
-    label: '密码',
-    placeholder: '配合规则，图标',
-    rules: [
-      {
-        method: 'password',
-        message: '密码，长度必须为6至20位',
-      },
-    ],
-    prefix: <MailTwoTone />,
-    type: 'password',
+    name: 'captcha3',
+    label: '点击后的计时',
+    tooltip: `max: 30`,
+    type: 'captcha',
+    max: 30,
+    extra: '按钮的样式可以调，直接captchaProps可直接控制，跟Button样式一样',
   },
   // {
   //   name: 'date',

@@ -69,6 +69,7 @@ export interface formProps {
   type?:
     | 'input'
     | 'password'
+    | 'captcha'
     | 'select'
     | 'date'
     | 'switch'
@@ -114,10 +115,12 @@ export interface formProps {
   half?: boolean;
   tooltips?: Array<string>;
   styleNode?: React.ReactNode | Function;
-  color: string;
-  range: boolean;
-  marks: Object;
-  step: number;
+  color?: string;
+  range?: boolean;
+  marks?: Object;
+  step?: number;
+  getCaptcha?: (phone: any) => void;
+  captchaText?: (timing: boolean, count: number) => void;
 }
 
 interface Props extends ProFormProps {

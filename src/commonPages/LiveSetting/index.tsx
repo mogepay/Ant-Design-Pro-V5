@@ -18,7 +18,7 @@ const LiveSetting: React.FC = () => (
         width: '100%',
         border: '0px',
         height: 300,
-        position: 'absolute',
+        position: 'fixed',
         left: '80%',
         bottom: 30,
         pointerEvents: 'auto',

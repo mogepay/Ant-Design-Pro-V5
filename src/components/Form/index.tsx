@@ -40,7 +40,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param formTailLayout 与formLayout相同，但无label字段
  *
  * @initialValues
- * @param select 属性值为原本的属性名，如 valueEnum 的属性名
+ * @param select 属性值为原本的属性名，如 valueEnum 的属性名 
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
@@ -59,6 +59,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @type
  * @param input 就是最基本的input
  * @param password 密码设置状态框, 包含input的全部属性
+ * @param captcha 获取验证码的功能
  * @param select 选择框
  * @param checkbox 多选
  * @param radio 单选
@@ -77,6 +78,11 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param rules 数组 设置规则，disabled设置为true，规则不生效，接收一个数组，按照原本的参数传递，并在此基础上做了些方便的功能，如果想使用原本参数的形式，可适用 rulesRender
  * @param noRequired 在很少的情况下，不需要规则必填，但填必须按照规则去填,可以按此规则 布尔值
  *
+ * @captcha的私有参数 包含input的参数
+ * @getCaptcha 获取验证码的事件
+ * @captchaTextRender 渲染计时的文案 timing: boolean, count: number
+ * @max 倒计时的秒数
+ * 
  * @select的私有参数
  * @param message 必填时的消息 默认
  * @param enum 对象， 对应选择框的值，展示属性值，值为属性名
@@ -314,6 +320,63 @@ const Form: React.FC<Props> = ({
     return rules;
   };
 
+  /**
+   * @module 公共配置Props
+   * @param type 传入的类型，通用但不是全部的Props，可以不用传
+   */
+  const commonProps = (item: any, type: string | boolean) => {
+    const formLayout = item.label ? formItemLayout : formItemTailLayout;
+    let commonType: any = {};
+
+    if (type) {
+      const typeTip =
+        type === 'select' ||
+        item.type === 'checkbox' ||
+        item.type === 'radio' ||
+        type === 'date' ||
+        type === 'rate'
+          ? '请选择'
+          : '请输入';
+      commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
+
+      // 只读和禁用不能设置必填
+      if (!item.readonly && !item.disabled) {
+        commonType.rules =
+          type === 'input' || type === 'password' || type === 'captcha'
+            ? ruleRender(item)
+            : item.required
+            ? [
+                {
+                  required: true,
+                  message: item.message || `${typeTip}${item.label}`,
+                },
+              ]
+            : undefined;
+      }
+
+      if (item.type === 'select' || item.type === 'checkbox' || item.type === 'radio') {
+        commonType.valueEnum = item.enum;
+        commonType.options = item.options;
+        commonType.request = item.request;
+      }
+
+      commonType.width = type === 'date' ? undefined : item.width || 'md';
+    }
+
+    return {
+      ...item,
+      ...commonType,
+      ...formLayout,
+      name: item.name,
+      label: item.label,
+      extra: item.extra,
+      initialValue: item.default,
+      readonly: item.readonly,
+      tooltip: item.tooltip,
+      disabled: item.disabled,
+    };
+  };
+
   // 日期限定规则规则
   const DateRender = (item: any) => {
     const dateRule = (current: any) => {
@@ -368,60 +431,13 @@ const Form: React.FC<Props> = ({
     };
   };
 
-  /**
-   * @module 公共配置Props
-   * @param type 传入的类型，通用但不是全部的Props，可以不用传
-   */
-  const commonProps = (item: any, type: string | boolean) => {
-    const formLayout = item.label ? formItemLayout : formItemTailLayout;
-    let commonType: any = {};
-
-    if (type) {
-      const typeTip =
-        type === 'select' ||
-        item.type === 'checkbox' ||
-        item.type === 'radio' ||
-        type === 'date' ||
-        type === 'rate'
-          ? '请选择'
-          : '请输入';
-      commonType.placeholder = item.placeholder || `${typeTip}${item.label || ''}`;
-
-      // 只读和禁用不能设置必填
-      if (!item.readonly && !item.disabled) {
-        commonType.rules =
-          type === 'input' || type === 'password'
-            ? ruleRender(item)
-            : item.required
-            ? [
-                {
-                  required: true,
-                  message: item.message || `${typeTip}${item.label}`,
-                },
-              ]
-            : undefined;
-      }
-
-      if (item.type === 'select' || item.type === 'checkbox' || item.type === 'radio') {
-        commonType.valueEnum = item.enum;
-        commonType.options = item.options;
-        commonType.request = item.request;
-      }
-
-      commonType.width = type === 'date' ? undefined : item.width || 'md';
-    }
-
+  const TextRender = (item: any) => {
     return {
-      ...item,
-      ...commonType,
-      ...formLayout,
-      name: item.name,
-      label: item.label,
-      extra: item.extra,
-      initialValue: item.default,
-      readonly: item.readonly,
-      tooltip: item.tooltip,
-      disabled: item.disabled,
+      addonAfter: item.addonAfter,
+      addonBefore: item.addonBefore,
+      suffix: item.suffix,
+      prefix: item.prefix,
+      ...item.fieldProps,
     };
   };
 
@@ -583,29 +599,22 @@ const Form: React.FC<Props> = ({
                   fieldProps={DateRender(item)}
                 />
               )
+            ) : item.type === 'captcha' ? (
+              <ProFormCaptcha
+                {...commonProps(item, item.type)}
+                onGetCaptcha={async (phone: any) => {
+                  if (item.getCaptcha) item.getCaptcha(phone);
+                }}
+                countDown={item.max}
+                fieldProps={TextRender(item)}
+              />
             ) : item.type === 'password' ? (
               <ProFormText.Password
                 {...commonProps(item, item.type)}
-                fieldProps={{
-                  addonAfter: item.addonAfter,
-                  addonBefore: item.addonBefore,
-                  suffix: item.suffix,
-                  prefix: item.prefix,
-                  ...item.fieldProps,
-                }}
+                fieldProps={TextRender(item)}
               />
             ) : (
-              <ProFormText
-                {...commonProps(item, 'input')}
-                // initialValue={item.default}
-                fieldProps={{
-                  addonAfter: item.addonAfter,
-                  addonBefore: item.addonBefore,
-                  suffix: item.suffix,
-                  prefix: item.prefix,
-                  ...item.fieldProps,
-                }}
-              />
+              <ProFormText {...commonProps(item, 'input')} fieldProps={TextRender(item)} />
             )}
           </div>
         ))}
