@@ -8,7 +8,7 @@ import Props from './interface.d';
 import './index.less';
 
 /**
- * @module UpLoad 图片上传
+ * @module OssUpLoad 图片上传
  * @author Domesy
  *
  * @param amount 数量 可设置上传的数量，默认为1张
@@ -35,7 +35,7 @@ import './index.less';
  *
  * @_config
  * @param noCheck 检验是否同一张图片 （当相同名字和文件大小一致时，才会校验不通过），默认false
- * @param radio 单选照片，默认多选
+ * @param radio 单选照片，默认多选(当图片为一张时默认单选)
  * @param text 未上传时的文字 默认 Upload
  * @param uploadNode 自定义upload样式，类型 Function | React.ReactNode
  * @param ossUrl 上传完图片，统一前缀 默认 web/domesy/images/
@@ -43,26 +43,6 @@ import './index.less';
  * @param pictureCardTip listType为picture-card时上传其他模式时的提示语 默认'请上传正确的图片类型！'
  */
 
-//  const  fileList = [
-//   {
-//     uid: '-4',
-//     name: 'image.png',
-//     status: 'done',
-//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//   },
-//   {
-//     uid: '-xxx',
-//     percent: 50,
-//     name: 'image.png',
-//     status: 'uploading',
-//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//   },
-//   {
-//     uid: '-5',
-//     name: 'image.png',
-//     status: 'error',
-//   },
-// ]
 /**
  * 问题：
  *  无法同时满足裁剪功能的照片和文件共同满足的情况，这种情况建议分开处理
@@ -81,7 +61,7 @@ let client = new aliOSS({
 });
 
 const OssUpLoad: React.FC<Props> = ({
-  amount = 4,
+  amount = 1,
   OSS = false,
   rules = {},
   listType = 'picture-card',
@@ -182,7 +162,6 @@ const OssUpLoad: React.FC<Props> = ({
       } else {
         result = [...getFilesList, { file, newFile: result }];
         setGetFilesList(result);
-        getFiles(result);
       }
       result = [...getFilesList, { file, newFile: result }];
       OSS ? result.map((item: any) => (OssList = [...OssList, item.newFile])) : '';
@@ -215,7 +194,7 @@ const OssUpLoad: React.FC<Props> = ({
       onChange={({ fileList }) => {
         if (isFileFlag) setFileList(fileList);
       }}
-      multiple={!_config.radio}
+      multiple={!_config.radio && amount !== 1}
       onRemove={(file) => {
         const result = fileList.filter((item) => item.uid !== file.uid);
         setFileList(result);

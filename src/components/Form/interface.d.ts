@@ -77,7 +77,8 @@ export interface formProps {
     | 'radio'
     | 'textArea'
     | 'rate'
-    | 'slider';
+    | 'slider'
+    | 'field';
   name: string;
   label?: string;
   tooltip?: string;

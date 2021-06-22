@@ -516,7 +516,9 @@ const Form: React.FC<Props> = ({
       >
         {formList.map((item, index) => (
           <div key={index}>
-            {item.type === 'select' ? (
+            {item.type === 'field' ? (
+              <ProFormField {...commonProps(item, item.type)} />
+            ) : item.type === 'select' ? (
               <ProFormSelect
                 {...commonProps(item, item.type)}
                 fieldProps={{

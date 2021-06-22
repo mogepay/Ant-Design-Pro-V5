@@ -19,7 +19,7 @@ interface configProps {
 }
 
 interface Props extends UploadProps {
-  getFiles?: Function;
+  getFiles: Function;
   amount?: number;
   rules?: rulesProps;
   _config?: configProps;
