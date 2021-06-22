@@ -122,6 +122,7 @@ export interface formProps {
   step?: number;
   getCaptcha?: (phone: any) => void;
   captchaText?: (timing: boolean, count: number) => void;
+  fieldRender?: React.ReactNode | Function;
 }
 
 interface Props extends ProFormProps {

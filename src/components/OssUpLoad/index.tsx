@@ -160,7 +160,6 @@ const OssUpLoad: React.FC<Props> = ({
         );
         result = res.url;
       } else {
-        result = [...getFilesList, { file, newFile: result }];
         setGetFilesList(result);
       }
       result = [...getFilesList, { file, newFile: result }];

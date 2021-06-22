@@ -517,7 +517,21 @@ const Form: React.FC<Props> = ({
         {formList.map((item, index) => (
           <div key={index}>
             {item.type === 'field' ? (
-              <ProFormField {...commonProps(item, item.type)} />
+              <ProFormField
+                {...commonProps(item, item.type)}
+                renderFormItem={() => (item.fieldRender ? item.fieldRender : <div></div>)}
+                render={111}
+                fieldProps={{
+                  value: '222',
+                }}
+                // renderFormItem={() => (
+                //   <>
+                //     {position === 'left' && otherRender}
+                //     {dom}
+                //     {position === 'right' && otherRender}
+                //   </>
+                // )}
+              />
             ) : item.type === 'select' ? (
               <ProFormSelect
                 {...commonProps(item, item.type)}
