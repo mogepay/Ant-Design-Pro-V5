@@ -297,37 +297,37 @@ const list: any = [
   //   prefix: <MailTwoTone />,
   //   type: 'password',
   // },
-  {
-    name: 'captcha',
-    label: '验证码',
-    tooltip: `type: captcha`,
-    prefix: <MailTwoTone />,
-    type: 'captcha',
-  },
-  {
-    name: 'captcha1',
-    label: '获取点击验证码事件',
-    tooltip: `getCaptcha:async (phone:any) => message.success('获取点击事件')`,
-    type: 'captcha',
-    getCaptcha: async (phone: any) => message.success('获取点击事件'),
-  },
-  {
-    name: 'captcha2',
-    label: '自定义文字',
-    tooltip: `captchaTextRender: (timing: boolean, count: number) => {return ...}`,
-    type: 'captcha',
-    captchaTextRender: (timing: boolean, count: number) => {
-      return timing ? `你还有${count}秒见到 Domesy` : 'Domesy';
-    },
-  },
-  {
-    name: 'captcha3',
-    label: '点击后的计时',
-    tooltip: `max: 30`,
-    type: 'captcha',
-    max: 30,
-    extra: '按钮的样式可以调，直接captchaProps可直接控制，跟Button样式一样',
-  },
+  // {
+  //   name: 'captcha',
+  //   label: '验证码',
+  //   tooltip: `type: captcha`,
+  //   prefix: <MailTwoTone />,
+  //   type: 'captcha',
+  // },
+  // {
+  //   name: 'captcha1',
+  //   label: '获取点击验证码事件',
+  //   tooltip: `getCaptcha:async (phone:any) => message.success('获取点击事件')`,
+  //   type: 'captcha',
+  //   getCaptcha: async (phone: any) => message.success('获取点击事件'),
+  // },
+  // {
+  //   name: 'captcha2',
+  //   label: '自定义文字',
+  //   tooltip: `captchaTextRender: (timing: boolean, count: number) => {return ...}`,
+  //   type: 'captcha',
+  //   captchaTextRender: (timing: boolean, count: number) => {
+  //     return timing ? `你还有${count}秒见到 Domesy` : 'Domesy';
+  //   },
+  // },
+  // {
+  //   name: 'captcha3',
+  //   label: '点击后的计时',
+  //   tooltip: `max: 30`,
+  //   type: 'captcha',
+  //   max: 30,
+  //   extra: '按钮的样式可以调，直接captchaProps可直接控制，跟Button样式一样',
+  // },
   // {
   //   name: 'date',
   //   label: '日期',
