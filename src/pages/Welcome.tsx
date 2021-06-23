@@ -26,12 +26,12 @@ const Welcome: React.FC<any> = (props) => {
   const [file, setFile] = useState<any>('111');
 
   const list: any = [
-    {
-      name: 'input',
-      label: '普通输入框',
-      tooltip: 'type: input',
-      default: '1112',
-    },
+    // {
+    //   name: 'input',
+    //   label: '普通输入框',
+    //   tooltip: 'type: input',
+    //   default: '1112',
+    // },
     // {
     //   name: 'input1',
     //   label: '宽度',
