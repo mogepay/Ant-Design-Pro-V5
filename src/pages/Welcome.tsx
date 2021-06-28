@@ -24,6 +24,7 @@ const waitTime = (time: number = 100) => {
 const Welcome: React.FC<any> = (props) => {
   useEffect(() => {}, []);
   const [file, setFile] = useState<any>('111');
+  const [ref, setRef] = useState<any>(false);
 
   const list: any = [
     // {
@@ -999,6 +1000,10 @@ const Welcome: React.FC<any> = (props) => {
           getFiles={(file: Array<any>) => {
             setFile(file);
             console.log(file, '00');
+            console.log(ref, '--');
+            ref?.current?.setFieldsValue({
+              field: file,
+            });
           }}
         />
       ),
@@ -1010,7 +1015,12 @@ const Welcome: React.FC<any> = (props) => {
     <PageContainer>
       <Card>
         {/* <Button onClick={() => {}}>测试</Button> */}
-        <Form formList={list} />
+        <Form
+          formList={list}
+          getRef={(fromRef: any) => {
+            setRef(fromRef);
+          }}
+        />
       </Card>
     </PageContainer>
   );

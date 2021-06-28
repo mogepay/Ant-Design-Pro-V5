@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { message } from 'antd';
 import moment from 'moment';
+import type { FormInstance } from 'antd';
 import ProForm, {
   ProFormText,
   ProFormCaptcha,
@@ -40,7 +41,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param formTailLayout 与formLayout相同，但无label字段
  *
  * @initialValues
- * @param select 属性值为原本的属性名，如 valueEnum 的属性名 
+ * @param select 属性值为原本的属性名，如 valueEnum 的属性名
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
@@ -82,7 +83,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @getCaptcha 获取验证码的事件
  * @captchaTextRender 渲染计时的文案 timing: boolean, count: number
  * @max 倒计时的秒数
- * 
+ *
  * @select的私有参数
  * @param message 必填时的消息 默认
  * @param enum 对象， 对应选择框的值，展示属性值，值为属性名
@@ -95,19 +96,19 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param enum 与select相同
  * @param options 与select相同
  * @param request 与select相同
- * 
+ *
  * @radio的私有参数
  * @param message 与select相同
  * @param enum 与select相同
  * @param options 与select相同
  * @param request 与select相同
- * 
+ *
  * @textArea的私有参数
  * @param showCount 是否显示字数 布尔
  * @param max 限制最大字数 Number
  * @param autoSize 自适应内容高度， 为true自适应
  * @param rows 限定高度，固定文本框的高度
- * 
+ *
  * @switch的私有参数
  * @param openText 开启是加载的文字或图标
  * @param closeText 关闭是加载的文字或图标
@@ -119,7 +120,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param half 是否选整个星，而不是半星，默认false
  * @param tooltips 移动到星星上方的字样，Array<string> ，数组对应的顺序对应星星上面的数据
  * @param styleNode 星星的默认样式，可字母，可icon，可文字，也可以自定义文字
- * 
+ *
  * @slider的私有参数
  * slider 有两种状态，第一种是单项，第二种是双向，单项时是纯选中的样式，双向时是以数组的形式展示，无论是默认值还是最终onFinsh的值都是这样返还的
  * @param range 布尔值 是否双向滑动 默认false
@@ -127,8 +128,8 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param max 布尔值 是否双向滑动
  * @param min 布尔值 是否双向滑动
  * @param step 布尔值 是否双向滑动
- * 
- * 
+ *
+ *
  * @date的私有参数
  * @param method 包含  date 日期  time 时间  dateTime 日起+时间 dateRange 日期区间， timeRange 时间区间，dateTimeRange 日期时间区间
  * dateRange timeRange dateTimeRange  三者的placeholder设职位开始时间和结束时间，如果要修改，只能在fieldProps内修改
@@ -217,6 +218,7 @@ const waitTime = (time: number = 100) => {
 };
 
 const Form: React.FC<Props> = ({
+  getRef,
   formList = [],
   footer = false,
   buttonConfig,
@@ -224,6 +226,12 @@ const Form: React.FC<Props> = ({
   formTailLayout,
   ...props
 }) => {
+  const formRef = useRef<FormInstance>();
+
+  useEffect(() => {
+    if (getRef) getRef(formRef);
+  }, []);
+
   // 规则设定
   const ruleRender = (data: formProps) => {
     if (data.readonly || data.disabled || (!data.rules && !data.rulesRender)) return undefined;
@@ -445,6 +453,7 @@ const Form: React.FC<Props> = ({
     <>
       <ProForm
         {...props}
+        formRef={formRef}
         onFinish={async (values) => {
           // await waitTime(2000);
           console.log(values, '--2');
