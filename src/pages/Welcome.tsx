@@ -27,12 +27,12 @@ const Welcome: React.FC<any> = (props) => {
   const [ref, setRef] = useState<any>(false);
 
   const list: any = [
-    // {
-    //   name: 'input',
-    //   label: '普通输入框',
-    //   tooltip: 'type: input',
-    //   default: '1112',
-    // },
+    {
+      name: 'input',
+      label: '普通输入框',
+      tooltip: 'type: input',
+      // default: '1112',
+    },
     // {
     //   name: 'input1',
     //   label: '宽度',
@@ -1002,7 +1002,8 @@ const Welcome: React.FC<any> = (props) => {
             console.log(file, '00');
             console.log(ref, '--');
             ref?.current?.setFieldsValue({
-              field: file,
+              field: file[0].file,
+              input: 'Domesy',
             });
           }}
         />
