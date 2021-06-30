@@ -449,6 +449,30 @@ const Form: React.FC<Props> = ({
     };
   };
 
+  // 自定义渲染
+  const fieldRender = (item: any) => {
+    console.log(item, '000');
+    if (item.fieldValue !== undefined && item.name) {
+      let payload: any = {};
+      payload[item.name] = item.fieldValue;
+      formRef?.current?.setFieldsValue(payload);
+    }
+
+    return (
+      <ProFormField
+        {...commonProps(item, item.type)}
+        renderFormItem={() => {
+          if (!item.fieldRender) return <div></div>;
+          return item.fieldRender;
+        }}
+        render={111}
+        fieldProps={{
+          value: '222',
+        }}
+      />
+    );
+  };
+
   return (
     <>
       <ProForm
@@ -526,21 +550,7 @@ const Form: React.FC<Props> = ({
         {formList.map((item, index) => (
           <div key={index}>
             {item.type === 'field' ? (
-              <ProFormField
-                {...commonProps(item, item.type)}
-                renderFormItem={() => (item.fieldRender ? item.fieldRender : <div></div>)}
-                render={111}
-                fieldProps={{
-                  value: '222',
-                }}
-                // renderFormItem={() => (
-                //   <>
-                //     {position === 'left' && otherRender}
-                //     {dom}
-                //     {position === 'right' && otherRender}
-                //   </>
-                // )}
-              />
+              fieldRender(item)
             ) : item.type === 'select' ? (
               <ProFormSelect
                 {...commonProps(item, item.type)}

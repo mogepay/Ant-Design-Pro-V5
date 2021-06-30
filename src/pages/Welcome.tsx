@@ -23,7 +23,7 @@ const waitTime = (time: number = 100) => {
 
 const Welcome: React.FC<any> = (props) => {
   useEffect(() => {}, []);
-  const [file, setFile] = useState<any>('111');
+  const [file, setFile] = useState<any>('');
   const [ref, setRef] = useState<any>(false);
 
   const list: any = [
@@ -995,16 +995,17 @@ const Welcome: React.FC<any> = (props) => {
       name: 'field',
       label: '自定义',
       type: 'field',
+      fieldValue: file,
+      // fieldValue: file,
       fieldRender: (
         <OssUpLoad
           getFiles={(file: Array<any>) => {
             setFile(file);
             console.log(file, '00');
-            console.log(ref, '--');
-            ref?.current?.setFieldsValue({
-              field: file[0].file,
-              input: 'Domesy',
-            });
+            // ref?.current?.setFieldsValue({
+            //   field: file[0].file,
+            //   input: 'Domesy',
+            // });
           }}
         />
       ),
