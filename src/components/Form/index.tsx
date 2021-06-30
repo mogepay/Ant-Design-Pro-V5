@@ -68,6 +68,10 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param textArea 文本框
  * @param rate 星级评价
  * @param slider 滑动输入条
+ * @param field 自定义输入
+ *
+ * @field的私有参数
+ * @param fieldValue 输入的值，必填，最后绑定在onFinsh上, 绑定在自定义组件上，也可以通过ref设置
  *
  * @input和password的私有参数
  * @param addonAfter 前缀 带个灰色的背景框
