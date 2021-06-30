@@ -996,20 +996,60 @@ const Welcome: React.FC<any> = (props) => {
       label: '自定义',
       type: 'field',
       fieldValue: file,
-      // fieldValue: file,
+      tooltip: `fieldValue: value, fieldRender: getValue(获取传递fieldValue)`,
+      fieldRender: (
+        <OssUpLoad
+          getFiles={(file: Array<any>) => {
+            setFile(file[0].file);
+          }}
+        />
+      ),
+    },
+    {
+      name: 'field1',
+      label: '自定义Ref',
+      type: 'field',
+      fieldValue: file,
+      tooltip: `通过 ref 来获取 ref?.current?.setFieldsValue({})`,
+      fieldRender: (
+        <OssUpLoad
+          getFiles={(file: Array<any>) => {
+            ref?.current?.setFieldsValue({
+              field: file[0].file,
+            });
+          }}
+        />
+      ),
+    },
+    {
+      name: 'field2',
+      label: '自定义必填',
+      type: 'field',
+      fieldValue: file,
+      tooltip: `required: true, message: '欢迎使用自定义组件'`,
       fieldRender: (
         <OssUpLoad
           getFiles={(file: Array<any>) => {
             setFile(file);
-            console.log(file, '00');
-            // ref?.current?.setFieldsValue({
-            //   field: file[0].file,
-            //   input: 'Domesy',
-            // });
           }}
         />
       ),
-      // default: file
+      required: true,
+      message: '欢迎使用自定义组件',
+    },
+    {
+      name: 'field3',
+      label: '自定义规则',
+      type: 'field',
+      fieldValue: file,
+      tooltip: `rules: [{ required: true, message: '欢迎使用自定义组件' }]`,
+      fieldRender: (
+        <OssUpLoad
+          getFiles={(file: Array<any>) => {
+            setFile(file);
+          }}
+        />
+      ),
     },
   ];
 

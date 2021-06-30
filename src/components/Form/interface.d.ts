@@ -132,6 +132,7 @@ interface Props extends ProFormProps {
   formList: Array<formProps>;
   footer?: boolean;
   buttonConfig?: ButtonRenderProps;
+  initValues?: Object<any>;
 }
 
 export default Props;

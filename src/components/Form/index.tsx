@@ -26,6 +26,7 @@ import Props, { formProps, RuleProps } from './interface.d';
 import { Method } from '@/utils';
 import { reTel, rePassword, reName, reCard, reSfz, reEmil, reTelEmil } from '@/utils/Regexp';
 import { Loading } from '../../.umi/plugin-dva/connect';
+import Item from 'antd/lib/list/Item';
 
 // 输入规则不一定要必填，因为可以不填，如果填了就必须按照规定去填
 
@@ -34,14 +35,12 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @author Domesy
  *
  * @param formList 必填 表单配置的数据
- * @param initialValues 初始值对象 设置默认初始值，属性名：formList的name字段 属性值：你想输入的默认字段
+ * @param initValues 初始值对象 设置默认初始值，属性名：formList的name字段 属性值：你想输入的默认字段（少部分field除外，需要在组件内自己写）
  * @param footer 按钮是否显示在页脚，如果自定义按钮则无效 默认：false
  * @param buttonConfig 按钮相关的配置
  * @param formLayout 栅格布局 与col类似,基础col的属性，将表格进行栅格布局，响应式布局等， 现在默认的居中，默认居中，有label字段，包含两个属性labelCol和wrapperCol
  * @param formTailLayout 与formLayout相同，但无label字段
  *
- * @initialValues
- * @param select 属性值为原本的属性名，如 valueEnum 的属性名
  *
  * @formList
  * @param type 类型，根据不同的类型来判断展示的组件， 默认为input
@@ -70,7 +69,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
  * @param slider 滑动输入条
  * @param field 自定义输入
  *
- * @field的私有参数
+ * @field的私有参数 自定义的field，并不是所有使用自定义的组件都需要fieldValue，绑定到onFinsh上，如果绑定的Ant Design的组件是不需要进行fieldValue绑定的，如 Cascader 组件，就可以不绑定fieldValue一样能够获取到。只有需要特殊处理的组件才需要绑定，如我封装的Upload组件
  * @param fieldValue 输入的值，必填，最后绑定在onFinsh上, 绑定在自定义组件上，也可以通过ref设置
  *
  * @input和password的私有参数
@@ -176,13 +175,7 @@ import { Loading } from '../../.umi/plugin-dva/connect';
 
 /**
  * 1. 基本布局 居中响应式，每行一列 栅格 按钮的问题 自定义文本框
- * 2. 各种类型的进行封装，普通的text 选择 开关 日期 单选 多选 图片 textArea
- * 3. 信息带入, 统一通过Inst
- * 4. 特殊组件进行封装
- * 5. 特殊组件的值进行绑定
- * 6. 可控制下列的框
- * 7. 可适用正则来控制对应的值
- * 8. 多个表单，最后统一initialValues提交
+ * 9. 样式垂直，formTailLayout无效的问题
  *
  * // 日期的预设的范围， 日期的选择范围
  */
@@ -228,6 +221,7 @@ const Form: React.FC<Props> = ({
   buttonConfig,
   formLayout,
   formTailLayout,
+  initValues,
   ...props
 }) => {
   const formRef = useRef<FormInstance>();
@@ -363,6 +357,8 @@ const Form: React.FC<Props> = ({
                   message: item.message || `${typeTip}${item.label}`,
                 },
               ]
+            : item.rules
+            ? item.rules
             : undefined;
       }
 
@@ -455,13 +451,11 @@ const Form: React.FC<Props> = ({
 
   // 自定义渲染
   const fieldRender = (item: any) => {
-    console.log(item, '000');
     if (item.fieldValue !== undefined && item.name) {
       let payload: any = {};
       payload[item.name] = item.fieldValue;
       formRef?.current?.setFieldsValue(payload);
     }
-
     return (
       <ProFormField
         {...commonProps(item, item.type)}
@@ -487,14 +481,7 @@ const Form: React.FC<Props> = ({
           console.log(values, '--2');
           message.success('提交成功');
         }}
-        initialValues={
-          {
-            // select: 'closed',
-            // date: '2021-04-06'
-            // switch: true
-            // checkbox: ['农业', '制造业']
-          }
-        }
+        initialValues={initValues}
         layout="horizontal"
         submitter={{
           searchConfig: {
