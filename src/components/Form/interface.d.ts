@@ -78,8 +78,9 @@ export interface formProps {
     | 'textArea'
     | 'rate'
     | 'slider'
-    | 'field';
-  name: string;
+    | 'field'
+    | 'dependency';
+  name: string | Array<string>;
   label?: string;
   tooltip?: string;
   readonly?: boolean;
@@ -123,6 +124,7 @@ export interface formProps {
   getCaptcha?: (phone: any) => void;
   captchaText?: (timing: boolean, count: number) => void;
   fieldRender?: React.ReactNode | Function;
+  itemRender?: (getArray: Object) => void;
 }
 
 interface Props extends ProFormProps {
