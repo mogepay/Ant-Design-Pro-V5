@@ -337,7 +337,98 @@ const Form: React.FC<Props> = ({
   };
 
   // 列表渲染
-  // const formListRender = (formList:Array<formProps>) =>
+  const formListRender = (item: formProps) => {
+    return item.type === 'field' ? (
+      fieldRender(item)
+    ) : item.type === 'select' ? (
+      <ProFormSelect
+        {...commonProps(item, item.type)}
+        fieldProps={{
+          optionItemRender: (ele: any) => {
+            if (item.optionItemRender) {
+              return item.optionItemRender(ele);
+            }
+          },
+          ...item.fieldProps,
+        }}
+      />
+    ) : item.type === 'slider' ? (
+      <ProFormSlider
+        {...commonProps(item, item.type)}
+        range={item.range}
+        max={item.max}
+        min={item.min}
+        marks={item.marks}
+        step={item.step ? Math.abs(item.step) : undefined}
+      />
+    ) : item.type === 'rate' ? (
+      <ProFormRate
+        {...commonProps(item, item.type)}
+        fieldProps={{
+          allowHalf: !item.half,
+          count: item.max,
+          tooltips: item.tooltips,
+          character: item.styleNode,
+          style: { color: item.color || '#1890ff' },
+          ...item.fieldProps,
+        }}
+      />
+    ) : item.type === 'textArea' ? (
+      <ProFormTextArea
+        {...commonProps(item, item.type)}
+        fieldProps={{
+          autoSize: item.rows ? { minRows: item.rows } : item.autoSize,
+          showCount: item.showCount || item.max,
+          maxLength: item.max,
+          ...item.fieldProps,
+        }}
+      />
+    ) : item.type === 'checkbox' ? (
+      <ProFormCheckbox.Group {...commonProps(item, item.type)} />
+    ) : item.type === 'radio' ? (
+      <ProFormRadio.Group {...commonProps(item, item.type)} />
+    ) : item.type === 'switch' ? (
+      <ProFormSwitch
+        {...commonProps(item, item.type)}
+        fieldProps={{
+          checkedChildren: item.openText,
+          unCheckedChildren: item.closeText,
+          loading: item.loading,
+          ...item.fieldProps,
+        }}
+      />
+    ) : item.type === 'date' ? (
+      item.method === 'time' ? (
+        <ProFormTimePicker {...commonProps(item, item.type)} />
+      ) : item.method === 'dateTime' ? (
+        <ProFormDateTimePicker {...commonProps(item, item.type)} fieldProps={DateRender(item)} />
+      ) : item.method === 'dateRange' ? (
+        <ProFormDateRangePicker {...commonProps(item, item.type)} fieldProps={DateRender(item)} />
+      ) : item.method === 'timeRange' ? (
+        <ProFormTimePicker.RangePicker {...commonProps(item, item.type)} />
+      ) : item.method === 'dateTimeRange' ? (
+        <ProFormDateTimeRangePicker
+          {...commonProps(item, item.type)}
+          fieldProps={DateRender(item)}
+        />
+      ) : (
+        <ProFormDatePicker {...commonProps(item, item.type)} fieldProps={DateRender(item)} />
+      )
+    ) : item.type === 'captcha' ? (
+      <ProFormCaptcha
+        {...commonProps(item, item.type)}
+        onGetCaptcha={async (phone: any) => {
+          if (item.getCaptcha) item.getCaptcha(phone);
+        }}
+        countDown={item.max}
+        fieldProps={TextRender(item)}
+      />
+    ) : item.type === 'password' ? (
+      <ProFormText.Password {...commonProps(item, item.type)} fieldProps={TextRender(item)} />
+    ) : (
+      <ProFormText {...commonProps(item, 'input')} fieldProps={TextRender(item)} />
+    );
+  };
 
   return (
     <>
@@ -423,107 +514,8 @@ const Form: React.FC<Props> = ({
                   );
                 }}
               </ProFormDependency>
-            ) : item.type === 'field' ? (
-              fieldRender(item)
-            ) : item.type === 'select' ? (
-              <ProFormSelect
-                {...commonProps(item, item.type)}
-                fieldProps={{
-                  optionItemRender: (ele: any) => {
-                    if (item.optionItemRender) {
-                      return item.optionItemRender(ele);
-                    }
-                  },
-                  ...item.fieldProps,
-                }}
-              />
-            ) : item.type === 'slider' ? (
-              <ProFormSlider
-                {...commonProps(item, item.type)}
-                range={item.range}
-                max={item.max}
-                min={item.min}
-                marks={item.marks}
-                step={item.step ? Math.abs(item.step) : undefined}
-              />
-            ) : item.type === 'rate' ? (
-              <ProFormRate
-                {...commonProps(item, item.type)}
-                fieldProps={{
-                  allowHalf: !item.half,
-                  count: item.max,
-                  tooltips: item.tooltips,
-                  character: item.styleNode,
-                  style: { color: item.color || '#1890ff' },
-                  ...item.fieldProps,
-                }}
-              />
-            ) : item.type === 'textArea' ? (
-              <ProFormTextArea
-                {...commonProps(item, item.type)}
-                fieldProps={{
-                  autoSize: item.rows ? { minRows: item.rows } : item.autoSize,
-                  showCount: item.showCount || item.max,
-                  maxLength: item.max,
-                  ...item.fieldProps,
-                }}
-              />
-            ) : item.type === 'checkbox' ? (
-              <ProFormCheckbox.Group {...commonProps(item, item.type)} />
-            ) : item.type === 'radio' ? (
-              <ProFormRadio.Group {...commonProps(item, item.type)} />
-            ) : item.type === 'switch' ? (
-              <ProFormSwitch
-                {...commonProps(item, item.type)}
-                fieldProps={{
-                  checkedChildren: item.openText,
-                  unCheckedChildren: item.closeText,
-                  loading: item.loading,
-                  ...item.fieldProps,
-                }}
-              />
-            ) : item.type === 'date' ? (
-              item.method === 'time' ? (
-                <ProFormTimePicker {...commonProps(item, item.type)} />
-              ) : item.method === 'dateTime' ? (
-                <ProFormDateTimePicker
-                  {...commonProps(item, item.type)}
-                  fieldProps={DateRender(item)}
-                />
-              ) : item.method === 'dateRange' ? (
-                <ProFormDateRangePicker
-                  {...commonProps(item, item.type)}
-                  fieldProps={DateRender(item)}
-                />
-              ) : item.method === 'timeRange' ? (
-                <ProFormTimePicker.RangePicker {...commonProps(item, item.type)} />
-              ) : item.method === 'dateTimeRange' ? (
-                <ProFormDateTimeRangePicker
-                  {...commonProps(item, item.type)}
-                  fieldProps={DateRender(item)}
-                />
-              ) : (
-                <ProFormDatePicker
-                  {...commonProps(item, item.type)}
-                  fieldProps={DateRender(item)}
-                />
-              )
-            ) : item.type === 'captcha' ? (
-              <ProFormCaptcha
-                {...commonProps(item, item.type)}
-                onGetCaptcha={async (phone: any) => {
-                  if (item.getCaptcha) item.getCaptcha(phone);
-                }}
-                countDown={item.max}
-                fieldProps={TextRender(item)}
-              />
-            ) : item.type === 'password' ? (
-              <ProFormText.Password
-                {...commonProps(item, item.type)}
-                fieldProps={TextRender(item)}
-              />
             ) : (
-              <ProFormText {...commonProps(item, 'input')} fieldProps={TextRender(item)} />
+              formListRender(item)
             )}
           </div>
         ))}
