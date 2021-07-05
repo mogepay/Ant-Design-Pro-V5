@@ -1,4 +1,3 @@
-
 import { history } from 'umi';
 
 /**
@@ -8,6 +7,7 @@ import { history } from 'umi';
  * @param back 回退(默认回退1)
  * @param replace 重定向（与go一样）
  * @param get 获取地址栏参数
+ *
  * @param href 跳转外部地址
  * @param title 设置标题
  *
@@ -15,36 +15,35 @@ import { history } from 'umi';
  * @param params 跳转时所带的参数
  */
 class Jump {
-
-  static go = (url:string, params:Object = {}) => {
-    history.push(url, params)
-  }
+  static go = (url: string, params: Object = {}) => {
+    history.push(url, params);
+  };
 
   static back = (back: number = -1) => {
-    history.go(back)
-  }
+    history.go(back);
+  };
 
-  static replace = (url:string, params:Object = {}) => {
-    history.replace(url, params)
-  }
+  static replace = (url: string, params: Object = {}) => {
+    history.replace(url, params);
+  };
 
-  static href = (url:string= 'https://www.baidu.com/', params:Object={}) => {
-    let str = ''
-    if(Object.keys(params).length != 0){
-      for(let name in params){
-        str += `${name}=${params[name]}&`
+  static href = (url: string = 'https://www.baidu.com/', params: Object = {}) => {
+    let str = '';
+    if (Object.keys(params).length != 0) {
+      for (let name in params) {
+        str += `${name}=${params[name]}&`;
       }
     }
-    window.location.href = str.length === 0 ? url : `${url}?${str.substring(0, str.length-1)}`
-  }
+    window.location.href = str.length === 0 ? url : `${url}?${str.substring(0, str.length - 1)}`;
+  };
 
   static get = () => {
-    return history.location.state
-  }
+    return history.location.state;
+  };
 
-  static title = (title:string) => {
+  static title = (title: string) => {
     document.title = title;
     return;
-  }
+  };
 }
-export default Jump
+export default Jump;

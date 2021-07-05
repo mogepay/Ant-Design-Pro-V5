@@ -21,6 +21,7 @@ import './index.less';
  * @param button 当type 为 'text' ’picture' 继承button的属性，如果children不存在时
  * @param children  当type 为 'text' ’picture' 可自定义样式
  * @param initFile  默认已有的文件
+ * @param cropConfig 裁剪默认配置的选项
  *
  * @param listType
  * listType 为 picture-card 只能支持图片， 其他文件格式不支持
@@ -72,6 +73,7 @@ const OssUpLoad: React.FC<Props> = ({
   _config = {},
   button = {},
   initFile = [],
+  cropConfig = {},
   ...props
 }) => {
   const [fileList, setFileList] = useState<Array<any>>(initFile); //总文件数组
@@ -232,7 +234,11 @@ const OssUpLoad: React.FC<Props> = ({
 
   return (
     <div className="UpLoadComponents">
-      {crop && listType === 'picture-card' ? <ImgCrop>{uploadNode}</ImgCrop> : uploadNode}
+      {crop && listType === 'picture-card' ? (
+        <ImgCrop {...cropConfig}>{uploadNode}</ImgCrop>
+      ) : (
+        uploadNode
+      )}
       <Modal
         visible={previewVisible}
         title={previewTitle}
