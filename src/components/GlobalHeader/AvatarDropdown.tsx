@@ -52,23 +52,18 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src={'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'}
+            alt="avatar"
+          />
+          <span className={`${styles.name} anticon`}>Domesy</span>
         </span>
       </HeaderDropdown>
-    ) : (
-      <span className={`${styles.action} ${styles.account}`}>
-        <Spin
-          size="small"
-          style={{
-            marginLeft: 8,
-            marginRight: 8,
-          }}
-        />
-      </span>
     );
   }
 }

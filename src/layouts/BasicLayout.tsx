@@ -66,9 +66,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: 'user/fetchCurrent',
-      });
-      dispatch({
         type: 'domesy/initSetting',
       });
     }
@@ -127,6 +124,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         logo={logo}
         {...props}
         {...settings}
+        menu={{ defaultOpenAll: layoutSy.defaultOpen || false }}
         onCollapse={handleMenuCollapse}
         onMenuHeaderClick={() => history.push('/')}
         menuItemRender={(menuItemProps, defaultDom) => {

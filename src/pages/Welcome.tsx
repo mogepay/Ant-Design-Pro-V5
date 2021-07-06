@@ -39,7 +39,6 @@ const Welcome: React.FC<any> = (props) => {
       name: ['input'],
       type: 'dependency',
       itemRender: ({ input }: any) => {
-        console.log(input);
         return [
           {
             name: 'input2',
