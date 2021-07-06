@@ -115,6 +115,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       },
     [location.pathname],
   );
+
   return (
     <>
       <ProLayout
