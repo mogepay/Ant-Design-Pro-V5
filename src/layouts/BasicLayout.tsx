@@ -11,6 +11,7 @@ import type {
 import ProLayout from '@ant-design/pro-layout';
 import { Footer, LiveSetting } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { Dispatch } from 'umi';
 import { Link, connect, history } from 'umi';
 import { Result, Button } from 'antd';
@@ -39,6 +40,7 @@ export type BasicLayoutProps = {
   };
   settings: Settings;
   dispatch: Dispatch;
+  layoutSy: any;
 } & ProLayoutProps;
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -55,9 +57,12 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  const { dispatch, children, settings, location = { pathname: '/' } } = props;
+  const { dispatch, children, settings, location = { pathname: '/' }, layoutSy } = props;
   const [menuData, setMenuData] = useState<any>([]);
+  const [collapsed, setCollapsed] = useState(false);
   const menuDataRef = useRef<MenuDataItem[]>([]);
+  const [config, setConfig] = useState<any>(layoutSy);
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -100,6 +105,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   };
 
   const handleMenuCollapse = (payload: boolean): void => {
+    setCollapsed(payload);
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -116,12 +122,22 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     [location.pathname],
   );
 
+  const configProps = () => {
+    const result: any = {};
+    if (config.collapse === 'header') result.collapsedButtonRender = false;
+
+    return {
+      ...result,
+    };
+  };
+
   return (
     <>
       <ProLayout
         logo={logo}
         {...props}
         {...settings}
+        {...configProps()}
         onCollapse={handleMenuCollapse}
         onMenuHeaderClick={() => history.push('/')}
         menuItemRender={(menuItemProps, defaultDom) => {
@@ -151,19 +167,37 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             <span>{route.breadcrumbName}</span>
           );
         }}
+        headerContentRender={
+          config.collapse === 'header'
+            ? () => {
+                return (
+                  <div
+                    onClick={() => handleMenuCollapse(!collapsed)}
+                    style={{
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      marginLeft: 10,
+                    }}
+                  >
+                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                  </div>
+                );
+              }
+            : undefined
+        }
         footerRender={() => {
           if (settings.footerRender || settings.footerRender === undefined) {
             return <Footer />;
           }
-
           return null;
         }}
         menuDataRender={menuDataRender}
         rightContentRender={() => <RightContent />}
-        postMenuData={(menuData) => {
-          menuDataRef.current = menuData || [];
-          return menuData || [];
-        }} // waterMarkProps={{
+        // postMenuData={(menuData) => {
+        //   menuDataRef.current = menuData || [];
+        //   return menuData || [];
+        // }}
+        // waterMarkProps={{
         //   content: 'Domesy',
         //   fontColor: 'rgba(24,144,255,0.15)',
         // }}
@@ -174,69 +208,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       </ProLayout>
 
       <LiveSetting />
-    </> // {
-    //   menuData.length!==0 ?
-    //   <ProLayout
-    //     logo={logo}
-    //     formatMessage={formatMessage}
-    //     {...props}
-    //     {...settings}
-    //     onCollapse={handleMenuCollapse}
-    //     onMenuHeaderClick={() => history.push('/')}
-    //     menuItemRender={(menuItemProps, defaultDom) => {
-    //       if (
-    //         menuItemProps.isUrl ||
-    //         !menuItemProps.path ||
-    //         location.pathname === menuItemProps.path
-    //       ) {
-    //         return defaultDom;
-    //       }
-    //       return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-    //     }}
-    //     breadcrumbRender={(routers = []) => [
-    //       {
-    //         path: '/',
-    //         breadcrumbName: formatMessage({ id: 'menu.home' }),
-    //       },
-    //       ...routers,
-    //     ]}
-    //     itemRender={(route, params, routes, paths) => {
-    //       const first = routes.indexOf(route) === 0;
-    //       return first ? (
-    //         <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-    //       ) : (
-    //         <span>{route.breadcrumbName}</span>
-    //       );
-    //     }}
-    //     footerRender={() => {
-    //       if (settings.footerRender || settings.footerRender === undefined) {
-    //         return defaultFooterDom;
-    //       }
-    //       return null;
-    //     }}
-    //     menuDataRender={() => menuData}
-    //     rightContentRender={() => <RightContent />}
-    //     postMenuData={(menuData) => {
-    //       menuDataRef.current = menuData || [];
-    //       return menuData || [];
-    //     }}
-    //     waterMarkProps={{
-    //       content: 'Ant Design Pro',
-    //       fontColor: 'rgba(24,144,255,0.15)',
-    //     }}
-    //   >
-    //     <Authorized authority={authorized!.authority} noMatch={noMatch}>
-    //       {children}
-    //     </Authorized>
-    //   </ProLayout>
-    //     :
-    //     <div></div>
-    //   }
-    // </>
+    </>
   );
 };
 
 export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  layoutSy: global.layoutSy,
 }))(BasicLayout);

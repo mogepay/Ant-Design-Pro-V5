@@ -1,6 +1,6 @@
 import type { Reducer, Effect } from 'umi';
-
 import type { NoticeIconData } from '@/components/NoticeIcon';
+import { layoutSy } from '@/utils/Setting';
 
 export type NoticeItem = {
   id: string;
@@ -9,6 +9,7 @@ export type NoticeItem = {
 } & NoticeIconData;
 
 export type GlobalModelState = {
+  layoutSy?: any;
   collapsed: boolean;
   notices: NoticeItem[];
 };
@@ -19,6 +20,7 @@ export type GlobalModelType = {
   effects: {};
   reducers: {
     changeLayoutCollapsed: Reducer<GlobalModelState>;
+    getInitData: Reducer<any>;
   };
 };
 
@@ -34,6 +36,12 @@ const GlobalModel: GlobalModelType = {
       return {
         ...state,
         collapsed: payload,
+      };
+    },
+    getInitData(state) {
+      return {
+        ...state,
+        layoutSy,
       };
     },
   },
