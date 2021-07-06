@@ -1,6 +1,6 @@
 import { Button, notification } from 'antd';
-import defaultSettings from '../config/defaultSettings';
-const { pwa } = defaultSettings;
+import { layoutSy } from '@/utils/Setting';
+const { pwa } = layoutSy.default;
 const isHttps = document.location.protocol === 'https:'; // if pwa is true
 
 if (pwa) {

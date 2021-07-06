@@ -1,5 +1,5 @@
-import type { DefaultSettings } from '../../config/defaultSettings';
-import defaultSettings from '../../config/defaultSettings';
+import type { DefaultSettings } from '@/utils/Setting';
+import { layoutSy } from '@/utils/Setting';
 
 export type SettingModelType = {
   namespace: 'settings';
@@ -9,7 +9,7 @@ export type SettingModelType = {
 
 const SettingModel: SettingModelType = {
   namespace: 'settings',
-  state: defaultSettings,
+  state: layoutSy.default,
   reducers: {},
 };
 export default SettingModel;

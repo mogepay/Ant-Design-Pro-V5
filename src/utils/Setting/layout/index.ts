@@ -17,7 +17,7 @@ interface LayoutProps {
   logo?: React.ReactNode;
 }
 
-export type { LayoutProps };
+export type { LayoutProps, DefaultSettings };
 
 const layoutSy: LayoutProps = {
   default: {

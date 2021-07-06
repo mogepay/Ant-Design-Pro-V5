@@ -1,6 +1,6 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
-import defaultSettings from './defaultSettings';
+import { layoutSy } from '@/utils/Setting';
 import proxy from './proxy';
 import routes from './routes';
 
@@ -32,7 +32,7 @@ export default defineConfig({
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
-    'primary-color': defaultSettings.primaryColor,
+    'primary-color': layoutSy.default.primaryColor,
   },
   title: false,
   ignoreMomentLocale: true,
