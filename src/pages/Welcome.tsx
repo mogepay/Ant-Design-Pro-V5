@@ -32,8 +32,6 @@ const Welcome: React.FC<any> = (props) => {
       name: 'input',
       label: '普通输入框',
       tooltip: 'type: input',
-      // required:true
-      rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
     },
     {
       name: ['input'],
@@ -42,10 +40,8 @@ const Welcome: React.FC<any> = (props) => {
         return [
           {
             name: 'input2',
-            label: '普通输入框',
+            label: `普通输入框${input || ''}`,
             tooltip: 'type: input',
-            // required:true
-            rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
           },
         ];
       },
@@ -57,6 +53,10 @@ const Welcome: React.FC<any> = (props) => {
       <Card>
         {/* <Button onClick={() => {}}>测试</Button> */}
         <Form
+          onFinish={(values: any) => {
+            message.success('打开控制台观看');
+            console.log(values, '---');
+          }}
           formList={list}
           getRef={(fromRef: any) => {
             setRef(fromRef);

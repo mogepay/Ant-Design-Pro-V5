@@ -73,6 +73,7 @@ const waitTime = (time: number = 100) => {
 
 const Form: React.FC<Props> = ({
   getRef,
+  onFinish,
   formList = [],
   footer = false,
   buttonConfig,
@@ -439,6 +440,7 @@ const Form: React.FC<Props> = ({
           // await waitTime(2000);
           console.log(values, '--2');
           message.success('提交成功');
+          onFinish(values);
         }}
         initialValues={initValues}
         layout="horizontal"
@@ -502,10 +504,25 @@ const Form: React.FC<Props> = ({
             {item.type === 'dependency' ? (
               <ProFormDependency name={typeof item.name === 'string' ? [...item.name] : item.name}>
                 {(data) => {
-                  // item.itemRender ? item.itemRender(name) :
+                  console.log(data, '--');
                   if (item.itemRender) {
-                    item.itemRender(data);
-                    return;
+                    const res: any = item.itemRender(data);
+                    console.log(formListRender(res));
+                    if (Array.isArray(res)) {
+                      console.log(res, '009');
+                      // res.map((item:any, index:number) => {
+                      //   return formListRender(item)
+                      // })
+                      return (
+                        <>
+                          {res.map((item: any, index: number) => (
+                            <div key={index}>{formListRender(item)}</div>
+                          ))}
+                        </>
+                      );
+                    } else {
+                      return message.error('请返回数组');
+                    }
                   }
                   return (
                     <div style={{ textAlign: 'center', fontSize: 16, color: '#ff4d4f' }}>

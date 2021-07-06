@@ -129,6 +129,7 @@ export interface formProps {
 
 interface Props extends ProFormProps {
   getRef?: (ref: any) => void;
+  onFinish: (value: Object) => void;
   formLayout?: formLayoutProps;
   formTailLayout?: formLayoutProps;
   formList: Array<formProps>;
