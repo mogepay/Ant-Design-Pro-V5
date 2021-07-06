@@ -337,7 +337,7 @@ const Form: React.FC<Props> = ({
   };
 
   // 列表渲染
-  const formListRender = (item: any) => {
+  const formListRender = (item: formProps) => {
     return item.type === 'field' ? (
       fieldRender(item)
     ) : item.type === 'select' ? (
@@ -504,23 +504,8 @@ const Form: React.FC<Props> = ({
                 {(data) => {
                   // item.itemRender ? item.itemRender(name) :
                   if (item.itemRender) {
-                    const res: any = item.itemRender(data);
-                    console.log(formListRender(res));
-                    if (Array.isArray(res)) {
-                      console.log(res, '009');
-                      // res.map((item:any, index:number) => {
-                      //   return formListRender(item)
-                      // })
-                      return (
-                        <>
-                          {res.map((item: any, index: number) => (
-                            <div key={index}>{formListRender(item)}</div>
-                          ))}
-                        </>
-                      );
-                    } else {
-                      return message.error('请返回数组');
-                    }
+                    item.itemRender(data);
+                    return;
                   }
                   return (
                     <div style={{ textAlign: 'center', fontSize: 16, color: '#ff4d4f' }}>

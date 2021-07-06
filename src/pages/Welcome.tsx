@@ -39,17 +39,11 @@ const Welcome: React.FC<any> = (props) => {
       name: ['input'],
       type: 'dependency',
       itemRender: ({ input }: any) => {
+        console.log(input);
         return [
           {
             name: 'input2',
-            label: `普通输入框${input || ''}`,
-            tooltip: 'type: input',
-            // required:true
-            rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
-          },
-          {
-            name: 'input3',
-            label: `普通输入框${input || ''}`,
+            label: '普通输入框',
             tooltip: 'type: input',
             // required:true
             rules: [{ required: true, message: '此选项必填，并且不能为空格' }],
