@@ -1,14 +1,3 @@
-/**
- * @module 全局配置框架部分
- *
- */
+export { default as layoutSy } from './layout';
 
-interface LayoutProps {
-  collapse?: 'header' | undefined;
-}
-
-const layoutSy: LayoutProps = {
-  collapse: 'header',
-};
-
-export { layoutSy };
+export type { LayoutProps } from './layout';

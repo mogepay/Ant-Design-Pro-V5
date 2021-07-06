@@ -6,7 +6,7 @@ import type { ConnectProps } from 'umi';
 import { Link, SelectLang, connect } from 'umi';
 import React from 'react';
 import type { ConnectState } from '@/models/connect';
-import logo from '../assets/logo.svg';
+// import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
 export type UserLayoutProps = {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -46,7 +46,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
+                {/* <img alt="logo" className={styles.logo} src={logo} /> */}
                 <span className={styles.title}>Ant Design</span>
               </Link>
             </div>
