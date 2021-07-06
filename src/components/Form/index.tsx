@@ -73,7 +73,6 @@ const waitTime = (time: number = 100) => {
 
 const Form: React.FC<Props> = ({
   getRef,
-  onFinish,
   formList = [],
   footer = false,
   buttonConfig,
@@ -438,7 +437,8 @@ const Form: React.FC<Props> = ({
         formRef={formRef}
         onFinish={async (values) => {
           // await waitTime(2000);
-          onFinish(values);
+          console.log(values, '--2');
+          message.success('提交成功');
         }}
         initialValues={initValues}
         layout="horizontal"
