@@ -7,6 +7,13 @@ export type SettingModelType = {
   reducers: {};
 };
 
+const updateColorWeak: (colorWeak: boolean) => void = (colorWeak) => {
+  const root = document.getElementById('root');
+  if (root) {
+    root.className = colorWeak ? 'colorWeak' : '';
+  }
+};
+
 const SettingModel: SettingModelType = {
   namespace: 'settings',
   state: layoutSy.default,

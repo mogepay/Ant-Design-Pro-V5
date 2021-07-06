@@ -3,19 +3,23 @@
  *
  * @see You can view component api by: https://github.com/ant-design/ant-design-pro-layout
  */
-import type { MenuDataItem, BasicLayoutProps as ProLayoutProps } from '@ant-design/pro-layout';
+import type {
+  MenuDataItem,
+  BasicLayoutProps as ProLayoutProps,
+  Settings,
+} from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
 import { Footer, LiveSetting } from '@/commonPages';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { Dispatch } from 'umi';
 import { Link, connect, history } from 'umi';
-import type { LayoutProps } from '@/utils/Setting';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
+import logo from '../assets/logo.svg';
 import allIcons from '@@/plugin-antd-icon/icons';
 const noMatch = (
   <Result
@@ -34,8 +38,9 @@ export type BasicLayoutProps = {
   route: ProLayoutProps['route'] & {
     authority: string[];
   };
+  settings: Settings;
   dispatch: Dispatch;
-  layoutSy: LayoutProps;
+  layoutSy: any;
 } & ProLayoutProps;
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -52,13 +57,13 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  const { dispatch, children, location = { pathname: '/' }, layoutSy } = props;
+  const { dispatch, children, settings, location = { pathname: '/' }, layoutSy } = props;
   const [menuData, setMenuData] = useState<any>([]);
   const [collapsed, setCollapsed] = useState(false);
   const menuDataRef = useRef<MenuDataItem[]>([]);
+  const [config, setConfig] = useState<any>(layoutSy);
 
   useEffect(() => {
-    console.log(layoutSy, '--');
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
@@ -119,7 +124,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const configProps = () => {
     const result: any = {};
-    if (layoutSy.collapse === 'header') result.collapsedButtonRender = false;
+    if (config.collapse === 'header') result.collapsedButtonRender = false;
+
     return {
       ...result,
     };
@@ -128,9 +134,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   return (
     <>
       <ProLayout
-        logo={layoutSy.logo}
+        logo={logo}
         {...props}
-        {...layoutSy.default}
+        {...settings}
         {...configProps()}
         onCollapse={handleMenuCollapse}
         onMenuHeaderClick={() => history.push('/')}
@@ -162,7 +168,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           );
         }}
         headerContentRender={
-          layoutSy.collapse === 'header'
+          config.collapse === 'header'
             ? () => {
                 return (
                   <div
@@ -180,7 +186,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             : undefined
         }
         footerRender={() => {
-          if (layoutSy.default.footerRender || layoutSy.default.footerRender === undefined) {
+          if (settings.footerRender || settings.footerRender === undefined) {
             return <Footer />;
           }
           return null;
@@ -206,7 +212,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   );
 };
 
-export default connect(({ global }: ConnectState) => ({
+export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
+  settings,
   layoutSy: global.layoutSy,
 }))(BasicLayout);
