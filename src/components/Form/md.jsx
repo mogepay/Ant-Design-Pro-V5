@@ -4,6 +4,7 @@
  *
  * @param formList 必填 表单配置的数据
  * @param initValues 初始值对象 设置默认初始值，属性名：formList的name字段 属性值：你想输入的默认字段（少部分field除外，需要在组件内自己写）
+ * @param onFinish 表单验证通过后返回的函数集合
  * @param footer 按钮是否显示在页脚，如果自定义按钮则无效 默认：false
  * @param buttonConfig 按钮相关的配置
  * @param formLayout 栅格布局 与col类似,基础col的属性，将表格进行栅格布局，响应式布局等， 现在默认的居中，默认居中，有label字段，包含两个属性labelCol和wrapperCol
