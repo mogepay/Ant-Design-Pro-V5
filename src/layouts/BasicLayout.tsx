@@ -121,23 +121,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       },
     [location.pathname],
   );
-
-  const configProps = () => {
-    const result: any = {};
-    if (config.collapse === 'header') result.collapsedButtonRender = false;
-
-    return {
-      ...result,
-    };
-  };
-
   return (
     <>
       <ProLayout
         logo={logo}
         {...props}
         {...settings}
-        {...configProps()}
         onCollapse={handleMenuCollapse}
         onMenuHeaderClick={() => history.push('/')}
         menuItemRender={(menuItemProps, defaultDom) => {
