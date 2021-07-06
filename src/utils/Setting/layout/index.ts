@@ -12,7 +12,7 @@ type DefaultSettings = Partial<ProSettings> & {
   pwa: boolean;
 };
 interface LayoutProps {
-  default: DefaultSettings;
+  // default: DefaultSettings;
   collapse?: 'header' | 'menu';
   logo?: React.ReactNode;
 }
@@ -20,21 +20,6 @@ interface LayoutProps {
 export type { LayoutProps, DefaultSettings };
 
 const layoutSy: LayoutProps = {
-  default: {
-    navTheme: 'dark',
-    primaryColor: '#1890ff',
-    layout: 'side',
-    contentWidth: 'Fluid',
-    fixedHeader: false,
-    fixSiderbar: false,
-    colorWeak: false,
-    title: 'Domesy',
-    menu: {
-      locale: false,
-    },
-    pwa: false,
-    iconfontUrl: '',
-  },
   collapse: 'header',
   logo,
 };
